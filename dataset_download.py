@@ -227,19 +227,22 @@ def process_qasper(dataset, dataset_name):
             if not unanswerable:
                 for k in range(len(options)):
                     yes_no = options[k]['yes_no'] 
-                    if title == "PO-EMO: Conceptualization, Annotation, and Modeling of Aesthetic Emotions in German and English Poetry":
-                        print(yes_no, "yes" if yes_no else "no")
                     if yes_no == None:
-                        for fr_frm_ans in options[k]['free_form_answer']:
-                            free_form_answer.append(fr_frm_ans)
-                        for ext_spans in options[k]['extractive_spans']:
-                            free_form_answer.append(ext_spans)
+                        if isinstance(options[k]['free_form_answer'], list):
+                            for fr_frm_ans in options[k]['free_form_answer']:
+                                free_form_answer.append(fr_frm_ans) 
+                        else:
+                            free_form_answer.append(options[k]['free_form_answer'])
+                        if isinstance(options[k]['extractive_spans'], list):
+                            for ext_spans in options[k]['extractive_spans']:
+                                free_form_answer.append(ext_spans)
+                        else:
+                            free_form_answer.append(options[k]['extractive_spans'])
                     else:
                         free_form_answer.append("yes" if yes_no else "no")
+            else:
+                free_form_answer.append("N/A")
             question_answer = QuestionAnswer(question, unanswerable, free_form_answer)
-            # if len(question_answer.option_answers.free_form_answers) == 0:
-            #     # skip question if it has no free form answers
-            #     continue
             qas.append(question_answer)
         dataset_data.append(Datasetdata(title, abstract, full_text, qas, "qasper"))
     return dataset_data
@@ -268,6 +271,7 @@ joined_dataset.train_dataset.extend(process_quality(quality["train"], "train"))
 joined_dataset.validation_dataset.extend(process_quality(quality["validation"], "validation"))
 
 # save joined dataset
+# \u201d é ", relaxa,o codigo não ta quebrado. Mas se alterar pra salvar como aspas mesmo, ai vai quebrar o json pq vai fechar as aspas no lugar errado
 with open("joined_dataset.json", "w") as f:
     json.dump(joined_dataset.to_dict(), f)
 
