@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  nlp_sentence_similarity:
+    build: .
+    container_name: my_app
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python test4.py
