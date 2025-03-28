@@ -8,4 +8,6 @@ services:
       - .:/app
     environment:
       - PYTHONUNBUFFERED=1
-    command: python main.py
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    #  entrypoint to keep the container running
+    entrypoint: tail -f /dev/null

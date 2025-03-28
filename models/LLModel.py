@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 
+import logging
+from google import genai
+
 class LLLAnswer(BaseModel):
     question: str
     unanswerable: bool
@@ -9,10 +12,23 @@ class LLLAnswer(BaseModel):
 class LLMModel:
     def __init__(self, model_name):
         self.model_name = model_name
-
+        
     # virtual method to be implemented by subclasses
-    def generate_answer(self, question, base_text):
-        raise NotImplementedError("Subclasses should implement this method")
+    def generate_answer(self, question, base_text, client):
+        prompt = self.generate_prompt(question, base_text)
+        response = client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=prompt,
+            config={
+                'response_mime_type': 'application/json',
+                'response_schema': LLLAnswer
+            }
+        )
+        model_answer = response.parsed
+        
+        
+        
+        return model_answer
         
 
     def generate_prompt(self, question, base_text):

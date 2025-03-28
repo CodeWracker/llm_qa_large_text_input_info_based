@@ -18,4 +18,4 @@ datasets
 tqdm
 pandas
 pydantic
-genai
+google-genai

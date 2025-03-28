@@ -2,12 +2,14 @@ from datasetModule import JoinedDataset, DatasetData, QuestionAnswer, FreeFormAn
 from similarityScoreModule import sbert_similarity_score, combined_similarity
 
 from models.LLModel import LLMModel
-from models.Gemini1_5Flash import Gemini1_5Flash
+from models.SpecificModels import Gemini1_5Flash
 
 
 import pickle
 import logging
 import json
+from google import genai
+import os
 
 # Configuração do logging
 logging.basicConfig(
@@ -18,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 
-
+GeminiClient = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
 
 class LLMAnswer:
@@ -72,7 +74,7 @@ if __name__ == "__main__":
     for data in joined_dataset.dataset:
         # Generate answers for each question in the dataset using the LLM model
         for qa in data.qas:
-            llm_answer = gemini1_5flash_model.generate_answer(qa.question)
+            llm_answer = gemini1_5flash_model.generate_answer(qa.question, data.full_text, GeminiClient).answer
             gemini1_5flash_answer_obj = LLMAnswer(gemini1_5flash_model.model_name, llm_answer, qa.option_answers.free_form_answers)
             gemini1_5flash_answer_obj.calculate_similarity_score()
             comparison_result = ComparisonResult(qa)
@@ -92,3 +94,24 @@ if __name__ == "__main__":
         for comparison_result in llm_generated_dataset:
             json_data.append(comparison_result.to_dict())
         json.dump(json_data, f, ensure_ascii=False, indent=2)
+        
+    # logging.info("Attempting to delete GeminiClient...")
+    # https://github.com/googleapis/python-genai/issues/588
+    # GeminiClient = None
+    # GeminiClient._api_client._httpx_client.close()
+    # GeminiClient._api_client._httpx_client._state = ClientState.CLOSED
+    
+    # Explicitly close the underlying httpx client
+    try:
+        GeminiClient._api_client._httpx_client.close()
+    except Exception as e:
+        logger.warning("Error closing httpx client: %s", e)
+
+    # Optionally override the __del__ method to a no-op to bypass cleanup code
+    GeminiClient.__del__ = lambda self: None
+
+    # Now set GeminiClient to None, so the original __del__ isn’t called
+    GeminiClient = None
+    
+    # logger.info("GeminiClient closed successfully.")
+   
