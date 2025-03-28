@@ -183,24 +183,16 @@ class Datasetdata:
 
 class JoinDataset:
     def __init__(self):
-        self.train_dataset = []
-        self.validation_dataset = []
-        self.test_dataset = []
+        self.dataset = []
     
     def to_dict(self):
         return {
-            "train_dataset": [dataset.to_dict() for dataset in self.train_dataset],
-            "validation_dataset": [dataset.to_dict() for dataset in self.validation_dataset],
-            "test_dataset": [dataset.to_dict() for dataset in self.test_dataset]
+            "dataset": [dataset_data.to_dict() for dataset_data in self.dataset],
         }
     
     def remove_full_text(self):
-        for dataset in self.train_dataset:
-            dataset.full_text = ""
-        for dataset in self.validation_dataset:
-            dataset.full_text = ""
-        for dataset in self.test_dataset:
-            dataset.full_text = ""
+        for dataset_data in self.dataset:
+            dataset_data.full_text = ""
 
 
 joined_dataset = JoinDataset()
@@ -247,9 +239,9 @@ def process_qasper(dataset, dataset_name):
         dataset_data.append(Datasetdata(title, abstract, full_text, qas, "qasper"))
     return dataset_data
 
-joined_dataset.train_dataset.extend(process_qasper(qasper["train"], "train"))
-joined_dataset.validation_dataset.extend(process_qasper(qasper["validation"], "validation"))
-joined_dataset.test_dataset.extend(process_qasper(qasper["test"], "test"))
+joined_dataset.dataset.extend(process_qasper(qasper["train"], "train"))
+joined_dataset.dataset.extend(process_qasper(qasper["validation"], "validation"))
+joined_dataset.dataset.extend(process_qasper(qasper["test"], "test"))
 
 # Quality dataset
 
@@ -267,8 +259,8 @@ def process_quality(dataset, dataset_name):
         dataset_data.append(Datasetdata(title, "", full_text, qas, "quality"))
     return dataset_data
 
-joined_dataset.train_dataset.extend(process_quality(quality["train"], "train"))
-joined_dataset.validation_dataset.extend(process_quality(quality["validation"], "validation"))
+joined_dataset.dataset.extend(process_quality(quality["train"], "train"))
+joined_dataset.dataset.extend(process_quality(quality["validation"], "validation"))
 
 # save joined dataset
 # \u201d é ", relaxa,o codigo não ta quebrado. Mas se alterar pra salvar como aspas mesmo, ai vai quebrar o json pq vai fechar as aspas no lugar errado
