@@ -1,6 +1,9 @@
 from datasetModule import JoinedDataset, DatasetData, QuestionAnswer, FreeFormAnswer
 from similarityScoreModule import sbert_similarity_score, combined_similarity
 
+from models.LLModel import LLMModel
+from models.Gemini1_5Flash import Gemini1_5Flash
+
 
 import pickle
 import logging
@@ -16,25 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 
-class LLMModel:
-    def __init__(self, model_name):
-        self.model_name = model_name
 
-    # virtual method to be implemented by subclasses
-    def generate_answer(self, question):
-        raise NotImplementedError("Subclasses should implement this method")
-        
-
-class Gemini1_5Flash(LLMModel):
-    def __init__(self):
-        super().__init__("Gemini 1.5 Flash")
-
-    def generate_answer(self, question):
-        # Implement the logic to generate an answer using the Gemini 1.5 Flash model
-        # For example, you can use the model's API to get the answer for the question.
-        # model_answer = "Generated answer from Gemini 1.5 Flash model"
-        model_answer = "The seed lexicon contains a set of predicates with positive and negative meanings."
-        return model_answer
 
 class LLMAnswer:
     def __init__(self, model_name, answer, option_answers_gt):
