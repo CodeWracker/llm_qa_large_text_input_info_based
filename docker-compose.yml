@@ -8,4 +8,4 @@ services:
       - .:/app
     environment:
       - PYTHONUNBUFFERED=1
-    command: python test4.py
+    command: python main.py
