@@ -2,12 +2,18 @@ from pydantic import BaseModel
 
 import logging
 from google import genai
+import json
+import os
+import re
 
 class LLLAnswer(BaseModel):
     question: str
     unanswerable: bool
     answer: str
     
+
+
+
 
 class LLMModel:
     def __init__(self, model_name):
@@ -62,3 +68,51 @@ class LLMModel:
         """
         
         return prompt
+    
+    
+class NonJSONLLMModel(LLMModel):
+    def __init__(self, model_name):
+        super().__init__(model_name)
+        
+    def convert_answer_to_LLMAnswer(self, answer):
+        # First checks if the answer is a valid json and then maps it to the LLMAnswer class
+        # logging.info(f"Converting answer to LLMAnswer: {answer}")
+        
+        # o texto esta no seguinte formato ```json\n{json}\n``` e o json é o que queremos (junto com os {})
+        
+        answer_parsed = ""
+        for line in answer.split("\n")[1:-1]:
+            answer_parsed += line.strip()
+        answer = answer_parsed
+            
+        # logging.info(f"Extracted JSON: {answer}")
+        
+        parsed_answer = json.loads(answer)
+        # logging.info(f"Parsed answer: {parsed_answer}")
+        answer = LLLAnswer(
+            question=parsed_answer.get("question", None),
+            unanswerable=parsed_answer.get("unanswerable", False),
+            answer=parsed_answer.get("answer", None)
+        )
+        
+        return answer
+        
+    # virtual method to be implemented by subclasses
+    def generate_answer(self, question, base_text, client, model_name):
+        prompt = self.generate_prompt(question, base_text)
+
+        while True:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt
+            )
+            
+            # logging.info(f"Response: {response}")
+            
+            try:
+                model_answer = self.convert_answer_to_LLMAnswer(response.candidates[0].content.parts[0].text)
+                return model_answer
+            except ValueError as e:
+                logging.error(f"Failed to convert answer to LLMAnswer: {e}")
+                prompt = prompt + f"\nYou have already answered this question, but your answer was not in the correct format. Please answer again, but this time make sure to follow the instructions and return a valid JSON. Previous error: {e}"
+        

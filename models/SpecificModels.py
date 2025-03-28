@@ -1,4 +1,4 @@
-from models.LLModel import LLMModel,LLLAnswer
+from models.LLModel import LLMModel,LLLAnswer, NonJSONLLMModel
 
 from google import genai
 import os
@@ -25,18 +25,20 @@ O Gemma 3	30	15.000	14.400
 Gemini Embedding Experimental 03-07	5	--	100
 """
 
-
-class Gemini2_5ProExperimental(LLMModel):
-    def __init__(self):
-        super().__init__("Gemini 2.5 Pro Experimental")
-        self.model_name = "gemini-2.5-pro-experimental"
+"""
+google.genai.errors.ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-pro-experimental is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+"""
+# class Gemini2_5ProExperimental(LLMModel):
+#     def __init__(self):
+#         super().__init__("Gemini 2.5 Pro Experimental")
+#         self.model_name = "gemini-2.5-pro-experimental"
         
-        self.limit_rpm = 2 # Limite de requisições por minuto
-        self.limit_tpm = 1000000 # Limite de tokens por minuto
-        self.limit_rpd = 50 # Limite de requisições por dia
+#         self.limit_rpm = 2 # Limite de requisições por minuto
+#         self.limit_tpm = 1000000 # Limite de tokens por minuto
+#         self.limit_rpd = 50 # Limite de requisições por dia
         
-    def generate_answer(self, question, base_text, client):
-        return super().generate_answer(question, base_text, client, self.model_name)
+#     def generate_answer(self, question, base_text, client):
+#         return super().generate_answer(question, base_text, client, self.model_name)
 
 class Gemini2_0Flash(LLMModel):
     def __init__(self):
@@ -74,7 +76,7 @@ class Gemini2_0FlashLite(LLMModel):
     def generate_answer(self, question, base_text, client):
         return super().generate_answer(question, base_text, client, self.model_name)
     
-class Gemini2_0FlashThinkingExperimental(LLMModel):
+class Gemini2_0FlashThinkingExperimental(NonJSONLLMModel):
     def __init__(self):
         super().__init__("Gemini 2.0 Flash Thinking Experimental")
         self.model_name = "gemini-2.0-flash-thinking-exp-1219"
@@ -122,15 +124,19 @@ class Gemini1_5Pro(LLMModel):
         
     def generate_answer(self, question, base_text, client):
         return super().generate_answer(question, base_text, client, self.model_name)
-    
-class GeminiGemma3(LLMModel):
-    def __init__(self):
-        super().__init__("Gemini Gemma 3")
-        self.model_name = "gemini-gemma-3"
+  
+  
+"""
+google.genai.errors.ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-gemma-3 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+"""  
+# class GeminiGemma3(LLMModel):
+#     def __init__(self):
+#         super().__init__("Gemini Gemma 3")
+#         self.model_name = "gemini-gemma-3"
         
-        self.limit_rpm = 30 # Limite de requisições por minuto
-        self.limit_tpm = 15000 # Limite de tokens por minuto
-        self.limit_rpd = 14400 # Limite de requisições por dia
+#         self.limit_rpm = 30 # Limite de requisições por minuto
+#         self.limit_tpm = 15000 # Limite de tokens por minuto
+#         self.limit_rpd = 14400 # Limite de requisições por dia
         
-    def generate_answer(self, question, base_text, client):
-        return super().generate_answer(question, base_text, client, self.model_name)
+#     def generate_answer(self, question, base_text, client):
+#         return super().generate_answer(question, base_text, client, self.model_name)
