@@ -164,19 +164,19 @@ def main():
     joined_dataset.dataset.extend(process_quality(quality["validation"], "validation"))
 
     # Salva o dataset completo
-    with open("joined_dataset.json", "w", encoding="utf-8") as f:
+    with open("results/joined_dataset.json", "w", encoding="utf-8") as f:
         json.dump(joined_dataset.to_dict(), f, ensure_ascii=False, indent=2)
     logger.info("Arquivo joined_dataset.json salvo com sucesso.")
 
     # Cria uma cópia para salvar sem o full_text
     joined_dataset_no_full_text = copy.deepcopy(joined_dataset)
     joined_dataset_no_full_text.remove_full_text()
-    with open("joined_dataset_no_full_text.json", "w", encoding="utf-8") as f:
+    with open("results/joined_dataset_no_full_text.json", "w", encoding="utf-8") as f:
         json.dump(joined_dataset_no_full_text.to_dict(), f, ensure_ascii=False, indent=2)
     logger.info("Arquivo joined_dataset_no_full_text.json salvo com sucesso.")
 
     # Salva em formato pickle
-    with open("joined_dataset.pkl", "wb") as f:
+    with open("results/joined_dataset.pkl", "wb") as f:
         pickle.dump(joined_dataset, f)
     logger.info("Arquivo joined_dataset.pkl salvo com sucesso.")
 

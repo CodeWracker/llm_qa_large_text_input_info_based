@@ -79,7 +79,7 @@ class ComparisonResult:
 if __name__ == "__main__":
     # This file will create the data of the LLM generated data and score it against the ground truth dataset
     # load the dataset.plk file
-    joined_dataset = pickle.load(open("joined_dataset.pkl", "rb"))
+    joined_dataset = pickle.load(open("results/joined_dataset.pkl", "rb"))
     
     gemini1_5flash_model = Gemini1_5Flash()
     llm_generated_dataset = []
@@ -97,12 +97,12 @@ if __name__ == "__main__":
         break
     
     # Save the generated dataset with similarity scores
-    with open("llm_generated_dataset.pkl", "wb") as f:
+    with open("results/llm_generated_dataset.pkl", "wb") as f:
         pickle.dump(llm_generated_dataset, f)
     logger.info("LLM generated dataset saved successfully.")
     
     # Save as JSON file
-    with open("llm_generated_dataset.json", "w", encoding="utf-8") as f:
+    with open("results/llm_generated_dataset.json", "w", encoding="utf-8") as f:
         json_data = []
         for comparison_result in llm_generated_dataset:
             json_data.append(comparison_result.to_dict())
