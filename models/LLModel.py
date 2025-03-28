@@ -14,10 +14,10 @@ class LLMModel:
         self.model_name = model_name
         
     # virtual method to be implemented by subclasses
-    def generate_answer(self, question, base_text, client):
+    def generate_answer(self, question, base_text, client, model_name):
         prompt = self.generate_prompt(question, base_text)
         response = client.models.generate_content(
-            model="gemini-1.5-flash",
+            model=model_name,
             contents=prompt,
             config={
                 'response_mime_type': 'application/json',

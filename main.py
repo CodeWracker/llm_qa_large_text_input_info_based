@@ -2,7 +2,7 @@ from datasetModule import JoinedDataset, DatasetData, QuestionAnswer, FreeFormAn
 from similarityScoreModule import sbert_similarity_score, combined_similarity
 
 from models.LLModel import LLMModel
-from models.SpecificModels import Gemini1_5Flash
+from models.SpecificModels import Gemini1_5Flash, Gemini1_5Flash8B, Gemini1_5Pro, Gemini2_0Flash, Gemini2_0FlashLite, Gemini2_0FlashThinkingExperimental, Gemini2_0FlashExperimental, Gemini2_5ProExperimental, GeminiGemma3
 
 
 import pickle
@@ -61,25 +61,81 @@ class ComparisonResult:
             "option_answers_gt": self.option_answers_gt,
             "dict_model_answers": dict_model_answers
         }
-        
+ 
+def generate_models_answer(qa, base_text, client):
+    question = qa.question
+    comparison_result = ComparisonResult(qa)
+    
+    
+    gemini1_5flash_model = Gemini1_5Flash()
+    gemini1_5flash_answer = gemini1_5flash_model.generate_answer(question, base_text, client).answer
+    gemini1_5flash_answer_obj = LLMAnswer(gemini1_5flash_model.model_name, gemini1_5flash_answer, qa.option_answers.free_form_answers)
+    gemini1_5flash_answer_obj.calculate_similarity_score()
+    comparison_result.models_answers.append(gemini1_5flash_answer_obj)
+    
+    gemini1_5flash8b_model = Gemini1_5Flash8B()
+    gemini1_5flash8b_answer = gemini1_5flash8b_model.generate_answer(question, base_text, client).answer
+    gemini1_5flash8b_answer_obj = LLMAnswer(gemini1_5flash8b_model.model_name, gemini1_5flash8b_answer, qa.option_answers.free_form_answers)
+    gemini1_5flash8b_answer_obj.calculate_similarity_score()
+    comparison_result.models_answers.append(gemini1_5flash8b_answer_obj)
+    
+    
+    gemini1_5pro_model = Gemini1_5Pro()
+    gemini1_5pro_answer = gemini1_5pro_model.generate_answer(question, base_text, client).answer
+    gemini1_5pro_answer_obj = LLMAnswer(gemini1_5pro_model.model_name, gemini1_5pro_answer, qa.option_answers.free_form_answers)
+    gemini1_5pro_answer_obj.calculate_similarity_score()
+    comparison_result.models_answers.append(gemini1_5pro_answer_obj)
+    
+    gemini2_0flash_model = Gemini2_0Flash()
+    gemini2_0flash_answer = gemini2_0flash_model.generate_answer(question, base_text, client).answer
+    gemini2_0flash_answer_obj = LLMAnswer(gemini2_0flash_model.model_name, gemini2_0flash_answer, qa.option_answers.free_form_answers)
+    gemini2_0flash_answer_obj.calculate_similarity_score()
+    comparison_result.models_answers.append(gemini2_0flash_answer_obj)
+    
+    gemini2_0flashlite_model = Gemini2_0FlashLite()
+    gemini2_0flashlite_answer = gemini2_0flashlite_model.generate_answer(question, base_text, client).answer
+    gemini2_0flashlite_answer_obj = LLMAnswer(gemini2_0flashlite_model.model_name, gemini2_0flashlite_answer, qa.option_answers.free_form_answers)
+    gemini2_0flashlite_answer_obj.calculate_similarity_score()
+    comparison_result.models_answers.append(gemini2_0flashlite_answer_obj)
+    
+    gemini2_0flashthinking_model = Gemini2_0FlashThinkingExperimental()
+    gemini2_0flashthinking_answer = gemini2_0flashthinking_model.generate_answer(question, base_text, client).answer
+    gemini2_0flashthinking_answer_obj = LLMAnswer(gemini2_0flashthinking_model.model_name, gemini2_0flashthinking_answer, qa.option_answers.free_form_answers)
+    gemini2_0flashthinking_answer_obj.calculate_similarity_score()
+    comparison_result.models_answers.append(gemini2_0flashthinking_answer_obj)
+    
+    gemini2_0flashexperimental_model = Gemini2_0FlashExperimental()
+    gemini2_0flashexperimental_answer = gemini2_0flashexperimental_model.generate_answer(question, base_text, client).answer
+    gemini2_0flashexperimental_answer_obj = LLMAnswer(gemini2_0flashexperimental_model.model_name, gemini2_0flashexperimental_answer, qa.option_answers.free_form_answers)
+    gemini2_0flashexperimental_answer_obj.calculate_similarity_score()
+    comparison_result.models_answers.append(gemini2_0flashexperimental_answer_obj)
+    
+    gemini2_5proexperimental_model = Gemini2_5ProExperimental()
+    gemini2_5proexperimental_answer = gemini2_5proexperimental_model.generate_answer(question, base_text, client).answer
+    gemini2_5proexperimental_answer_obj = LLMAnswer(gemini2_5proexperimental_model.model_name, gemini2_5proexperimental_answer, qa.option_answers.free_form_answers)
+    gemini2_5proexperimental_answer_obj.calculate_similarity_score()
+    comparison_result.models_answers.append(gemini2_5proexperimental_answer_obj)
+    
+    geminigemma3_model = GeminiGemma3()
+    geminigemma3_answer = geminigemma3_model.generate_answer(question, base_text, client).answer
+    geminigemma3_answer_obj = LLMAnswer(geminigemma3_model.model_name, geminigemma3_answer, qa.option_answers.free_form_answers)
+    geminigemma3_answer_obj.calculate_similarity_score()
+    comparison_result.models_answers.append(geminigemma3_answer_obj)
+    
+    
 
 if __name__ == "__main__":
     # This file will create the data of the LLM generated data and score it against the ground truth dataset
     # load the dataset.plk file
     joined_dataset = pickle.load(open("results/joined_dataset.pkl", "rb"))
     
-    gemini1_5flash_model = Gemini1_5Flash()
     llm_generated_dataset = []
     
     for data in joined_dataset.dataset:
         # Generate answers for each question in the dataset using the LLM model
         for qa in data.qas:
-            llm_answer = gemini1_5flash_model.generate_answer(qa.question, data.full_text, GeminiClient).answer
-            gemini1_5flash_answer_obj = LLMAnswer(gemini1_5flash_model.model_name, llm_answer, qa.option_answers.free_form_answers)
-            gemini1_5flash_answer_obj.calculate_similarity_score()
-            comparison_result = ComparisonResult(qa)
-            comparison_result.models_answers.append(gemini1_5flash_answer_obj)
-            llm_generated_dataset.append(comparison_result)
+            comparison_results = generate_models_answer(qa, data.full_text, GeminiClient)
+            llm_generated_dataset.extend(comparison_results)
             break
         break
     

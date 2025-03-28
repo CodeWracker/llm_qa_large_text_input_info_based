@@ -36,7 +36,7 @@ class Gemini2_5ProExperimental(LLMModel):
         self.limit_rpd = 50 # Limite de requisições por dia
         
     def generate_answer(self, question, base_text, client):
-        return self.super().generate_answer(question, base_text, client, self.model_name)
+        return super().generate_answer(question, base_text, client, self.model_name)
 
 class Gemini2_0Flash(LLMModel):
     def __init__(self):
@@ -48,19 +48,19 @@ class Gemini2_0Flash(LLMModel):
         self.limit_rpd = 1500 # Limite de requisições por dia
         
     def generate_answer(self, question, base_text, client):
-        return self.super().generate_answer(question, base_text, client, self.model_name)
+        return super().generate_answer(question, base_text, client, self.model_name)
     
 class Gemini2_0FlashExperimental(LLMModel):
     def __init__(self):
         super().__init__("Gemini 2.0 Flash Experimental")
-        self.model_name = "gemini-2.0-flash-experimental"
+        self.model_name = "gemini-2.0-flash-exp"
         
         self.limit_rpm = 10 # Limite de requisições por minuto
         self.limit_tpm = 1000000 # Limite de tokens por minuto
         self.limit_rpd = 1500 # Limite de requisições por dia
         
     def generate_answer(self, question, base_text, client):
-        return self.super().generate_answer(question, base_text, client, self.model_name)
+        return super().generate_answer(question, base_text, client, self.model_name)
     
 class Gemini2_0FlashLite(LLMModel):
     def __init__(self):
@@ -72,19 +72,19 @@ class Gemini2_0FlashLite(LLMModel):
         self.limit_rpd = 1500 # Limite de requisições por dia
         
     def generate_answer(self, question, base_text, client):
-        return self.super().generate_answer(question, base_text, client, self.model_name)
+        return super().generate_answer(question, base_text, client, self.model_name)
     
 class Gemini2_0FlashThinkingExperimental(LLMModel):
     def __init__(self):
         super().__init__("Gemini 2.0 Flash Thinking Experimental")
-        self.model_name = "gemini-2.0-flash-thinking-experimental"
+        self.model_name = "gemini-2.0-flash-thinking-exp-1219"
         
         self.limit_rpm = 10 # Limite de requisições por minuto
         self.limit_tpm = 4000000 # Limite de tokens por minuto
         self.limit_rpd = 1500 # Limite de requisições por dia
         
     def generate_answer(self, question, base_text, client):
-        return self.super().generate_answer(question, base_text, client, self.model_name)
+        return super().generate_answer(question, base_text, client, self.model_name)
     
 class Gemini1_5Flash(LLMModel):
     def __init__(self):
@@ -97,7 +97,7 @@ class Gemini1_5Flash(LLMModel):
         
 
     def generate_answer(self, question, base_text, client):
-        return self.super().generate_answer(question, base_text, client, self.model_name)
+        return super().generate_answer(question, base_text, client, self.model_name)
 
 class Gemini1_5Flash8B(LLMModel):
     def __init__(self):
@@ -109,7 +109,7 @@ class Gemini1_5Flash8B(LLMModel):
         self.limit_rpd = 1500 # Limite de requisições por dia
         
     def generate_answer(self, question, base_text, client):
-        return self.super().generate_answer(question, base_text, client, self.model_name)
+        return super().generate_answer(question, base_text, client, self.model_name)
     
 class Gemini1_5Pro(LLMModel):
     def __init__(self):
@@ -121,7 +121,7 @@ class Gemini1_5Pro(LLMModel):
         self.limit_rpd = 50 # Limite de requisições por dia
         
     def generate_answer(self, question, base_text, client):
-        return self.super().generate_answer(question, base_text, client, self.model_name)
+        return super().generate_answer(question, base_text, client, self.model_name)
     
 class GeminiGemma3(LLMModel):
     def __init__(self):
@@ -133,4 +133,4 @@ class GeminiGemma3(LLMModel):
         self.limit_rpd = 14400 # Limite de requisições por dia
         
     def generate_answer(self, question, base_text, client):
-        return self.super().generate_answer(question, base_text, client, self.model_name)
+        return super().generate_answer(question, base_text, client, self.model_name)
