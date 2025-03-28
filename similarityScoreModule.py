@@ -154,26 +154,28 @@ def combined_similarity(reference_text, generated_text):
     """
     logger.info("Calculando a similaridade combinada.")
     scores = {
-        'Cosine Similarity (TF-IDF)': cosine_similarity_score(reference_text, generated_text),
-        'Jaccard Similarity': jaccard_similarity_score(reference_text, generated_text),
-        'Bigram Similarity': ngram_similarity_score(reference_text, generated_text, n=2),
-        'Trigram Similarity': ngram_similarity_score(reference_text, generated_text, n=3),
-        'Fuzzy Similarity': fuzzy_similarity_score(reference_text, generated_text),
-        'Difflib Similarity': difflib_similarity_score(reference_text, generated_text),
+        # 'Cosine Similarity (TF-IDF)': cosine_similarity_score(reference_text, generated_text),
+        # 'Jaccard Similarity': jaccard_similarity_score(reference_text, generated_text),
+        # 'Bigram Similarity': ngram_similarity_score(reference_text, generated_text, n=2),
+        # 'Trigram Similarity': ngram_similarity_score(reference_text, generated_text, n=3),
+        # 'Fuzzy Similarity': fuzzy_similarity_score(reference_text, generated_text),
+        # 'Difflib Similarity': difflib_similarity_score(reference_text, generated_text),
         'SBERT Similarity': sbert_similarity_score(reference_text, generated_text),
         'BERTScore Similarity': bertscore_similarity_score(reference_text, generated_text)
     }
-    # Ponderação: 40% para SBERT, 40% para BERTScore, 20% para a média dos métodos lexicais
-    lexical_methods = [
-        scores['Cosine Similarity (TF-IDF)'],
-        scores['Jaccard Similarity'],
-        scores['Bigram Similarity'],
-        scores['Trigram Similarity'],
-        scores['Fuzzy Similarity'],
-        scores['Difflib Similarity']
-    ]
-    lexical_avg = np.mean(lexical_methods)
-    combined_score_value = 0.4 * scores['SBERT Similarity'] + 0.4 * scores['BERTScore Similarity'] + 0.2 * lexical_avg
+    # Ponderação: 40% para SBERT, 40% para BERTScore, 20% para a média dos métodos lexicais (ANTIGO)
+    # lexical_methods = [
+    #     scores['Cosine Similarity (TF-IDF)'],
+    #     scores['Jaccard Similarity'],
+    #     scores['Bigram Similarity'],
+    #     scores['Trigram Similarity'],
+    #     scores['Fuzzy Similarity'],
+    #     scores['Difflib Similarity']
+    # ]
+    # lexical_avg = np.mean(lexical_methods)
+    
+    # METRICA AGORA É SOMENTE A MÉDIA PONDERADA ENTRE SBERT E BERTSCORE (ANALISE DE SEMANTICA)
+    combined_score_value = 0.5 * scores['SBERT Similarity'] + 0.5 * scores['BERTScore Similarity'] 
     logger.info(f"Scores de similaridade: {scores}")
     logger.info(f"Pontuação de similaridade combinada (ponderada): {combined_score_value:.4f}")
     return scores, combined_score_value
