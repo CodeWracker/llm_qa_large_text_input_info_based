@@ -2,8 +2,15 @@ from datasetModule import JoinedDataset, DatasetData, QuestionAnswer, FreeFormAn
 from similarityScoreModule import sbert_similarity_score, combined_similarity
 
 from models.LLModel import LLMModel
-from models.SpecificModels import Gemini1_5Flash, Gemini1_5Flash8B, Gemini1_5Pro, Gemini2_0Flash, Gemini2_0FlashLite, Gemini2_0FlashThinkingExperimental, Gemini2_0FlashExperimental
-
+from models.SpecificModels import (
+    Gemini1_5Flash,
+    Gemini1_5Flash8B,
+    Gemini1_5Pro,
+    Gemini2_0Flash,
+    Gemini2_0FlashLite,
+    Gemini2_0FlashThinkingExperimental,
+    Gemini2_0FlashExperimental
+)
 
 import pickle
 import logging
@@ -18,146 +25,147 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
-
 GeminiClient = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
-
 
 class LLMAnswer:
     def __init__(self, model_name, answer, option_answers_gt):
         self.model_name = model_name
         self.answer = answer
         self.option_answers_gt = option_answers_gt
-        self.similarity_score = None
-        self.scores = []
+        self.similarity_score = None  # Similaridade geral (maior valor dentre as comparações)
+        self.scores = []  # Lista de dicionários: { "gt_compared_answer": <gt>, "scores": <scores_dict> }
+
     def calculate_similarity_score(self):
         for gt_answer in self.option_answers_gt:
-            
             scores, combined_score_value = combined_similarity(self.answer, gt_answer)
             logger.info(f"Similarity score between generated answer and ground truth answer: {combined_score_value:.4f}")
-            self.scores.append({"gt_compared_answer": gt_answer, "scores": scores})
+            self.scores.append({
+                "gt_compared_answer": gt_answer,
+                "scores": scores
+            })
             if self.similarity_score is None or combined_score_value > self.similarity_score:
                 self.similarity_score = combined_score_value
-        pass
+
     def to_dict(self):
+        # Transforma a lista de scores em um dicionário onde a chave é a resposta GT
+        similarities = { item["gt_compared_answer"]: item["scores"] for item in self.scores }
         return {
             "model_name": self.model_name,
             "answer": self.answer,
-            "similarity_score": self.similarity_score,
-            "scores": self.scores           
+            "overall_similarity": self.similarity_score,
+            "similarities": similarities
         }
 
 class ComparisonResult:
-    def __init__(self, groud_truth_qas):
-        self.question = groud_truth_qas.question
-        self.unanswerable = groud_truth_qas.unanswerable
-        self.option_answers_gt = groud_truth_qas.option_answers.free_form_answers
-        self.models_answers = []
+    def __init__(self, ground_truth_qas, text_title):
+        self.question = ground_truth_qas.question
+        self.text_title = text_title
+        self.unanswerable = ground_truth_qas.unanswerable
+        self.ground_truth = ground_truth_qas.option_answers.free_form_answers
+        self.model_results = []  # Lista de instâncias de LLMAnswer
+
     def to_dict(self):
-        dict_model_answers = [model_answer.to_dict() for model_answer in self.models_answers]
+        model_results_list = [model_answer.to_dict() for model_answer in self.model_results]
         return {
             "question": self.question,
+            "text_title": self.text_title,
             "unanswerable": self.unanswerable,
-            "option_answers_gt": self.option_answers_gt,
-            "dict_model_answers": dict_model_answers
+            "ground_truth": self.ground_truth,
+            "model_results": model_results_list
         }
- 
-def generate_models_answer(qa, base_text, client):
-    question = qa.question
-    comparison_results = ComparisonResult(qa)
-    
-    
-    gemini1_5flash_model = Gemini1_5Flash()
-    gemini1_5flash_answer = gemini1_5flash_model.generate_answer(question, base_text, client).answer
-    gemini1_5flash_answer_obj = LLMAnswer(gemini1_5flash_model.model_name, gemini1_5flash_answer, qa.option_answers.free_form_answers)
-    gemini1_5flash_answer_obj.calculate_similarity_score()
-    comparison_results.models_answers.append(gemini1_5flash_answer_obj)
-    
-    gemini1_5flash8b_model = Gemini1_5Flash8B()
-    gemini1_5flash8b_answer = gemini1_5flash8b_model.generate_answer(question, base_text, client).answer
-    gemini1_5flash8b_answer_obj = LLMAnswer(gemini1_5flash8b_model.model_name, gemini1_5flash8b_answer, qa.option_answers.free_form_answers)
-    gemini1_5flash8b_answer_obj.calculate_similarity_score()
-    comparison_results.models_answers.append(gemini1_5flash8b_answer_obj)
-    
-    
-    gemini1_5pro_model = Gemini1_5Pro()
-    gemini1_5pro_answer = gemini1_5pro_model.generate_answer(question, base_text, client).answer
-    gemini1_5pro_answer_obj = LLMAnswer(gemini1_5pro_model.model_name, gemini1_5pro_answer, qa.option_answers.free_form_answers)
-    gemini1_5pro_answer_obj.calculate_similarity_score()
-    comparison_results.models_answers.append(gemini1_5pro_answer_obj)
-    
-    gemini2_0flash_model = Gemini2_0Flash()
-    gemini2_0flash_answer = gemini2_0flash_model.generate_answer(question, base_text, client).answer
-    gemini2_0flash_answer_obj = LLMAnswer(gemini2_0flash_model.model_name, gemini2_0flash_answer, qa.option_answers.free_form_answers)
-    gemini2_0flash_answer_obj.calculate_similarity_score()
-    comparison_results.models_answers.append(gemini2_0flash_answer_obj)
-    
-    gemini2_0flashlite_model = Gemini2_0FlashLite()
-    gemini2_0flashlite_answer = gemini2_0flashlite_model.generate_answer(question, base_text, client).answer
-    gemini2_0flashlite_answer_obj = LLMAnswer(gemini2_0flashlite_model.model_name, gemini2_0flashlite_answer, qa.option_answers.free_form_answers)
-    gemini2_0flashlite_answer_obj.calculate_similarity_score()
-    comparison_results.models_answers.append(gemini2_0flashlite_answer_obj)
-    
-    gemini2_0flashthinking_model = Gemini2_0FlashThinkingExperimental()
-    gemini2_0flashthinking_answer = gemini2_0flashthinking_model.generate_answer(question, base_text, client).answer
-    gemini2_0flashthinking_answer_obj = LLMAnswer(gemini2_0flashthinking_model.model_name, gemini2_0flashthinking_answer, qa.option_answers.free_form_answers)
-    gemini2_0flashthinking_answer_obj.calculate_similarity_score()
-    comparison_results.models_answers.append(gemini2_0flashthinking_answer_obj)
-    
-    gemini2_0flashexperimental_model = Gemini2_0FlashExperimental()
-    gemini2_0flashexperimental_answer = gemini2_0flashexperimental_model.generate_answer(question, base_text, client).answer
-    gemini2_0flashexperimental_answer_obj = LLMAnswer(gemini2_0flashexperimental_model.model_name, gemini2_0flashexperimental_answer, qa.option_answers.free_form_answers)
-    gemini2_0flashexperimental_answer_obj.calculate_similarity_score()
-    comparison_results.models_answers.append(gemini2_0flashexperimental_answer_obj)
 
+def process_models_for_comparison(comparison_results, question, base_text, client):
+    # Lista dos modelos a serem processados
+    modelos = [
+        Gemini1_5Flash,
+        Gemini1_5Flash8B,
+        Gemini1_5Pro,
+        Gemini2_0Flash,
+        Gemini2_0FlashLite,
+        Gemini2_0FlashThinkingExperimental,
+        Gemini2_0FlashExperimental
+    ]
+    
+    for modelo_class in modelos:
+        # Instancia o modelo para obter o nome
+        modelo_inst = modelo_class()
+        model_name = modelo_inst.model_name
+        # Verifica se esse modelo já foi processado para esse par
+        if not any(mr.model_name == model_name for mr in comparison_results.model_results):
+            logger.info(f"Processando modelo: {model_name} para a questão: {question}")
+            answer_obj = modelo_inst.generate_answer(question, base_text, client)
+            llm_answer_obj = LLMAnswer(model_name, answer_obj.answer, comparison_results.ground_truth)
+            llm_answer_obj.calculate_similarity_score()
+            comparison_results.model_results.append(llm_answer_obj)
+        else:
+            logger.info(f"Modelo {model_name} já processado para essa questão, pulando.")
     return comparison_results
-    
-    
 
 if __name__ == "__main__":
-    # This file will create the data of the LLM generated data and score it against the ground truth dataset
-    # load the dataset.plk file
-    joined_dataset = pickle.load(open("results/joined_dataset.pkl", "rb"))
-    
-    llm_generated_dataset = []
-    
-    for data in joined_dataset.dataset:
-        # Generate answers for each question in the dataset using the LLM model
-        for qa in data.qas:
-            comparison_results = generate_models_answer(qa, data.full_text, GeminiClient)
-            llm_generated_dataset.append(comparison_results)
-            break
-        break
-    
-    # Save the generated dataset with similarity scores
-    with open("results/llm_generated_dataset.pkl", "wb") as f:
-        pickle.dump(llm_generated_dataset, f)
-    logger.info("LLM generated dataset saved successfully.")
-    
-    # Save as JSON file
-    with open("results/llm_generated_dataset.json", "w", encoding="utf-8") as f:
-        json_data = []
-        for comparison_result in llm_generated_dataset:
-            json_data.append(comparison_result.to_dict())
-        json.dump(json_data, f, ensure_ascii=False, indent=2)
+    try:
+        # Carrega o dataset original
+        joined_dataset = pickle.load(open("results/joined_dataset.pkl", "rb"))
         
-    # logging.info("Attempting to delete GeminiClient...")
-    # https://github.com/googleapis/python-genai/issues/588
-    # GeminiClient = None
-    # GeminiClient._api_client._httpx_client.close()
-    # GeminiClient._api_client._httpx_client._state = ClientState.CLOSED
-    
-    # Explicitly close the underlying httpx client
+        # Tenta carregar os resultados gerados anteriormente
+        results_path = "results/llm_generated_dataset.pkl"
+        if os.path.exists(results_path):
+            with open(results_path, "rb") as f:
+                loaded_results = pickle.load(f)
+            # Se os resultados carregados forem uma lista, converte para dicionário com chave "title+question"
+            if isinstance(loaded_results, list):
+                results_dict = {}
+                for item in loaded_results:
+                    key = f"{item.text_title}+{item.question}"
+                    results_dict[key] = item
+            else:
+                results_dict = loaded_results
+            logger.info("Resultados carregados com sucesso.")
+        else:
+            results_dict = {}
+            logger.info("Nenhum resultado anterior encontrado. Processando tudo do zero.")
+        
+        # Processa o dataset e atualiza apenas os pares que faltam
+        for data in joined_dataset.dataset:
+            for qa in data.qas:
+                key = f"{data.title}+{qa.question}"
+                if key in results_dict:
+                    comparison_result = results_dict[key]
+                    logger.info(f"Par já processado: {key}. Verificando modelos faltantes.")
+                else:
+                    comparison_result = ComparisonResult(qa, data.title)
+                
+                # Processa apenas os modelos que ainda não foram computados para esse par
+                comparison_result = process_models_for_comparison(comparison_result, qa.question, data.full_text, GeminiClient)
+                
+                # Atualiza ou adiciona o resultado no dicionário
+                results_dict[key] = comparison_result
+                
+                # Para teste, interrompe após a primeira questão de cada texto
+                break
+            # Para teste, interrompe após o primeiro texto
+            break
+        
+        # Converte os resultados para lista para salvar
+        llm_generated_dataset = list(results_dict.values())
+        
+        # Salva o dataset gerado com as similaridades em formato pickle
+        with open(results_path, "wb") as f:
+            pickle.dump(results_dict, f)
+        logger.info("LLM generated dataset salvo com sucesso (pickle).")
+        
+        # Salva como arquivo JSON com a nova estrutura
+        with open("results/llm_generated_dataset.json", "w", encoding="utf-8") as f:
+            json_data = [cr.to_dict() for cr in llm_generated_dataset]
+            json.dump(json_data, f, ensure_ascii=False, indent=2)
+        logger.info("LLM generated dataset salvo com sucesso (JSON).")
+    except Exception as e:
+        logger.error("Erro durante o processamento: %s", e)
+        
+    # Fechamento do GeminiClient
     try:
         GeminiClient._api_client._httpx_client.close()
     except Exception as e:
-        logger.warning("Error closing httpx client: %s", e)
+        logger.warning("Erro ao fechar o httpx client: %s", e)
 
-    # Optionally override the __del__ method to a no-op to bypass cleanup code
     GeminiClient.__del__ = lambda self: None
-
-    # Now set GeminiClient to None, so the original __del__ isn’t called
     GeminiClient = None
-    
-    # logger.info("GeminiClient closed successfully.")
-   
