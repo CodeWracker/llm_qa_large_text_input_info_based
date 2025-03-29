@@ -1,0 +1,142 @@
+\documentclass{article}%
+\usepackage[T1]{fontenc}%
+\usepackage[utf8]{inputenc}%
+\usepackage{lmodern}%
+\usepackage{textcomp}%
+\usepackage{lastpage}%
+\usepackage{geometry}%
+\geometry{tmargin=2cm,lmargin=2cm,rmargin=2cm,bmargin=2cm}%
+\usepackage{graphicx}%
+\usepackage{float}%
+\usepackage{booktabs}%
+%
+\title{Relatório de Análise de Similaridade entre Modelos}%
+\author{Seu Nome}%
+\date{\today}%
+%
+\begin{document}%
+\normalsize%
+\maketitle%
+\tableofcontents%
+\newpage%
+\section*{Introdução}%
+\label{sec:Introduo}%
+Este relatório apresenta a análise comparativa dos modelos baseados nas métricas de similaridade entre respostas. Os dados foram processados a partir de um arquivo pickle que contém as respostas dos modelos e as respostas de referência (ground truth). Diversas métricas de similaridade (como Cosine Similarity, Difflib, BERTScore, entre outras) foram calculadas para cada comparação. O objetivo é entender a performance dos modelos a partir de diferentes perspectivas estatísticas e correlacionais.
+
+%
+\section*{Metodologia}%
+\label{sec:Metodologia}%
+Inicialmente, os dados foram carregados e convertidos para um formato de dicionário. Foram construídos dois DataFrames principais: \textbf{df\_overall}: contém as estatísticas gerais (overall similarity) para cada questão e modelo; \textbf{df\_detailed}: armazena, para cada comparação (modelo versus ground truth), os valores de diversas métricas de similaridade. Em seguida, foram aplicadas análises descritivas, de correlação e variação, além da exportação dos dados para arquivos CSV e tabelas em LaTeX. Os gráficos gerados (barras, histogramas, boxplots, heatmaps e scatter plots) ilustram visualmente os resultados e auxiliam na interpretação dos dados.
+
+%
+\section*{Resultados}%
+\label{sec:Resultados}%
+\subsection*{Análise Descritiva da Similaridade Geral}%
+\label{subsec:AnliseDescritivadaSimilaridadeGeral}%
+A tabela a seguir (Tabela \ref{tab:overall_stats}) apresenta as estatísticas descritivas da overall similarity por modelo, incluindo média, mediana, desvio padrão, valor mínimo e máximo.%
+\begin{table}[H]%
+\centering%
+\caption{Estatísticas de Overall Similarity por Modelo}\label{tab:overall_stats}%
+\begin{tabular}{lrrrrr}
+\toprule
+ & mean & median & std & min & max \\
+model_name &  &  &  &  &  \\
+\midrule
+gemini-1.5-flash & 0.624493 & 0.667514 & 0.243642 & 0.000000 & 1.000000 \\
+gemini-1.5-flash-8b & 0.695548 & 0.734200 & 0.284632 & 0.000000 & 1.000000 \\
+gemini-1.5-pro & 0.602949 & 0.657294 & 0.196461 & 0.000000 & 0.806889 \\
+gemini-2.0-flash & 0.704191 & 0.741846 & 0.254234 & 0.000000 & 1.000000 \\
+gemini-2.0-flash-exp & 0.712266 & 0.735477 & 0.250689 & 0.000000 & 1.000000 \\
+gemini-2.0-flash-lite & 0.661387 & 0.659615 & 0.257016 & 0.000000 & 1.000000 \\
+gemini-2.0-flash-thinking-exp-1219 & 0.719972 & 0.741123 & 0.247354 & 0.000000 & 1.000000 \\
+\bottomrule
+\end{tabular}
+%
+\end{table}
+
+%
+\subsection*{Frequência de Casos com Scores Vazios}%
+\label{subsec:FrequnciadeCasoscomScoresVazios}%
+A tabela a seguir (Tabela \ref{tab:empty_scores}) mostra a contagem e o percentual de casos com dicionários de scores vazios para cada modelo.%
+\begin{table}[H]%
+\centering%
+\caption{Frequência de Casos com Scores Vazios por Modelo}\label{tab:empty_scores}%
+\begin{tabular}{lrr}
+\toprule
+ & empty\_counts & empty\_percent \\
+model_name &  &  \\
+\midrule
+gemini-1.5-flash & 3 & 7.320000 \\
+gemini-1.5-flash-8b & 5 & 12.200000 \\
+gemini-1.5-pro & 2 & 4.880000 \\
+gemini-2.0-flash & 3 & 7.320000 \\
+gemini-2.0-flash-exp & 3 & 7.320000 \\
+gemini-2.0-flash-lite & 3 & 7.320000 \\
+gemini-2.0-flash-thinking-exp-1219 & 2 & 4.880000 \\
+\bottomrule
+\end{tabular}
+%
+\end{table}
+
+%
+\subsection*{Estatísticas Agregadas das Métricas Detalhadas}%
+\label{subsec:EstatsticasAgregadasdasMtricasDetalhadas}%
+A tabela a seguir (Tabela \ref{tab:aggregated_metrics}) apresenta as estatísticas agregadas das métricas detalhadas (média, mediana, desvio padrão, mínimo e máximo) para cada modelo.%
+\begin{table}[H]%
+\centering%
+\caption{Estatísticas Agregadas das Métricas Detalhadas por Modelo}\label{tab:aggregated_metrics}%
+\begin{tabular}{lllllllllllllllllllllllllllllllllllllllll}
+\toprule
+ & Difflib Similarity & Difflib Similarity.1 & Difflib Similarity.2 & Difflib Similarity.3 & Difflib Similarity.4 & Trigram Similarity & Trigram Similarity.1 & Trigram Similarity.2 & Trigram Similarity.3 & Trigram Similarity.4 & Jaccard Similarity & Jaccard Similarity.1 & Jaccard Similarity.2 & Jaccard Similarity.3 & Jaccard Similarity.4 & Fuzzy Similarity & Fuzzy Similarity.1 & Fuzzy Similarity.2 & Fuzzy Similarity.3 & Fuzzy Similarity.4 & SBERT Similarity & SBERT Similarity.1 & SBERT Similarity.2 & SBERT Similarity.3 & SBERT Similarity.4 & Bigram Similarity & Bigram Similarity.1 & Bigram Similarity.2 & Bigram Similarity.3 & Bigram Similarity.4 & BERTScore Similarity & BERTScore Similarity.1 & BERTScore Similarity.2 & BERTScore Similarity.3 & BERTScore Similarity.4 & Cosine Similarity (TF-IDF) & Cosine Similarity (TF-IDF).1 & Cosine Similarity (TF-IDF).2 & Cosine Similarity (TF-IDF).3 & Cosine Similarity (TF-IDF).4 \\
+\midrule
+NaN & mean & median & std & min & max & mean & median & std & min & max & mean & median & std & min & max & mean & median & std & min & max & mean & median & std & min & max & mean & median & std & min & max & mean & median & std & min & max & mean & median & std & min & max \\
+model\_name & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN & NaN \\
+gemini-1.5-flash & 0.2799203811434493 & 0.21922847564710055 & 0.24785096376552662 & 0.0 & 0.9615384615384616 & 0.06626866619070026 & 0.003968253968253968 & 0.1700273012734746 & 0.0 & 1.0 & 0.21140476093781355 & 0.1458966565349544 & 0.2265811595613438 & 0.0 & 1.0 & 0.3610526315789474 & 0.32 & 0.2326903693019129 & 0.0 & 0.96 & 0.6312073242703551 & 0.6437293291091919 & 0.21374447768110594 & -0.017379697412252426 & 0.9999999403953552 & 0.09450694407588364 & 0.03883349950149551 & 0.17956895075155382 & 0.0 & 1.0 & 0.7196166876115297 & 0.697758674621582 & 0.10506571159248747 & 0.54423588514328 & 1.0000001192092896 & 0.34825800200164503 & 0.2846709402496297 & 0.2484120679797909 & 0.0 & 1.0000000000000002 \\
+gemini-1.5-flash-8b & 0.42941601327943457 & 0.2646458758379481 & 0.36001778190881295 & 0.0 & 1.0 & 0.16413779019452507 & 0.0 & 0.3334726593426224 & 0.0 & 1.0 & 0.36079441697311027 & 0.18974358974358974 & 0.3588658026174959 & 0.0 & 1.0 & 0.5055555555555555 & 0.415 & 0.30973209109481736 & 0.0 & 1.0 & 0.7036903732352786 & 0.7219740152359009 & 0.24410216229157536 & 0.04892702400684357 & 1.0 & 0.19087459744868485 & 0.014425072644250726 & 0.3393307404799798 & 0.0 & 1.0 & 0.7781418694390191 & 0.7266928553581238 & 0.12849453180425782 & 0.6036295294761658 & 1.0 & 0.4275812034213022 & 0.35426023647317056 & 0.3464112180606134 & 0.0 & 1.0000000000000002 \\
+gemini-1.5-pro & 0.20687483195529055 & 0.2087912087912088 & 0.14091516134442492 & 0.0060790273556231 & 0.53125 & 0.032282440983450074 & 0.0 & 0.049960529071999625 & 0.0 & 0.18181818181818182 & 0.1519117619788406 & 0.13114754098360656 & 0.10510325062782307 & 0.0 & 0.4 & 0.2887179487179487 & 0.3 & 0.15152174565456875 & 0.01 & 0.6 & 0.5753845440176053 & 0.6188157796859741 & 0.1993749107252614 & -0.0010327864438295364 & 0.8784235119819641 & 0.058768556882469764 & 0.027210884353741496 & 0.07077323838045284 & 0.0 & 0.25 & 0.6934220011417682 & 0.7006736993789673 & 0.07310206799497296 & 0.5502569675445557 & 0.8579261302947998 & 0.27981998427539023 & 0.27894254532582513 & 0.14832396225433872 & 0.0 & 0.5658678403492277 \\
+gemini-2.0-flash & 0.44854865960863294 & 0.39603729603729604 & 0.3249836145276488 & 0.0 & 1.0 & 0.1272154137925116 & 0.0 & 0.2183294501730026 & 0.0 & 0.8571428571428571 & 0.3434419249299461 & 0.24525316455696203 & 0.3030142889268265 & 0.0 & 1.0 & 0.531578947368421 & 0.455 & 0.27406377553102756 & 0.0 & 1.0 & 0.6787298678567535 & 0.669850081205368 & 0.23570748725080332 & 0.1366681307554245 & 0.9999999403953552 & 0.1690853398871384 & 0.014815627743634766 & 0.25254294318588666 & 0.0 & 0.875 & 0.780173587171655 & 0.7751254439353943 & 0.1200586331340362 & 0.572259247303009 & 1.0000001192092896 & 0.44673096963849285 & 0.39690336488601813 & 0.32683227606379095 & 0.0 & 1.0000000000000002 \\
+gemini-2.0-flash-exp & 0.47128847317169426 & 0.4190522557611165 & 0.32206984292687246 & 0.0 & 1.0 & 0.14651392123957638 & 0.0 & 0.22577826481119267 & 0.0 & 0.8571428571428571 & 0.3652325809690139 & 0.275 & 0.3010113353585862 & 0.0 & 1.0 & 0.5476315789473684 & 0.47 & 0.2729462298351515 & 0.0 & 1.0 & 0.6836691016429349 & 0.6445953249931335 & 0.23137534791588807 & 0.1366681307554245 & 0.9999999403953552 & 0.19118668373369085 & 0.03262599469496021 & 0.25914319131271835 & 0.0 & 0.875 & 0.7891636365338376 & 0.7877156138420105 & 0.1155103441755064 & 0.572259247303009 & 1.0000001192092896 & 0.45306986746008304 & 0.3930088807167925 & 0.33068481975135317 & 0.0 & 1.0000000000000002 \\
+gemini-2.0-flash-lite & 0.39852259018231834 & 0.30897877223178427 & 0.3110210418287233 & 0.0 & 1.0 & 0.12891402029547386 & 0.0 & 0.24777211315303016 & 0.0 & 1.0 & 0.27535343157110964 & 0.1913687881429817 & 0.28277353404235894 & 0.0 & 1.0 & 0.4755263157894737 & 0.42 & 0.26901921330380896 & 0.0 & 1.0 & 0.6058163336037021 & 0.6112007796764374 & 0.2605908208557018 & 0.04255399480462074 & 1.0 & 0.1463677447515532 & 0.021708683473389355 & 0.25505097187482756 & 0.0 & 1.0 & 0.7579752818534249 & 0.7120564579963684 & 0.12278314958606276 & 0.5514239072799683 & 1.0000001192092896 & 0.3946711679436973 & 0.26706162299722735 & 0.32619256766865434 & 0.0 & 1.0000000000000002 \\
+gemini-2.0-flash-thinking-exp-1219 & 0.44947587816004714 & 0.3649122807017544 & 0.32906983271331397 & 0.0 & 1.0 & 0.10631602592388144 & 0.0 & 0.19849503491938006 & 0.0 & 0.7323943661971831 & 0.35623767554542507 & 0.22580645161290322 & 0.3291696761221861 & 0.0 & 1.0 & 0.5251282051282051 & 0.47 & 0.2851119059604103 & 0.0 & 1.0 & 0.7112669165317829 & 0.726109504699707 & 0.2231497211313038 & 0.08222454786300659 & 0.9999999403953552 & 0.17704364127294087 & 0.045871559633027525 & 0.2708294245145265 & 0.0 & 1.0 & 0.7917987566727859 & 0.7634747624397278 & 0.11625967595231144 & 0.6020044088363647 & 1.0000001192092896 & 0.4515502699805307 & 0.3800085496337079 & 0.33792347383798566 & 0.0 & 1.0000000000000002 \\
+\bottomrule
+\end{tabular}
+%
+\end{table}
+
+%
+\section*{Discussão}%
+\label{sec:Discusso}%
+
+A análise dos dados indica que o modelo \textbf{gemini-2.0-flash-thinking-exp-1219} apresentou a maior média de overall similarity (0.72), 
+enquanto o modelo \textbf{gemini-1.5-pro} apresentou a menor média (0.60). Essa diferença ressalta variações na performance 
+dos modelos em aderência às respostas de referência.
+
+Adicionalmente, observa-se que o percentual de casos com dicionário de scores vazio foi mais elevado para o modelo 
+\textbf{gemini-1.5-flash-8b} (12.2%), sugerindo que podem haver dificuldades na geração ou na coleta dos scores para esse modelo.
+
+A análise das estatísticas agregadas das métricas detalhadas evidencia variações na consistência dos modelos, o que pode ser explorado 
+para identificar possíveis ajustes nos algoritmos de resposta.
+
+%
+\section*{Conclusões}%
+\label{sec:Concluses}%
+
+Com base nos dados analisados, pode-se concluir que:
+\begin{itemize}
+    \item Modelos com maiores médias de overall similarity tendem a aderir melhor às respostas de referência, embora a variabilidade dos scores deva ser considerada.
+    \item O elevado percentual de casos com scores vazios em alguns modelos indica a necessidade de investigar a qualidade dos dados e o processo de geração de scores.
+    \item As estatísticas agregadas das métricas detalhadas oferecem insights sobre a consistência dos modelos, o que pode orientar ajustes para aprimorar a performance.
+\end{itemize}
+
+%
+\section*{Anexos}%
+\label{sec:Anexos}%
+Os anexos deste relatório incluem as tabelas geradas a partir dos arquivos CSV: \texttt{overall\_stats.csv}, \texttt{empty\_scores\_frequency.csv}, e \texttt{aggregated\_metrics.csv}, além de todas as imagens geradas (gráficos em formato PNG presentes na pasta \texttt{analysis\_results}).
+
+%
+\section*{Referências}%
+\label{sec:Referncias}%
+Bibliotecas utilizadas: \begin{itemize}\item \textbf{pandas}, \textbf{numpy}: para manipulação e análise dos dados.\item \textbf{matplotlib}, \textbf{seaborn}: para geração dos gráficos.\item \textbf{PyLaTeX}: para a criação deste relatório em LaTeX.\end{itemize} Além disso, é necessário ter instalada uma distribuição LaTeX (como TeX Live ou MiKTeX) para compilar o documento.
+
+%
+\end{document}

@@ -47,14 +47,23 @@ def preprocess_text(text):
 
 def cosine_similarity_score(reference_text, generated_text):
     """
-    Calcula a similaridade do cosseno usando TF-IDF.
+    Calcula a similaridade do cosseno usando TF-IDF, tratando casos de vocabulário vazio.
     """
     logging.debug("Calculando a similaridade do cosseno (TF-IDF).")
-    vectorizer = TfidfVectorizer()
-    tfidf_matrix = vectorizer.fit_transform([reference_text, generated_text])
-    score_value = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0]
-    logging.debug(f"Similaridade do cosseno: {score_value:.4f}")
+    # Configura o vectorizer para aceitar tokens com 1 ou mais caracteres
+    vectorizer = TfidfVectorizer(token_pattern=r"(?u)\b\w+\b")
+    try:
+        tfidf_matrix = vectorizer.fit_transform([reference_text, generated_text])
+        # Se o vocabulário ficar vazio, força a exceção
+        if tfidf_matrix.shape[1] == 0:
+            raise ValueError("Empty vocabulary")
+        score_value = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0]
+        logging.debug(f"Similaridade do cosseno: {score_value:.4f}")
+    except ValueError as e:
+        logging.error(f"Erro no cálculo do TF-IDF: {e}")
+        score_value = 0.0
     return score_value
+
 
 def jaccard_similarity_score(reference_text, generated_text):
     """
@@ -112,7 +121,7 @@ def sbert_similarity_score(reference_text, generated_text):
     emb2 = sentense_transformer_model_sbert.encode(generated_text, convert_to_tensor=True, show_progress_bar = False)
     score_value = util.pytorch_cos_sim(emb1, emb2).item()
     logging.debug(f"Similaridade SBERT: {score_value:.4f}")
-    return 0.9
+    return score_value
 
 # Aumenta a consistência na detecção do idioma
 DetectorFactory.seed = 0
