@@ -5,7 +5,7 @@ from google import genai
 import json
 import os
 import re
-
+import time
 class LLLAnswer(BaseModel):
     question: str
     unanswerable: bool
@@ -22,14 +22,32 @@ class LLMModel:
     # virtual method to be implemented by subclasses
     def generate_answer(self, question, base_text, client, model_name):
         prompt = self.generate_prompt(question, base_text)
-        response = client.models.generate_content(
-            model=model_name,
-            contents=prompt,
-            config={
-                'response_mime_type': 'application/json',
-                'response_schema': LLLAnswer
-            }
-        )
+        while True:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                    config={
+                        'response_mime_type': 'application/json',
+                        'response_schema': LLLAnswer
+                    }
+                )
+                break
+            except Exception as e:
+                # 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-1.5-pro'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '44s'}]}}
+                # se e contem 'RESOURCE_EXHAUSTED'
+                if "RESOURCE_EXHAUSTED" in str(e):
+                    logging.error(f"Resource exhausted: {e}")
+                    logging.warning("Waiting for 1minute before retrying...")
+                    time.sleep(60)
+                # checka se é keyboard e se sim, espera 30 segundos
+                elif "KeyboardInterrupt" in str(e):
+                    raise KeyboardInterrupt
+                else:
+                    logging.error(f"An error occurred: {e}")
+                    logging.warning("Waiting for 30 seconds before retrying...")
+                    time.sleep(30)
+                continue
         model_answer = response.parsed
         
         
@@ -102,11 +120,27 @@ class NonJSONLLMModel(LLMModel):
         prompt = self.generate_prompt(question, base_text)
 
         while True:
-            response = client.models.generate_content(
-                model=model_name,
-                contents=prompt
-            )
-            
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt
+                )
+            # exception for RESOURCE_EXHAUSTED
+            except Exception as e:
+                # 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-1.5-pro'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '44s'}]}}
+                # se e contem 'RESOURCE_EXHAUSTED'
+                if "RESOURCE_EXHAUSTED" in str(e):
+                    logging.error(f"Resource exhausted: {e}")
+                    logging.warning("Waiting for 1minute before retrying...")
+                    time.sleep(60)
+                # checka se é keyboard e se sim, espera 30 segundos
+                elif "KeyboardInterrupt" in str(e):
+                    raise KeyboardInterrupt
+                else:
+                    logging.error(f"An error occurred: {e}")
+                    logging.warning("Waiting for 30 seconds before retrying...")
+                    time.sleep(30)
+                continue
             # logging.info(f"Response: {response}")
             
             try:

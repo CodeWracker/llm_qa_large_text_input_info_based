@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from pathlib import Path
 from pylatex import Document, Section, Subsection, Command, Figure, NoEscape, Package, MiniPage
 
 # =============================================================================
@@ -10,7 +11,7 @@ csv_folder = "analysis_results"
 # Carregar os CSVs com as estatísticas e métricas
 overall_stats_df = pd.read_csv(os.path.join(csv_folder, "overall_stats.csv"), index_col=0)
 empty_scores_df = pd.read_csv(os.path.join(csv_folder, "empty_scores_frequency.csv"), index_col=0)
-aggregated_metrics_df = pd.read_csv(os.path.join(csv_folder, "aggregated_metrics.csv"), index_col=0)
+
 variation_data_df = pd.read_csv(os.path.join(csv_folder, "variation_data.csv"), index_col=0)
 
 # Função para escapar underscores (pois serão usados em LaTeX)
@@ -21,15 +22,38 @@ def escape_df(df):
 
 overall_stats_df = escape_df(overall_stats_df)
 empty_scores_df = escape_df(empty_scores_df)
-aggregated_metrics_df = escape_df(aggregated_metrics_df)
 variation_data_df = escape_df(variation_data_df)
 
 # Converter DataFrames para tabelas LaTeX
 overall_stats_table = overall_stats_df.to_latex(escape=False)
 empty_scores_table = empty_scores_df.to_latex(escape=False)
-aggregated_metrics_df = aggregated_metrics_df.round(4)
-aggregated_metrics_df = aggregated_metrics_df.round(4)
-aggregated_metrics_table = aggregated_metrics_df.to_latex(escape=False)
+
+# Define o caminho da pasta onde os CSVs estão armazenados
+scores_folder = os.path.join("analysis_results", "scores")
+
+# Lista todos os arquivos CSV na pasta scores
+csv_files = [f for f in os.listdir(scores_folder) if f.endswith('.csv')]
+
+# Função para formatar cada valor para 4 casas decimais, se possível
+def format_value(x):
+    try:
+        return f"{float(x):.4f}"
+    except (ValueError, TypeError):
+        return x
+
+# Lista para armazenar as tabelas LaTeX de cada CSV
+detailed_results_latex_tables = []
+
+# Itera sobre cada arquivo CSV encontrado
+for csv_file in csv_files:
+    file_path = os.path.join(scores_folder, csv_file)
+    df = pd.read_csv(file_path, index_col=0)
+    # Aplica a formatação célula por célula
+    df = df.applymap(format_value)
+    # Converte o DataFrame para uma tabela em LaTeX
+    latex_table = df.to_latex(escape=False)
+    detailed_results_latex_tables.append(latex_table)
+
 variation_data_table = variation_data_df.to_latex(escape=False)
 
 # =============================================================================
@@ -47,6 +71,7 @@ doc = Document("RelatorioAnalise", geometry_options=geometry_options)
 doc.packages.append(Package("graphicx"))
 doc.packages.append(Package("float"))
 doc.packages.append(Package("booktabs"))
+doc.packages.append(Package("rotating"))
 
 # Pré-ambiente: título, autor, data
 doc.preamble.append(Command("title", "Relatório de Análise de Performance dos Modelos de Resposta"))
@@ -110,6 +135,10 @@ with doc.create(Section("Resultados", numbering=False)):
     
     
     
+    # Converter os caminhos das imagens para o formato POSIX
+    count_image_path = str(Path(csv_folder, "count_unanswerable.png").as_posix())
+    box_image_path = str(Path(csv_folder, "boxplot_overall_vs_unanswerable.png").as_posix())
+
     # Análise de Casos "Unanswerable" com imagens lado a lado usando minipages
     with doc.create(Subsection("Análise de Casos 'Unanswerable'", numbering=False)):
         doc.append("Nesta parte, são analisados os casos em que os modelos não forneceram respostas (unanswerable). "
@@ -118,12 +147,12 @@ with doc.create(Section("Resultados", numbering=False)):
         with doc.create(Figure(position='H')) as unans_fig:
             unans_fig.append(NoEscape(r"\begin{minipage}[b]{0.45\textwidth}"))
             unans_fig.append(NoEscape(r"\centering"))
-            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + str(os.path.join(csv_folder, "count_unanswerable.png")).replace(r'\\','/') + "}"))
+            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + count_image_path + "}"))
             unans_fig.append(NoEscape(r"\caption*{Contagem de Casos Unanswerable.}"))
             unans_fig.append(NoEscape(r"\end{minipage}\hfill"))
             unans_fig.append(NoEscape(r"\begin{minipage}[b]{0.45\textwidth}"))
             unans_fig.append(NoEscape(r"\centering"))
-            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + str(os.path.join(csv_folder, "boxplot_overall_vs_unanswerable.png")).replace(r'\\','/') + "}"))
+            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + box_image_path + "}"))
             unans_fig.append(NoEscape(r"\caption*{Boxplot – Overall Similarity vs. Unanswerable.}"))
             unans_fig.append(NoEscape(r"\end{minipage}"))
 
@@ -136,30 +165,57 @@ with doc.create(Section("Resultados", numbering=False)):
             heatmap_inter_fig.add_image(os.path.join(csv_folder, 'heatmap_inter_model_corr.png'), width=NoEscape(r'0.8\textwidth'))
             heatmap_inter_fig.add_caption("Heatmap – Correlação Inter-Modelos de Overall Similarity.")
     
-    # Estatísticas Agregadas das Métricas Detalhadas
-    with doc.create(Subsection("Estatísticas Agregadas das Métricas Detalhadas", numbering=False)):
-        doc.append("Por fim, a tabela a seguir apresenta as estatísticas agregadas (média, mediana, desvio padrão, mínimo e máximo) para cada métrica detalhada, "
-                "agrupadas por modelo. Essa análise auxilia na identificação de padrões e na avaliação da consistência dos scores.")
+# Seção: Estatísticas Agregadas das Métricas Detalhadas
+with doc.create(Subsection("Estatísticas Agregadas das Métricas Detalhadas", numbering=False)):
+    doc.append("A seguir, serão apresentadas diversas tabelas, cada uma correspondendo a um score específico. "
+               "Em cada tabela, estão exibidas as estatísticas agregadas – média, mediana, desvio padrão, valor mínimo e valor máximo – "
+               "agrupadas por modelo. Essas métricas auxiliam na identificação de padrões e na avaliação da consistência dos scores obtidos.")
+    
+    # Itera sobre as tabelas geradas (uma para cada score)
+    for i, table in enumerate(detailed_results_latex_tables):
+        # Usa o nome do arquivo CSV para identificar o score
+        metric_name = csv_files[i].replace(".csv", "").replace("_", r"\_")
+        doc.append(NoEscape(r"\subsubsection*{Estatísticas para o Score: " + metric_name + "}"))
         doc.append(NoEscape(r"\begin{table}[H]"))
         doc.append(NoEscape(r"\centering"))
-        doc.append(NoEscape(r"\caption{Estatísticas Agregadas das Métricas Detalhadas por Modelo}\label{tab:aggregated_metrics}"))
-        doc.append(NoEscape(aggregated_metrics_table))
+        doc.append(NoEscape(table))
         doc.append(NoEscape(r"\end{table}"))
+        doc.append(NoEscape(r"\vspace{0.5cm}"))
 
 
-# Discussão
+# ============================================================================
+# Gerar análises simples para as seções de Discussão 
+# ============================================================================
+# Identificar o modelo com maior e menor média de overall similarity
+max_mean_model = overall_stats_df['mean'].idxmax()
+max_mean_value = overall_stats_df.loc[max_mean_model, 'mean']
+min_mean_model = overall_stats_df['mean'].idxmin()
+min_mean_value = overall_stats_df.loc[min_mean_model, 'mean']
+
+# Identificar qual modelo possui o maior percentual de casos vazios
+# Note que aqui a coluna já foi escapada, então use 'empty\_percent'
+max_empty_model = empty_scores_df['empty\\_percent'].idxmax()
+max_empty_percent = empty_scores_df.loc[max_empty_model, 'empty\\_percent']
+
+# Texto da discussão baseado nos dados
+discussion_text = NoEscape(rf"""
+A análise dos dados indica que o modelo \textbf{{{max_mean_model}}} apresentou a maior média de overall similarity ({max_mean_value:.2f}), 
+enquanto o modelo \textbf{{{min_mean_model}}} apresentou a menor média ({min_mean_value:.2f}). Essa diferença ressalta variações na performance 
+dos modelos em aderência às respostas de referência.
+
+Adicionalmente, observa-se que o percentual de casos com dicionário de scores vazio foi mais elevado para o modelo 
+\textbf{{{max_empty_model}}} ({max_empty_percent}%), sugerindo que podem haver dificuldades na geração ou na coleta dos scores para esse modelo.
+
+A análise das estatísticas agregadas das métricas detalhadas evidencia variações na consistência dos modelos, o que pode ser explorado 
+para identificar possíveis ajustes nos algoritmos de resposta.
+""")
+
+
+# Discussão (texto gerado dinamicamente a partir dos dados)
+# ---------------------------------------------------------------------------
 with doc.create(Section("Discussão", numbering=False)):
-    doc.append("Os resultados apresentados oferecem múltiplas perspectivas sobre a performance dos modelos de resposta. "
-               "A análise das estatísticas de similaridade geral permite identificar quais modelos se destacam na aderência às respostas de referência, "
-               "enquanto os gráficos de distribuição e boxplots revelam a variabilidade dos scores. "
-               "A análise de correlação entre as métricas detalhadas e a overall similarity sugere a consistência (ou a falta dela) entre as diferentes formas de avaliação. "
-               "Adicionalmente, a análise dos casos unanswerable e a variação entre ground truths evidenciam pontos que podem ser aprimorados nos algoritmos de resposta.")
+    doc.append(discussion_text)
 
-# Conclusões
-with doc.create(Section("Conclusões", numbering=False)):
-    doc.append("Em resumo, o relatório demonstra que modelos com maiores médias de similaridade tendem a apresentar desempenho mais consistente. "
-               "Entretanto, a presença de alta variabilidade e de casos unanswerable indica que há espaço para ajustes nos processos de geração e avaliação das respostas. "
-               "A integração de diversas métricas e a análise visual proporcionam uma visão abrangente, que pode orientar futuras melhorias nos modelos.")
 
 # Anexos
 with doc.create(Section("Anexos", numbering=False)):

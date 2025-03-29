@@ -329,12 +329,25 @@ plt.savefig(os.path.join(output_folder, 'heatmap_inter_model_corr.png'))
 plt.close()
 
 # -------------------------------------------------------------------------------
-# 11. Estatísticas Agregadas das Métricas Detalhadas por Modelo
+# 11. Estatísticas Agregadas das Métricas Detalhadas por Modelo (geral)
 # -------------------------------------------------------------------------------
 aggregated_metrics = df_detailed.groupby('model_name')[score_keys].agg(['mean', 'median', 'std', 'min', 'max'])
 print("\nEstatísticas agregadas das métricas detalhadas por modelo:")
 print(aggregated_metrics)
 aggregated_metrics.to_csv(os.path.join(output_folder, 'aggregated_metrics.csv'))
+
+# -------------------------------------------------------------------------------
+# Salvar um DataFrame para cada score separadamente em analysis_results/scores
+# -------------------------------------------------------------------------------
+scores_folder = os.path.join(output_folder, "scores")
+os.makedirs(scores_folder, exist_ok=True)
+
+for key in score_keys:
+    df_score = df_detailed.groupby('model_name')[key].agg(['mean', 'median', 'std', 'min', 'max'])
+    print(f"\nEstatísticas agregadas para o score: {key}")
+    print(df_score)
+    df_score.to_csv(os.path.join(scores_folder, f'aggregated_{key}.csv'))
+
 
 # -------------------------------------------------------------------------------
 # 12. Correlação entre a média dos scores (avg_metric) e Overall Similarity

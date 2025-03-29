@@ -17,6 +17,7 @@ import logging
 import json
 from google import genai
 import os
+import time
 
 
 # Remove any existing handlers
@@ -168,7 +169,14 @@ if __name__ == "__main__":
             results_dict = {}
             logging.info("Nenhum resultado anterior encontrado. Processando tudo do zero.")
         
-        # Processa o dataset e atualiza apenas os pares que faltam
+        # Inicia a contagem de tempo e define o total de perguntas a serem processadas
+        start_time = time.time()
+        total_questions = sum(len(data.qas) for data in joined_dataset.dataset)
+        questions_processed = 0
+
+        # Lista para armazenar os tempos dos últimos 5 processamentos
+        last_times = []
+
         qtd_textos = len(joined_dataset.dataset)
         for data in joined_dataset.dataset:
             qtd_textos -= 1
@@ -181,19 +189,64 @@ if __name__ == "__main__":
                 else:
                     comparison_result = ComparisonResult(qa, data.title)
                 
+                # Inicia a medição do tempo para a pergunta atual
+                question_start = time.time()
+
                 # Processa apenas os modelos que ainda não foram computados para esse par
-                comparison_result = process_models_for_comparison(comparison_result, qa.question, data.full_text, GeminiClient)
+                while True:
+                    try:
+                        comparison_result = process_models_for_comparison(
+                            comparison_result, qa.question, data.full_text, GeminiClient
+                        )
+                        break
+                    except KeyboardInterrupt:
+                        logging.info("Processamento interrompido pelo usuário.")
+                        raise KeyboardInterrupt
+                    except Exception as e:
+                        logging.error(f"Erro ao processar o modelo: {e}")
+                        logging.info("Tentando novamente após erro.")
+                        time.sleep(2)
+                        continue
                 
                 # Atualiza ou adiciona o resultado no dicionário
                 results_dict[key] = comparison_result
 
                 # Salva checkpoint após cada pergunta processada
                 save_checkpoint(results_dict, results_path)
-            
+                
+                # Atualiza o contador de perguntas processadas
+                questions_processed += 1
+                
+                # Calcula o tempo gasto para esta pergunta e atualiza a lista dos últimos tempos
+                question_elapsed = time.time() - question_start
+                last_times.append(question_elapsed)
+                if len(last_times) > 5:
+                    last_times.pop(0)
+                
+                # Calcula o tempo médio com base nos últimos 5 processamentos (ou menos, se ainda não houver 5)
+                average_time = sum(last_times) / len(last_times)
+                remaining_questions = total_questions - questions_processed
+                estimated_remaining_time = average_time * remaining_questions
+                
+                elapsed_time_total = time.time() - start_time
+                
+                # Log de tempo decorrido e estimativa de tempo restante
+                logging.info(
+                    f"Tempo total gasto até agora: {elapsed_time_total:.2f} segundos. "
+                    f"Estimativa de tempo restante: {estimated_remaining_time:.2f} segundos."
+                )
+                
+                # Log do progresso de perguntas processadas
+                percent_done = (questions_processed / total_questions) * 100
+                logging.info(
+                    f"{questions_processed} perguntas respondidas por todos os modelos de um total de {total_questions}. "
+                    f"Processamento em {percent_done:.2f}%."
+                )
+            logging.info(f"Texto {data.title} processado com sucesso com {len(data.qas)} perguntas respondidas.")
         logging.info("Processamento completo do dataset.")
-        
-    except Exception as e:
-        logging.error("Erro durante o processamento: %s", e)
+                
+    except KeyboardInterrupt as e:
+        logging.error("Processamento interrompido pelo usuário.")
         
     # Fechamento do GeminiClient
     try:
