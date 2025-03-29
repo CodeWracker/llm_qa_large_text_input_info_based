@@ -28,6 +28,7 @@ variation_data_df = escape_df(variation_data_df)
 overall_stats_table = overall_stats_df.to_latex(escape=False)
 empty_scores_table = empty_scores_df.to_latex(escape=False)
 aggregated_metrics_df = aggregated_metrics_df.round(4)
+aggregated_metrics_df = aggregated_metrics_df.round(4)
 aggregated_metrics_table = aggregated_metrics_df.to_latex(escape=False)
 variation_data_table = variation_data_df.to_latex(escape=False)
 
@@ -117,12 +118,12 @@ with doc.create(Section("Resultados", numbering=False)):
         with doc.create(Figure(position='H')) as unans_fig:
             unans_fig.append(NoEscape(r"\begin{minipage}[b]{0.45\textwidth}"))
             unans_fig.append(NoEscape(r"\centering"))
-            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + os.path.join(csv_folder, "count_unanswerable.png") + "}"))
+            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + str(os.path.join(csv_folder, "count_unanswerable.png")).replace(r'\\','/') + "}"))
             unans_fig.append(NoEscape(r"\caption*{Contagem de Casos Unanswerable.}"))
             unans_fig.append(NoEscape(r"\end{minipage}\hfill"))
             unans_fig.append(NoEscape(r"\begin{minipage}[b]{0.45\textwidth}"))
             unans_fig.append(NoEscape(r"\centering"))
-            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + os.path.join(csv_folder, "boxplot_overall_vs_unanswerable.png") + "}"))
+            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + str(os.path.join(csv_folder, "boxplot_overall_vs_unanswerable.png")).replace(r'\\','/') + "}"))
             unans_fig.append(NoEscape(r"\caption*{Boxplot – Overall Similarity vs. Unanswerable.}"))
             unans_fig.append(NoEscape(r"\end{minipage}"))
 
