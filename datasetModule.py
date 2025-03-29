@@ -94,7 +94,11 @@ def extract_free_form_answers(option):
         # Processa extractive_spans, que pode ser lista ou string
         spans = option.get('extractive_spans')
         if isinstance(spans, list):
-            answers.extend(spans)
+            sp_resp = ""
+            for sp in spans:
+                sp_resp += sp + ", "
+            sp_resp = sp_resp[:-2]  # Remove a última vírgula
+            answers.append(sp_resp)
         elif spans:
             answers.append(spans)
     return answers

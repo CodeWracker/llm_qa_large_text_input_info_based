@@ -24,10 +24,20 @@ for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
 
 # Configuração do logging
+# Configuração para log em arquivo
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    filename='main.py.log',
+    filemode='a'
 )
+
+# Adiciona um handler para o console
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+console_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(console_formatter)
+logging.getLogger().addHandler(console_handler)
 
 GeminiClient = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
@@ -38,10 +48,29 @@ class LLMAnswer:
         self.option_answers_gt = option_answers_gt
         self.similarity_score = None  # Similaridade geral (maior valor dentre as comparações)
         self.scores = []  # Lista de dicionários: { "gt_compared_answer": <gt>, "scores": <scores_dict> }
+        logging.info(f"Instância de LLMAnswer criada para o modelo: {model_name} - Resposta: {answer}")
 
     def calculate_similarity_score(self):
         for gt_answer in self.option_answers_gt:
-            scores, combined_score_value = combined_similarity(self.answer, gt_answer)
+            # Verifica se a resposta do modelo ou o ground truth são "N/A"
+            answer_is_na = self.answer.strip().upper() == "N/A"
+            gt_is_na = gt_answer.strip().upper() == "N/A"
+            
+            if answer_is_na or gt_is_na:
+                # Se ao menos uma for "N/A", não calculamos as métricas detalhadas (scores será um objeto vazio)
+                scores = {}
+                # Se a resposta do modelo for "N/A" e o ground truth não for, pontuação 0
+                if answer_is_na and not gt_is_na:
+                    combined_score_value = 0.0
+                # Se ambas forem "N/A", pontuação 1
+                elif answer_is_na and gt_is_na:
+                    combined_score_value = 1.0
+                # Caso não especificado (por exemplo, ground truth for "N/A" e a resposta não), define como 0
+                else:
+                    combined_score_value = 0.0
+            else:
+                scores, combined_score_value = combined_similarity(self.answer, gt_answer)
+            
             logging.info(f"Similarity score between generated answer and ground truth answer: {combined_score_value:.4f}")
             self.scores.append({
                 "gt_compared_answer": gt_answer,
@@ -49,6 +78,7 @@ class LLMAnswer:
             })
             if self.similarity_score is None or combined_score_value > self.similarity_score:
                 self.similarity_score = combined_score_value
+
 
     def to_dict(self):
         # Transforma a lista de scores em um dicionário onde a chave é a resposta GT
@@ -105,6 +135,16 @@ def process_models_for_comparison(comparison_results, question, base_text, clien
             logging.info(f"Modelo {model_name} já processado para essa questão, pulando.")
     return comparison_results
 
+def save_checkpoint(results_dict, results_path):
+    # Salva o checkpoint em formato pickle
+    with open(results_path, "wb") as f:
+        pickle.dump(results_dict, f)
+    # Salva o checkpoint em formato JSON
+    with open("results/llm_generated_dataset.json", "w", encoding="utf-8") as f:
+        json_data = [cr.to_dict() for cr in list(results_dict.values())]
+        json.dump(json_data, f, ensure_ascii=False, indent=2)
+    logging.info("Checkpoint salvo com sucesso.")
+
 if __name__ == "__main__":
     try:
         # Carrega o dataset original
@@ -131,6 +171,7 @@ if __name__ == "__main__":
         # Processa o dataset e atualiza apenas os pares que faltam
         qtd_textos = len(joined_dataset.dataset)
         for data in joined_dataset.dataset:
+            qtd_textos -= 1
             logging.info(f"Processando texto: {data.title} ({qtd_textos} textos restantes)")
             for qa in data.qas:
                 key = f"{data.title}+{qa.question}"
@@ -145,21 +186,12 @@ if __name__ == "__main__":
                 
                 # Atualiza ou adiciona o resultado no dicionário
                 results_dict[key] = comparison_result
+
+                # Salva checkpoint após cada pergunta processada
+                save_checkpoint(results_dict, results_path)
             
+        logging.info("Processamento completo do dataset.")
         
-        # Converte os resultados para lista para salvar
-        llm_generated_dataset = list(results_dict.values())
-        
-        # Salva o dataset gerado com as similaridades em formato pickle
-        with open(results_path, "wb") as f:
-            pickle.dump(results_dict, f)
-        logging.info("LLM generated dataset salvo com sucesso (pickle).")
-        
-        # Salva como arquivo JSON com a nova estrutura
-        with open("results/llm_generated_dataset.json", "w", encoding="utf-8") as f:
-            json_data = [cr.to_dict() for cr in llm_generated_dataset]
-            json.dump(json_data, f, ensure_ascii=False, indent=2)
-        logging.info("LLM generated dataset salvo com sucesso (JSON).")
     except Exception as e:
         logging.error("Erro durante o processamento: %s", e)
         

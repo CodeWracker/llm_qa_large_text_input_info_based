@@ -154,6 +154,8 @@ def combined_similarity(reference_text, generated_text):
     e uma pontuação combinada ponderada.
     """
     logging.info("Calculando a similaridade combinada.")
+    reference_text = str(reference_text)
+    generated_text = str(generated_text)
     scores = {
         'Cosine Similarity (TF-IDF)': cosine_similarity_score(reference_text, generated_text),
         'Jaccard Similarity': jaccard_similarity_score(reference_text, generated_text),
