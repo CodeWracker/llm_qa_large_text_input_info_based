@@ -6,12 +6,7 @@ from datasets import load_dataset
 from tqdm import tqdm
 from pprint import pprint
 
-# Configuração do logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
+
 
 
 class FreeFormAnswer:
@@ -107,7 +102,7 @@ def extract_free_form_answers(option):
 
 def process_qasper(dataset, dataset_name):
     processed_data = []
-    logger.info(f"Iniciando o processamento do dataset QASPER - {dataset_name}")
+    logging.info(f"Iniciando o processamento do dataset QASPER - {dataset_name}")
     for item in tqdm(dataset, desc=f"QASPER {dataset_name}"):
         title = item.get("title", "")
         abstract = item.get("abstract", "")
@@ -134,7 +129,7 @@ def process_qasper(dataset, dataset_name):
 
 def process_quality(dataset, dataset_name):
     processed_data = []
-    logger.info(f"Iniciando o processamento do dataset Quality - {dataset_name}")
+    logging.info(f"Iniciando o processamento do dataset Quality - {dataset_name}")
     for item in tqdm(dataset, desc=f"Quality {dataset_name}"):
         title = item.get("title", "")
         full_text = item.get("article", "")
@@ -148,7 +143,7 @@ def process_quality(dataset, dataset_name):
 
 
 def main():
-    logger.info("Carregando os datasets...")
+    logging.info("Carregando os datasets...")
     qasper = load_dataset("allenai/qasper")
     quality = load_dataset("tasksource/QuALITY")
 
@@ -166,20 +161,25 @@ def main():
     # Salva o dataset completo
     with open("results/joined_dataset.json", "w", encoding="utf-8") as f:
         json.dump(joined_dataset.to_dict(), f, ensure_ascii=False, indent=2)
-    logger.info("Arquivo joined_dataset.json salvo com sucesso.")
+    logging.info("Arquivo joined_dataset.json salvo com sucesso.")
 
     # Cria uma cópia para salvar sem o full_text
     joined_dataset_no_full_text = copy.deepcopy(joined_dataset)
     joined_dataset_no_full_text.remove_full_text()
     with open("results/joined_dataset_no_full_text.json", "w", encoding="utf-8") as f:
         json.dump(joined_dataset_no_full_text.to_dict(), f, ensure_ascii=False, indent=2)
-    logger.info("Arquivo joined_dataset_no_full_text.json salvo com sucesso.")
+    logging.info("Arquivo joined_dataset_no_full_text.json salvo com sucesso.")
 
     # Salva em formato pickle
     with open("results/joined_dataset.pkl", "wb") as f:
         pickle.dump(joined_dataset, f)
-    logger.info("Arquivo joined_dataset.pkl salvo com sucesso.")
+    logging.info("Arquivo joined_dataset.pkl salvo com sucesso.")
 
 
 if __name__ == '__main__':
+    # Configuração do logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
     main()

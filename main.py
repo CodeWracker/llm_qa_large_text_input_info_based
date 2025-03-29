@@ -18,12 +18,16 @@ import json
 from google import genai
 import os
 
+
+# Remove any existing handlers
+for handler in logging.root.handlers[:]:
+    logging.root.removeHandler(handler)
+
 # Configuração do logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger(__name__)
 
 GeminiClient = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
@@ -38,7 +42,7 @@ class LLMAnswer:
     def calculate_similarity_score(self):
         for gt_answer in self.option_answers_gt:
             scores, combined_score_value = combined_similarity(self.answer, gt_answer)
-            logger.info(f"Similarity score between generated answer and ground truth answer: {combined_score_value:.4f}")
+            logging.info(f"Similarity score between generated answer and ground truth answer: {combined_score_value:.4f}")
             self.scores.append({
                 "gt_compared_answer": gt_answer,
                 "scores": scores
@@ -92,13 +96,13 @@ def process_models_for_comparison(comparison_results, question, base_text, clien
         model_name = modelo_inst.model_name
         # Verifica se esse modelo já foi processado para esse par
         if not any(mr.model_name == model_name for mr in comparison_results.model_results):
-            logger.info(f"Processando modelo: {model_name} para a questão: {question}")
+            logging.info(f"Processando modelo: {model_name} para a questão: {question}")
             answer_obj = modelo_inst.generate_answer(question, base_text, client)
             llm_answer_obj = LLMAnswer(model_name, answer_obj.answer, comparison_results.ground_truth)
             llm_answer_obj.calculate_similarity_score()
             comparison_results.model_results.append(llm_answer_obj)
         else:
-            logger.info(f"Modelo {model_name} já processado para essa questão, pulando.")
+            logging.info(f"Modelo {model_name} já processado para essa questão, pulando.")
     return comparison_results
 
 if __name__ == "__main__":
@@ -119,18 +123,20 @@ if __name__ == "__main__":
                     results_dict[key] = item
             else:
                 results_dict = loaded_results
-            logger.info("Resultados carregados com sucesso.")
+            logging.info("Resultados carregados com sucesso.")
         else:
             results_dict = {}
-            logger.info("Nenhum resultado anterior encontrado. Processando tudo do zero.")
+            logging.info("Nenhum resultado anterior encontrado. Processando tudo do zero.")
         
         # Processa o dataset e atualiza apenas os pares que faltam
+        qtd_textos = len(joined_dataset.dataset)
         for data in joined_dataset.dataset:
+            logging.info(f"Processando texto: {data.title} ({qtd_textos} textos restantes)")
             for qa in data.qas:
                 key = f"{data.title}+{qa.question}"
                 if key in results_dict:
                     comparison_result = results_dict[key]
-                    logger.info(f"Par já processado: {key}. Verificando modelos faltantes.")
+                    logging.info(f"Par já processado: {key}. Verificando modelos faltantes.")
                 else:
                     comparison_result = ComparisonResult(qa, data.title)
                 
@@ -139,11 +145,7 @@ if __name__ == "__main__":
                 
                 # Atualiza ou adiciona o resultado no dicionário
                 results_dict[key] = comparison_result
-                
-                # Para teste, interrompe após a primeira questão de cada texto
-                break
-            # Para teste, interrompe após o primeiro texto
-            break
+            
         
         # Converte os resultados para lista para salvar
         llm_generated_dataset = list(results_dict.values())
@@ -151,21 +153,21 @@ if __name__ == "__main__":
         # Salva o dataset gerado com as similaridades em formato pickle
         with open(results_path, "wb") as f:
             pickle.dump(results_dict, f)
-        logger.info("LLM generated dataset salvo com sucesso (pickle).")
+        logging.info("LLM generated dataset salvo com sucesso (pickle).")
         
         # Salva como arquivo JSON com a nova estrutura
         with open("results/llm_generated_dataset.json", "w", encoding="utf-8") as f:
             json_data = [cr.to_dict() for cr in llm_generated_dataset]
             json.dump(json_data, f, ensure_ascii=False, indent=2)
-        logger.info("LLM generated dataset salvo com sucesso (JSON).")
+        logging.info("LLM generated dataset salvo com sucesso (JSON).")
     except Exception as e:
-        logger.error("Erro durante o processamento: %s", e)
+        logging.error("Erro durante o processamento: %s", e)
         
     # Fechamento do GeminiClient
     try:
         GeminiClient._api_client._httpx_client.close()
     except Exception as e:
-        logger.warning("Erro ao fechar o httpx client: %s", e)
+        logging.warning("Erro ao fechar o httpx client: %s", e)
 
     GeminiClient.__del__ = lambda self: None
     GeminiClient = None

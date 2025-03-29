@@ -6,9 +6,7 @@ from pprint import pprint
 import time
 from datetime import datetime, timedelta
 
-# Configuração do logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+
 
 # --- Mixin e Decorator para controle de limites ---
 class RateLimitMixin:
@@ -42,21 +40,21 @@ class RateLimitMixin:
                 earliest = min(t for t in self.request_history if t > one_minute_ago)
                 wait_time = (earliest + timedelta(minutes=1) - now).total_seconds()
                 wait_times.append(wait_time)
-                logger.warning("Limite de requisições por minuto atingido. Aguardando {:.2f} segundos.".format(wait_time))
+                logging.warning("Limite de requisições por minuto atingido. Aguardando {:.2f} segundos.".format(wait_time))
             if tokens_last_minute + token_count > self.limit_tpm:
                 if self.token_history:
                     earliest_token = min(t for t, count in self.token_history if t > one_minute_ago)
                     wait_time = (earliest_token + timedelta(minutes=1) - now).total_seconds()
                     wait_times.append(wait_time)
-                    logger.warning("Limite de tokens por minuto atingido. Aguardando {:.2f} segundos.".format(wait_time))
+                    logging.warning("Limite de tokens por minuto atingido. Aguardando {:.2f} segundos.".format(wait_time))
                 else:
                     wait_times.append(60)
-                    logger.warning("Limite de tokens por minuto atingido. Aguardando 60 segundos.")
+                    logging.warning("Limite de tokens por minuto atingido. Aguardando 60 segundos.")
             if requests_today >= self.limit_rpd:
                 earliest_daily = min(self.request_history)
                 wait_time = (earliest_daily + timedelta(days=1) - now).total_seconds()
                 wait_times.append(wait_time)
-                logger.warning("Limite de requisições por dia atingido. Aguardando {:.2f} segundos.".format(wait_time))
+                logging.warning("Limite de requisições por dia atingido. Aguardando {:.2f} segundos.".format(wait_time))
 
             # Aguarda o tempo máximo necessário dentre os limites
             sleep_time = max(wait_times)
