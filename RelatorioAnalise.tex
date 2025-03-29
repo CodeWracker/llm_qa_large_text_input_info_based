@@ -10,78 +10,125 @@
 \usepackage{float}%
 \usepackage{booktabs}%
 %
-\title{Relatório de Análise de Similaridade entre Modelos}%
-\author{Seu Nome}%
+\title{Relatório de Análise de Performance dos Modelos de Resposta}%
 \date{\today}%
 %
 \begin{document}%
 \normalsize%
 \maketitle%
-\tableofcontents%
-\newpage%
 \section*{Introdução}%
 \label{sec:Introduo}%
-Este relatório apresenta a análise comparativa dos modelos baseados nas métricas de similaridade entre respostas. Os dados foram processados a partir de um arquivo pickle que contém as respostas dos modelos e as respostas de referência (ground truth). Diversas métricas de similaridade (como Cosine Similarity, Difflib, BERTScore, entre outras) foram calculadas para cada comparação. O objetivo é entender a performance dos modelos a partir de diferentes perspectivas estatísticas e correlacionais.
+Este relatório apresenta uma análise completa dos modelos de resposta, avaliando a similaridade entre as respostas geradas e as respostas de referência. Foram calculadas diversas métricas de similaridade e realizadas análises estatísticas e visuais para identificar padrões de performance, inconsistências e possíveis pontos de melhoria. O objetivo é fornecer subsídios para interpretar os dados de forma objetiva, auxiliando na tomada de decisões para ajustes nos algoritmos.
 
 %
 \section*{Metodologia}%
 \label{sec:Metodologia}%
-Inicialmente, os dados foram carregados e convertidos para um formato de dicionário. Foram construídos dois DataFrames principais: \textbf{df\_overall}: contém as estatísticas gerais (overall similarity) para cada questão e modelo; \textbf{df\_detailed}: armazena, para cada comparação (modelo versus ground truth), os valores de diversas métricas de similaridade. Em seguida, foram aplicadas análises descritivas, de correlação e variação, além da exportação dos dados para arquivos CSV e tabelas em LaTeX. Os gráficos gerados (barras, histogramas, boxplots, heatmaps e scatter plots) ilustram visualmente os resultados e auxiliam na interpretação dos dados.
+A análise foi realizada em duas etapas principais:\newline%
+\newline%
+%
+\begin{itemize}%
+\item Carregamento dos dados: os dados foram extraídos de um arquivo pickle e convertidos para dicionários, possibilitando o acesso às respostas dos modelos e às respostas de referência.%
+\item Processamento e análise: foram calculadas diversas métricas de similaridade, estatísticas descritivas e correlações. Além disso, foram gerados diversos gráficos (barras, histogramas, boxplots, heatmaps e scatter plots) para facilitar a interpretação visual dos resultados.%
+\end{itemize}%
+Cada gráfico ou tabela vem acompanhado de uma breve explicação sobre como interpretá{-}lo, de modo que o leitor possa compreender os pontos principais de cada análise.
 
 %
 \section*{Resultados}%
 \label{sec:Resultados}%
-\subsection*{Análise Descritiva da Similaridade Geral}%
-\label{subsec:AnliseDescritivadaSimilaridadeGeral}%
-A tabela a seguir (Tabela \ref{tab:overall_stats}) apresenta as estatísticas descritivas da overall similarity por modelo, incluindo média, mediana, desvio padrão, valor mínimo e máximo.%
-\begin{table}[H]%
+\subsection*{Estatísticas de Similaridade Geral}%
+\label{subsec:EstatsticasdeSimilaridadeGeral}%
+Nesta seção são apresentadas as estatísticas descritivas da overall similarity dos modelos. Valores médios e medianos mais elevados indicam melhor aderência às respostas de referência, enquanto um alto desvio padrão pode indicar maior variabilidade.%
+\newline%
+Foram gerados os seguintes gráficos para visualizar esses dados:%
+
+
+\begin{figure}[H]%
 \centering%
-\caption{Estatísticas de Overall Similarity por Modelo}\label{tab:overall_stats}%
-\begin{tabular}{lrrrrr}
-\toprule
- & mean & median & std & min & max \\
-model_name &  &  &  &  &  \\
-\midrule
-gemini-1.5-flash & 0.624493 & 0.667514 & 0.243642 & 0.000000 & 1.000000 \\
-gemini-1.5-flash-8b & 0.695548 & 0.734200 & 0.284632 & 0.000000 & 1.000000 \\
-gemini-1.5-pro & 0.602949 & 0.657294 & 0.196461 & 0.000000 & 0.806889 \\
-gemini-2.0-flash & 0.704191 & 0.741846 & 0.254234 & 0.000000 & 1.000000 \\
-gemini-2.0-flash-exp & 0.712266 & 0.735477 & 0.250689 & 0.000000 & 1.000000 \\
-gemini-2.0-flash-lite & 0.661387 & 0.659615 & 0.257016 & 0.000000 & 1.000000 \\
-gemini-2.0-flash-thinking-exp-1219 & 0.719972 & 0.741123 & 0.247354 & 0.000000 & 1.000000 \\
-\bottomrule
-\end{tabular}
-%
-\end{table}
+\includegraphics[width=0.8\textwidth]{analysis_results/barplot_overall_similarity.png}%
+\caption{Gráfico de Barras – Média de Overall Similarity por Modelo. Observe as diferenças de desempenho entre os modelos.}%
+\end{figure}
 
 %
-\subsection*{Frequência de Casos com Scores Vazios}%
-\label{subsec:FrequnciadeCasoscomScoresVazios}%
-A tabela a seguir (Tabela \ref{tab:empty_scores}) mostra a contagem e o percentual de casos com dicionários de scores vazios para cada modelo.%
-\begin{table}[H]%
+
+
+\begin{figure}[H]%
 \centering%
-\caption{Frequência de Casos com Scores Vazios por Modelo}\label{tab:empty_scores}%
-\begin{tabular}{lrr}
-\toprule
- & empty\_counts & empty\_percent \\
-model_name &  &  \\
-\midrule
-gemini-1.5-flash & 3 & 7.320000 \\
-gemini-1.5-flash-8b & 5 & 12.200000 \\
-gemini-1.5-pro & 2 & 4.880000 \\
-gemini-2.0-flash & 3 & 7.320000 \\
-gemini-2.0-flash-exp & 3 & 7.320000 \\
-gemini-2.0-flash-lite & 3 & 7.320000 \\
-gemini-2.0-flash-thinking-exp-1219 & 2 & 4.880000 \\
-\bottomrule
-\end{tabular}
+\includegraphics[width=0.8\textwidth]{analysis_results/histogram_overall_similarity.png}%
+\caption{Histograma – Distribuição de Overall Similarity. Permite visualizar a dispersão dos valores obtidos.}%
+\end{figure}
+
 %
-\end{table}
+
+
+\begin{figure}[H]%
+\centering%
+\includegraphics[width=0.8\textwidth]{analysis_results/boxplot_overall_similarity.png}%
+\caption{Boxplot – Overall Similarity por Modelo. Facilita a identificação de mediana, quartis e outliers.}%
+\end{figure}
+
+%
+\subsection*{Correlação entre Métricas de Similaridade}%
+\label{subsec:CorrelaoentreMtricasdeSimilaridade}%
+Nesta análise, avaliamos a correlação entre as diferentes métricas de similaridade (score keys). O heatmap abaixo mostra a força da correlação entre cada par de métricas: valores próximos de 1 ou {-}1 indicam forte correlação, enquanto valores próximos de 0 sugerem correlação fraca ou inexistente.%
+
+
+\begin{figure}[H]%
+\centering%
+\includegraphics[width=0.8\textwidth]{analysis_results/heatmap_score_keys_correlation.png}%
+\caption{Heatmap – Correlação entre as Métricas de Similaridade.}%
+\end{figure}
+
+%
+\newline%
+Além do heatmap, foram gerados scatter plots individuais comparando cada métrica com a overall similarity. Esses gráficos podem ser consultados nos anexos para análises mais detalhadas.
+
+%
+\subsection*{Correlação entre Overall Similarity e Média dos Scores}%
+\label{subsec:CorrelaoentreOverallSimilarityeMdiadosScores}%
+Esta seção apresenta a relação entre a overall similarity e a média dos scores detalhados (avg\textbackslash{}\_metric). O scatter plot a seguir permite identificar se existe uma tendência linear entre essas duas medidas, o que indicaria consistência na avaliação dos modelos.%
+
+
+\begin{figure}[H]%
+\centering%
+\includegraphics[width=0.8\textwidth]{analysis_results/scatter_overall_vs_avg_metric.png}%
+\caption{Scatter Plot – Overall Similarity vs. Média dos Score Metrics (avg\textbackslash{}\_metric).}%
+\end{figure}
+
+%
+\subsection*{Análise de Casos 'Unanswerable'}%
+\label{subsec:AnlisedeCasosUnanswerable}%
+Nesta parte, são analisados os casos em que os modelos não forneceram respostas (unanswerable). Os gráficos abaixo, apresentados lado a lado, mostram respectivamente a contagem desses casos e a relação entre a overall similarity e a condição de unanswerable. Em geral, uma baixa overall similarity pode estar associada a questões sem resposta.%
+
+
+\begin{figure}[H]%
+\begin{minipage}[b]{0.45\textwidth}%
+\centering%
+\includegraphics[width=\linewidth]{analysis_results\count_unanswerable.png}%
+\caption*{Contagem de Casos Unanswerable.}%
+\end{minipage}\hfill%
+\begin{minipage}[b]{0.45\textwidth}%
+\centering%
+\includegraphics[width=\linewidth]{analysis_results\boxplot_overall_vs_unanswerable.png}%
+\caption*{Boxplot – Overall Similarity vs. Unanswerable.}%
+\end{minipage}%
+\end{figure}
+
+%
+\subsection*{Correlação Inter{-}Modelos}%
+\label{subsec:CorrelaoInter{-}Modelos}%
+Esta análise verifica a correlação da overall similarity entre os diferentes modelos. Utilizando uma pivot table, foi calculada a correlação entre os modelos, cuja visualização por meio de um heatmap facilita a identificação de similaridades ou discrepâncias na performance entre eles.%
+
+
+\begin{figure}[H]%
+\centering%
+\includegraphics[width=0.8\textwidth]{analysis_results/heatmap_inter_model_corr.png}%
+\caption{Heatmap – Correlação Inter{-}Modelos de Overall Similarity.}%
+\end{figure}
 
 %
 \subsection*{Estatísticas Agregadas das Métricas Detalhadas}%
 \label{subsec:EstatsticasAgregadasdasMtricasDetalhadas}%
-A tabela a seguir (Tabela \ref{tab:aggregated_metrics}) apresenta as estatísticas agregadas das métricas detalhadas (média, mediana, desvio padrão, mínimo e máximo) para cada modelo.%
+Por fim, a tabela a seguir apresenta as estatísticas agregadas (média, mediana, desvio padrão, mínimo e máximo) para cada métrica detalhada, agrupadas por modelo. Essa análise auxilia na identificação de padrões e na avaliação da consistência dos scores.%
 \begin{table}[H]%
 \centering%
 \caption{Estatísticas Agregadas das Métricas Detalhadas por Modelo}\label{tab:aggregated_metrics}%
@@ -106,37 +153,36 @@ gemini-2.0-flash-thinking-exp-1219 & 0.44947587816004714 & 0.3649122807017544 & 
 %
 \section*{Discussão}%
 \label{sec:Discusso}%
-
-A análise dos dados indica que o modelo \textbf{gemini-2.0-flash-thinking-exp-1219} apresentou a maior média de overall similarity (0.72), 
-enquanto o modelo \textbf{gemini-1.5-pro} apresentou a menor média (0.60). Essa diferença ressalta variações na performance 
-dos modelos em aderência às respostas de referência.
-
-Adicionalmente, observa-se que o percentual de casos com dicionário de scores vazio foi mais elevado para o modelo 
-\textbf{gemini-1.5-flash-8b} (12.2%), sugerindo que podem haver dificuldades na geração ou na coleta dos scores para esse modelo.
-
-A análise das estatísticas agregadas das métricas detalhadas evidencia variações na consistência dos modelos, o que pode ser explorado 
-para identificar possíveis ajustes nos algoritmos de resposta.
+Os resultados apresentados oferecem múltiplas perspectivas sobre a performance dos modelos de resposta. A análise das estatísticas de similaridade geral permite identificar quais modelos se destacam na aderência às respostas de referência, enquanto os gráficos de distribuição e boxplots revelam a variabilidade dos scores. A análise de correlação entre as métricas detalhadas e a overall similarity sugere a consistência (ou a falta dela) entre as diferentes formas de avaliação. Adicionalmente, a análise dos casos unanswerable e a variação entre ground truths evidenciam pontos que podem ser aprimorados nos algoritmos de resposta.
 
 %
 \section*{Conclusões}%
 \label{sec:Concluses}%
-
-Com base nos dados analisados, pode-se concluir que:
-\begin{itemize}
-    \item Modelos com maiores médias de overall similarity tendem a aderir melhor às respostas de referência, embora a variabilidade dos scores deva ser considerada.
-    \item O elevado percentual de casos com scores vazios em alguns modelos indica a necessidade de investigar a qualidade dos dados e o processo de geração de scores.
-    \item As estatísticas agregadas das métricas detalhadas oferecem insights sobre a consistência dos modelos, o que pode orientar ajustes para aprimorar a performance.
-\end{itemize}
+Em resumo, o relatório demonstra que modelos com maiores médias de similaridade tendem a apresentar desempenho mais consistente. Entretanto, a presença de alta variabilidade e de casos unanswerable indica que há espaço para ajustes nos processos de geração e avaliação das respostas. A integração de diversas métricas e a análise visual proporcionam uma visão abrangente, que pode orientar futuras melhorias nos modelos.
 
 %
 \section*{Anexos}%
 \label{sec:Anexos}%
-Os anexos deste relatório incluem as tabelas geradas a partir dos arquivos CSV: \texttt{overall\_stats.csv}, \texttt{empty\_scores\_frequency.csv}, e \texttt{aggregated\_metrics.csv}, além de todas as imagens geradas (gráficos em formato PNG presentes na pasta \texttt{analysis\_results}).
+Os anexos deste relatório reúnem os arquivos CSV gerados e todos os gráficos produzidos durante a análise, tais como:%
+\begin{itemize}%
+\item overall\_stats.csv%
+\item empty\_scores\_frequency.csv%
+\item variation\_data.csv%
+\item aggregated\_metrics.csv%
+\item overall\_similarity.csv%
+\item detailed\_similarity.csv%
+\end{itemize}%
+Além disso, todos os gráficos (barplots, histogramas, boxplots, heatmaps e scatter plots) podem ser conferidos na pasta 'analysis\_results'.
 
 %
 \section*{Referências}%
 \label{sec:Referncias}%
-Bibliotecas utilizadas: \begin{itemize}\item \textbf{pandas}, \textbf{numpy}: para manipulação e análise dos dados.\item \textbf{matplotlib}, \textbf{seaborn}: para geração dos gráficos.\item \textbf{PyLaTeX}: para a criação deste relatório em LaTeX.\end{itemize} Além disso, é necessário ter instalada uma distribuição LaTeX (como TeX Live ou MiKTeX) para compilar o documento.
+As principais bibliotecas e ferramentas utilizadas para a geração deste relatório foram:%
+\begin{itemize}%
+\item \textbf{pandas} e \textbf{numpy} para manipulação e análise dos dados.%
+\item \textbf{matplotlib} e \textbf{seaborn} para a criação dos gráficos.%
+\item \textbf{PyLaTeX} para a montagem do documento LaTeX.%
+\end{itemize}
 
 %
 \end{document}

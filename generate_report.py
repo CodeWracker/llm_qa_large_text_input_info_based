@@ -1,20 +1,20 @@
 import os
 import pandas as pd
-from pylatex import Document, Section, Subsection, Command, Figure, NoEscape, Package
+from pylatex import Document, Section, Subsection, Command, Figure, NoEscape, Package, MiniPage
 
-# ============================================================================
-# 1. Carregar os CSVs gerados anteriormente
-# ============================================================================
+# =============================================================================
+# 1. Carregar as tabelas geradas pelas análises
+# =============================================================================
 csv_folder = "analysis_results"
+
+# Carregar os CSVs com as estatísticas e métricas
 overall_stats_df = pd.read_csv(os.path.join(csv_folder, "overall_stats.csv"), index_col=0)
 empty_scores_df = pd.read_csv(os.path.join(csv_folder, "empty_scores_frequency.csv"), index_col=0)
 aggregated_metrics_df = pd.read_csv(os.path.join(csv_folder, "aggregated_metrics.csv"), index_col=0)
+variation_data_df = pd.read_csv(os.path.join(csv_folder, "variation_data.csv"), index_col=0)
 
-# ---------------------------------------------------------------------------
-# Função para escapar manualmente os underscores em colunas e índice
-# ---------------------------------------------------------------------------
+# Função para escapar underscores (pois serão usados em LaTeX)
 def escape_df(df):
-    # Use raw strings para evitar problemas com barras invertidas
     df.index = df.index.to_series().str.replace('_', r'\_', regex=False)
     df.columns = df.columns.str.replace('_', r'\_', regex=False)
     return df
@@ -22,55 +22,18 @@ def escape_df(df):
 overall_stats_df = escape_df(overall_stats_df)
 empty_scores_df = escape_df(empty_scores_df)
 aggregated_metrics_df = escape_df(aggregated_metrics_df)
+variation_data_df = escape_df(variation_data_df)
 
-# ---------------------------------------------------------------------------
-# Converter os DataFrames para tabelas em LaTeX com escape=False, 
-# pois os underscores já foram escapados manualmente
-# ---------------------------------------------------------------------------
+# Converter DataFrames para tabelas LaTeX
 overall_stats_table = overall_stats_df.to_latex(escape=False)
 empty_scores_table = empty_scores_df.to_latex(escape=False)
+aggregated_metrics_df = aggregated_metrics_df.round(4)
 aggregated_metrics_table = aggregated_metrics_df.to_latex(escape=False)
+variation_data_table = variation_data_df.to_latex(escape=False)
 
-# ============================================================================
-# 2. Gerar análises simples para as seções de Discussão e Conclusões
-# ============================================================================
-# Identificar o modelo com maior e menor média de overall similarity
-max_mean_model = overall_stats_df['mean'].idxmax()
-max_mean_value = overall_stats_df.loc[max_mean_model, 'mean']
-min_mean_model = overall_stats_df['mean'].idxmin()
-min_mean_value = overall_stats_df.loc[min_mean_model, 'mean']
-
-# Identificar qual modelo possui o maior percentual de casos vazios
-# Note que aqui a coluna já foi escapada, então use 'empty\_percent'
-max_empty_model = empty_scores_df['empty\\_percent'].idxmax()
-max_empty_percent = empty_scores_df.loc[max_empty_model, 'empty\\_percent']
-
-# Texto da discussão baseado nos dados
-discussion_text = NoEscape(rf"""
-A análise dos dados indica que o modelo \textbf{{{max_mean_model}}} apresentou a maior média de overall similarity ({max_mean_value:.2f}), 
-enquanto o modelo \textbf{{{min_mean_model}}} apresentou a menor média ({min_mean_value:.2f}). Essa diferença ressalta variações na performance 
-dos modelos em aderência às respostas de referência.
-
-Adicionalmente, observa-se que o percentual de casos com dicionário de scores vazio foi mais elevado para o modelo 
-\textbf{{{max_empty_model}}} ({max_empty_percent}%), sugerindo que podem haver dificuldades na geração ou na coleta dos scores para esse modelo.
-
-A análise das estatísticas agregadas das métricas detalhadas evidencia variações na consistência dos modelos, o que pode ser explorado 
-para identificar possíveis ajustes nos algoritmos de resposta.
-""")
-
-# Texto das conclusões
-conclusion_text = NoEscape(r"""
-Com base nos dados analisados, pode-se concluir que:
-\begin{itemize}
-    \item Modelos com maiores médias de overall similarity tendem a aderir melhor às respostas de referência, embora a variabilidade dos scores deva ser considerada.
-    \item O elevado percentual de casos com scores vazios em alguns modelos indica a necessidade de investigar a qualidade dos dados e o processo de geração de scores.
-    \item As estatísticas agregadas das métricas detalhadas oferecem insights sobre a consistência dos modelos, o que pode orientar ajustes para aprimorar a performance.
-\end{itemize}
-""")
-
-# ============================================================================
-# 3. Criação do documento LaTeX com inclusão das tabelas e textos dinâmicos
-# ============================================================================
+# =============================================================================
+# 2. Configurar o documento LaTeX
+# =============================================================================
 geometry_options = {
     "tmargin": "2cm",
     "lmargin": "2cm",
@@ -79,117 +42,149 @@ geometry_options = {
 }
 doc = Document("RelatorioAnalise", geometry_options=geometry_options)
 
-# Adicionar os pacotes necessários
+# Adicionar pacotes necessários
 doc.packages.append(Package("graphicx"))
 doc.packages.append(Package("float"))
 doc.packages.append(Package("booktabs"))
 
 # Pré-ambiente: título, autor, data
-doc.preamble.append(Command("title", "Relatório de Análise de Similaridade entre Modelos"))
-doc.preamble.append(Command("author", "Seu Nome"))
+doc.preamble.append(Command("title", "Relatório de Análise de Performance dos Modelos de Resposta"))
 doc.preamble.append(Command("date", NoEscape(r"\today")))
 doc.append(NoEscape(r"\maketitle"))
-doc.append(NoEscape(r"\tableofcontents"))
-doc.append(NoEscape(r"\newpage"))
 
-# ---------------------------------------------------------------------------
-# Seção 1. Introdução
-# ---------------------------------------------------------------------------
+# =============================================================================
+# 3. Seções do relatório
+# =============================================================================
+
+# Introdução
 with doc.create(Section("Introdução", numbering=False)):
-    doc.append(NoEscape(
-        "Este relatório apresenta a análise comparativa dos modelos baseados nas métricas de similaridade entre respostas. "
-        "Os dados foram processados a partir de um arquivo pickle que contém as respostas dos modelos e as respostas de referência (ground truth). "
-        "Diversas métricas de similaridade (como Cosine Similarity, Difflib, BERTScore, entre outras) foram calculadas para cada comparação. "
-        "O objetivo é entender a performance dos modelos a partir de diferentes perspectivas estatísticas e correlacionais."
-    ))
+    doc.append("Este relatório apresenta uma análise completa dos modelos de resposta, avaliando a similaridade entre as respostas geradas e as respostas de referência. "
+               "Foram calculadas diversas métricas de similaridade e realizadas análises estatísticas e visuais para identificar padrões de performance, inconsistências e possíveis pontos de melhoria. "
+               "O objetivo é fornecer subsídios para interpretar os dados de forma objetiva, auxiliando na tomada de decisões para ajustes nos algoritmos.")
 
-# ---------------------------------------------------------------------------
-# Seção 2. Metodologia
-# ---------------------------------------------------------------------------
+# Metodologia
 with doc.create(Section("Metodologia", numbering=False)):
-    doc.append(NoEscape(
-        "Inicialmente, os dados foram carregados e convertidos para um formato de dicionário. Foram construídos dois DataFrames principais: "
-        "\\textbf{df\\_overall}: contém as estatísticas gerais (overall similarity) para cada questão e modelo; "
-        "\\textbf{df\\_detailed}: armazena, para cada comparação (modelo versus ground truth), os valores de diversas métricas de similaridade. "
-        "Em seguida, foram aplicadas análises descritivas, de correlação e variação, além da exportação dos dados para arquivos CSV e tabelas em LaTeX. "
-        "Os gráficos gerados (barras, histogramas, boxplots, heatmaps e scatter plots) ilustram visualmente os resultados e auxiliam na interpretação dos dados."
-    ))
+    doc.append("A análise foi realizada em duas etapas principais:\n\n")
+    doc.append(NoEscape(r"\begin{itemize}"))
+    doc.append(NoEscape(r"\item Carregamento dos dados: os dados foram extraídos de um arquivo pickle e convertidos para dicionários, possibilitando o acesso às respostas dos modelos e às respostas de referência."))
+    doc.append(NoEscape(r"\item Processamento e análise: foram calculadas diversas métricas de similaridade, estatísticas descritivas e correlações. Além disso, foram gerados diversos gráficos (barras, histogramas, boxplots, heatmaps e scatter plots) para facilitar a interpretação visual dos resultados."))
+    doc.append(NoEscape(r"\end{itemize}"))
+    doc.append("Cada gráfico ou tabela vem acompanhado de uma breve explicação sobre como interpretá-lo, de modo que o leitor possa compreender os pontos principais de cada análise.")
 
-# ---------------------------------------------------------------------------
-# Seção 3. Resultados
-# ---------------------------------------------------------------------------
+# Resultados
 with doc.create(Section("Resultados", numbering=False)):
     
-    # 3.1 Estatísticas de Overall Similarity
-    with doc.create(Subsection("Análise Descritiva da Similaridade Geral", numbering=False)):
-        doc.append(NoEscape(
-            "A tabela a seguir (Tabela \\ref{tab:overall_stats}) apresenta as estatísticas descritivas da overall similarity por modelo, "
-            "incluindo média, mediana, desvio padrão, valor mínimo e máximo."
-        ))
-        doc.append(NoEscape(r"\begin{table}[H]"))
-        doc.append(NoEscape(r"\centering"))
-        doc.append(NoEscape(r"\caption{Estatísticas de Overall Similarity por Modelo}\label{tab:overall_stats}"))
-        doc.append(NoEscape(overall_stats_table))
-        doc.append(NoEscape(r"\end{table}"))
+    # Estatísticas de Similaridade Geral
+    with doc.create(Subsection("Estatísticas de Similaridade Geral", numbering=False)):
+        doc.append("Nesta seção são apresentadas as estatísticas descritivas da overall similarity dos modelos. "
+                   "Valores médios e medianos mais elevados indicam melhor aderência às respostas de referência, enquanto um alto desvio padrão pode indicar maior variabilidade.")
         
-    # 3.2 Frequência de Scores Vazios
-    with doc.create(Subsection("Frequência de Casos com Scores Vazios", numbering=False)):
-        doc.append(NoEscape(
-            "A tabela a seguir (Tabela \\ref{tab:empty_scores}) mostra a contagem e o percentual de casos com dicionários de scores vazios para cada modelo."
-        ))
-        doc.append(NoEscape(r"\begin{table}[H]"))
-        doc.append(NoEscape(r"\centering"))
-        doc.append(NoEscape(r"\caption{Frequência de Casos com Scores Vazios por Modelo}\label{tab:empty_scores}"))
-        doc.append(NoEscape(empty_scores_table))
-        doc.append(NoEscape(r"\end{table}"))
-        
-    # 3.3 Estatísticas Agregadas das Métricas Detalhadas
+        doc.append("\nForam gerados os seguintes gráficos para visualizar esses dados:")
+        with doc.create(Figure(position='H')) as bar_fig:
+            bar_fig.add_image(os.path.join(csv_folder, 'barplot_overall_similarity.png'), width=NoEscape(r'0.8\textwidth'))
+            bar_fig.add_caption("Gráfico de Barras – Média de Overall Similarity por Modelo. Observe as diferenças de desempenho entre os modelos.")
+        with doc.create(Figure(position='H')) as hist_fig:
+            hist_fig.add_image(os.path.join(csv_folder, 'histogram_overall_similarity.png'), width=NoEscape(r'0.8\textwidth'))
+            hist_fig.add_caption("Histograma – Distribuição de Overall Similarity. Permite visualizar a dispersão dos valores obtidos.")
+        with doc.create(Figure(position='H')) as box_fig:
+            box_fig.add_image(os.path.join(csv_folder, 'boxplot_overall_similarity.png'), width=NoEscape(r'0.8\textwidth'))
+            box_fig.add_caption("Boxplot – Overall Similarity por Modelo. Facilita a identificação de mediana, quartis e outliers.")
+    
+    # Correlação entre Métricas de Similaridade
+    with doc.create(Subsection("Correlação entre Métricas de Similaridade", numbering=False)):
+        doc.append("Nesta análise, avaliamos a correlação entre as diferentes métricas de similaridade (score keys). "
+                   "O heatmap abaixo mostra a força da correlação entre cada par de métricas: valores próximos de 1 ou -1 indicam forte correlação, enquanto valores próximos de 0 sugerem correlação fraca ou inexistente.")
+        with doc.create(Figure(position='H')) as heatmap_fig:
+            heatmap_fig.add_image(os.path.join(csv_folder, 'heatmap_score_keys_correlation.png'), width=NoEscape(r'0.8\textwidth'))
+            heatmap_fig.add_caption("Heatmap – Correlação entre as Métricas de Similaridade.")
+        doc.append("\nAlém do heatmap, foram gerados scatter plots individuais comparando cada métrica com a overall similarity. Esses gráficos podem ser consultados nos anexos para análises mais detalhadas.")
+    
+    # Correlação entre Overall Similarity e Média dos Scores (avg_metric)
+    with doc.create(Subsection("Correlação entre Overall Similarity e Média dos Scores", numbering=False)):
+        doc.append("Esta seção apresenta a relação entre a overall similarity e a média dos scores detalhados (avg\_metric). "
+                   "O scatter plot a seguir permite identificar se existe uma tendência linear entre essas duas medidas, o que indicaria consistência na avaliação dos modelos.")
+        with doc.create(Figure(position='H')) as scatter_avg_fig:
+            scatter_avg_fig.add_image(os.path.join(csv_folder, 'scatter_overall_vs_avg_metric.png'), width=NoEscape(r'0.8\textwidth'))
+            scatter_avg_fig.add_caption("Scatter Plot – Overall Similarity vs. Média dos Score Metrics (avg\_metric).")
+    
+    
+    
+    # Análise de Casos "Unanswerable" com imagens lado a lado usando minipages
+    with doc.create(Subsection("Análise de Casos 'Unanswerable'", numbering=False)):
+        doc.append("Nesta parte, são analisados os casos em que os modelos não forneceram respostas (unanswerable). "
+                "Os gráficos abaixo, apresentados lado a lado, mostram respectivamente a contagem desses casos e a relação entre a overall similarity e a condição de unanswerable. "
+                "Em geral, uma baixa overall similarity pode estar associada a questões sem resposta.")
+        with doc.create(Figure(position='H')) as unans_fig:
+            unans_fig.append(NoEscape(r"\begin{minipage}[b]{0.45\textwidth}"))
+            unans_fig.append(NoEscape(r"\centering"))
+            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + os.path.join(csv_folder, "count_unanswerable.png") + "}"))
+            unans_fig.append(NoEscape(r"\caption*{Contagem de Casos Unanswerable.}"))
+            unans_fig.append(NoEscape(r"\end{minipage}\hfill"))
+            unans_fig.append(NoEscape(r"\begin{minipage}[b]{0.45\textwidth}"))
+            unans_fig.append(NoEscape(r"\centering"))
+            unans_fig.append(NoEscape(r"\includegraphics[width=\linewidth]{" + os.path.join(csv_folder, "boxplot_overall_vs_unanswerable.png") + "}"))
+            unans_fig.append(NoEscape(r"\caption*{Boxplot – Overall Similarity vs. Unanswerable.}"))
+            unans_fig.append(NoEscape(r"\end{minipage}"))
+
+    
+    # Correlação Inter-Modelos
+    with doc.create(Subsection("Correlação Inter-Modelos", numbering=False)):
+        doc.append("Esta análise verifica a correlação da overall similarity entre os diferentes modelos. "
+                   "Utilizando uma pivot table, foi calculada a correlação entre os modelos, cuja visualização por meio de um heatmap facilita a identificação de similaridades ou discrepâncias na performance entre eles.")
+        with doc.create(Figure(position='H')) as heatmap_inter_fig:
+            heatmap_inter_fig.add_image(os.path.join(csv_folder, 'heatmap_inter_model_corr.png'), width=NoEscape(r'0.8\textwidth'))
+            heatmap_inter_fig.add_caption("Heatmap – Correlação Inter-Modelos de Overall Similarity.")
+    
+    # Estatísticas Agregadas das Métricas Detalhadas
     with doc.create(Subsection("Estatísticas Agregadas das Métricas Detalhadas", numbering=False)):
-        doc.append(NoEscape(
-            "A tabela a seguir (Tabela \\ref{tab:aggregated_metrics}) apresenta as estatísticas agregadas das métricas detalhadas (média, mediana, desvio padrão, mínimo e máximo) para cada modelo."
-        ))
+        doc.append("Por fim, a tabela a seguir apresenta as estatísticas agregadas (média, mediana, desvio padrão, mínimo e máximo) para cada métrica detalhada, "
+                "agrupadas por modelo. Essa análise auxilia na identificação de padrões e na avaliação da consistência dos scores.")
         doc.append(NoEscape(r"\begin{table}[H]"))
         doc.append(NoEscape(r"\centering"))
         doc.append(NoEscape(r"\caption{Estatísticas Agregadas das Métricas Detalhadas por Modelo}\label{tab:aggregated_metrics}"))
         doc.append(NoEscape(aggregated_metrics_table))
         doc.append(NoEscape(r"\end{table}"))
 
-# ---------------------------------------------------------------------------
-# Seção 4. Discussão (texto gerado dinamicamente a partir dos dados)
-# ---------------------------------------------------------------------------
+
+# Discussão
 with doc.create(Section("Discussão", numbering=False)):
-    doc.append(discussion_text)
+    doc.append("Os resultados apresentados oferecem múltiplas perspectivas sobre a performance dos modelos de resposta. "
+               "A análise das estatísticas de similaridade geral permite identificar quais modelos se destacam na aderência às respostas de referência, "
+               "enquanto os gráficos de distribuição e boxplots revelam a variabilidade dos scores. "
+               "A análise de correlação entre as métricas detalhadas e a overall similarity sugere a consistência (ou a falta dela) entre as diferentes formas de avaliação. "
+               "Adicionalmente, a análise dos casos unanswerable e a variação entre ground truths evidenciam pontos que podem ser aprimorados nos algoritmos de resposta.")
 
-# ---------------------------------------------------------------------------
-# Seção 5. Conclusões (texto gerado dinamicamente a partir dos dados)
-# ---------------------------------------------------------------------------
+# Conclusões
 with doc.create(Section("Conclusões", numbering=False)):
-    doc.append(conclusion_text)
+    doc.append("Em resumo, o relatório demonstra que modelos com maiores médias de similaridade tendem a apresentar desempenho mais consistente. "
+               "Entretanto, a presença de alta variabilidade e de casos unanswerable indica que há espaço para ajustes nos processos de geração e avaliação das respostas. "
+               "A integração de diversas métricas e a análise visual proporcionam uma visão abrangente, que pode orientar futuras melhorias nos modelos.")
 
-# ---------------------------------------------------------------------------
-# Seção 6. Anexos
-# ---------------------------------------------------------------------------
+# Anexos
 with doc.create(Section("Anexos", numbering=False)):
-    doc.append(NoEscape(
-        "Os anexos deste relatório incluem as tabelas geradas a partir dos arquivos CSV: "
-        "\\texttt{overall\\_stats.csv}, \\texttt{empty\\_scores\\_frequency.csv}, e \\texttt{aggregated\\_metrics.csv}, "
-        "além de todas as imagens geradas (gráficos em formato PNG presentes na pasta \\texttt{analysis\\_results})."
-    ))
+    doc.append("Os anexos deste relatório reúnem os arquivos CSV gerados e todos os gráficos produzidos durante a análise, tais como:")
+    doc.append(NoEscape(r"\begin{itemize}"))
+    doc.append(NoEscape(r"\item overall\_stats.csv"))
+    doc.append(NoEscape(r"\item empty\_scores\_frequency.csv"))
+    doc.append(NoEscape(r"\item variation\_data.csv"))
+    doc.append(NoEscape(r"\item aggregated\_metrics.csv"))
+    doc.append(NoEscape(r"\item overall\_similarity.csv"))
+    doc.append(NoEscape(r"\item detailed\_similarity.csv"))
+    doc.append(NoEscape(r"\end{itemize}"))
+    doc.append("Além disso, todos os gráficos (barplots, histogramas, boxplots, heatmaps e scatter plots) podem ser conferidos na pasta 'analysis_results'.")
 
-# ---------------------------------------------------------------------------
-# Seção 7. Referências
-# ---------------------------------------------------------------------------
+# Referências
 with doc.create(Section("Referências", numbering=False)):
-    doc.append(NoEscape(
-        "Bibliotecas utilizadas: "
-        "\\begin{itemize}"
-        "\\item \\textbf{pandas}, \\textbf{numpy}: para manipulação e análise dos dados."
-        "\\item \\textbf{matplotlib}, \\textbf{seaborn}: para geração dos gráficos."
-        "\\item \\textbf{PyLaTeX}: para a criação deste relatório em LaTeX."
-        "\\end{itemize} Além disso, é necessário ter instalada uma distribuição LaTeX (como TeX Live ou MiKTeX) para compilar o documento."
-    ))
+    doc.append("As principais bibliotecas e ferramentas utilizadas para a geração deste relatório foram:")
+    doc.append(NoEscape(r"\begin{itemize}"))
+    doc.append(NoEscape(r"\item \textbf{pandas} e \textbf{numpy} para manipulação e análise dos dados."))
+    doc.append(NoEscape(r"\item \textbf{matplotlib} e \textbf{seaborn} para a criação dos gráficos."))
+    doc.append(NoEscape(r"\item \textbf{PyLaTeX} para a montagem do documento LaTeX."))
+    doc.append(NoEscape(r"\end{itemize}"))
 
-# Gerar o arquivo .tex
+# =============================================================================
+# 4. Gerar o arquivo .tex
+# =============================================================================
 doc.generate_tex("RelatorioAnalise")
 
 print("Arquivo RelatorioAnalise.tex gerado com sucesso!")
