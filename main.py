@@ -1,8 +1,8 @@
 from datasetModule import JoinedDataset, DatasetData, QuestionAnswer, FreeFormAnswer
 from similarityScoreModule import sbert_similarity_score, combined_similarity
+from ai_jury import ask_ai_jury
 
-from models.LLModel import LLMModel
-from models.SpecificModels import (
+from models.GoogleModels import (
     Gemini1_5Flash,
     Gemini1_5Flash8B,
     Gemini1_5Pro,
@@ -15,7 +15,6 @@ from models.SpecificModels import (
 import pickle
 import logging
 import json
-from google import genai
 import os
 import time
 
@@ -40,10 +39,46 @@ console_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s
 console_handler.setFormatter(console_formatter)
 logging.getLogger().addHandler(console_handler)
 
-GeminiClient = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
+
+
+class AiJuryModelOpinion:
+    def __init__(self, model_name, opinion):
+        self.is_correct = opinion["is_correct"]
+        self.justification = opinion["justification"]
+
+    def to_dict(self):
+        return {
+            "model_name": self.model_name,
+            "opinion": self.opinion
+        }
+
+class AiJury:
+    def __init__(self, question, reference_answer, eval_answer):
+        self.question = question
+        self.reference_answer = reference_answer
+        self.eval_answer = eval_answer
+
+    def ask_ai_jury(self):
+        veredict = ask_ai_jury(self.question, self.reference_answer, self.eval_answer)
+        self.final_verdict = veredict["final_verdict"]
+        self.models_opinion = []
+        for model in veredict["models_opinion"].keys():
+            model_name = model
+            opinion = veredict["models_opinion"][model]
+            self.models_opinion.append(AiJuryModelOpinion(model_name, opinion))
+            
+    def to_dict(self):
+        return {
+            "question": self.question,
+            "reference_answer": self.reference_answer,
+            "eval_answer": self.eval_answer,
+            "final_verdict": self.final_verdict,
+            "models_opinion": [opinion.to_dict() for opinion in self.models_opinion]
+        }
 class LLMAnswer:
-    def __init__(self, model_name, answer, option_answers_gt):
+    def __init__(self, model_name, answer, option_answers_gt, question=None):
+        self.question = question
         self.model_name = model_name
         self.answer = answer
         self.option_answers_gt = option_answers_gt
@@ -71,11 +106,17 @@ class LLMAnswer:
                     combined_score_value = 0.0
             else:
                 scores, combined_score_value = combined_similarity(self.answer, gt_answer)
+                ai_jury_veredict_result = ask_ai_jury(self.answer, gt_answer, self.question)
+                
             
             logging.info(f"Similarity score between generated answer and ground truth answer: {combined_score_value:.4f}")
+            
+            
+            
             self.scores.append({
                 "gt_compared_answer": gt_answer,
-                "scores": scores
+                "scores": scores,
+                "ai_jury_veredict_result": ai_jury_veredict_result
             })
             if self.similarity_score is None or combined_score_value > self.similarity_score:
                 self.similarity_score = combined_score_value
@@ -84,11 +125,13 @@ class LLMAnswer:
     def to_dict(self):
         # Transforma a lista de scores em um dicionário onde a chave é a resposta GT
         similarities = { item["gt_compared_answer"]: item["scores"] for item in self.scores }
+        ai_jury_results = { item["gt_compared_answer"]: item["ai_jury_veredict_result"] for item in self.scores }
         return {
             "model_name": self.model_name,
             "answer": self.answer,
             "overall_similarity": self.similarity_score,
-            "similarities": similarities
+            "similarities": similarities,
+            "ai_jury_results": ai_jury_results
         }
 
 class ComparisonResult:
@@ -109,16 +152,16 @@ class ComparisonResult:
             "model_results": model_results_list
         }
 
-def process_models_for_comparison(comparison_results, question, base_text, client):
+def process_models_for_comparison(comparison_results, question, base_text):
     # Lista dos modelos a serem processados
     modelos = [
         Gemini1_5Flash,
-        Gemini1_5Flash8B,
-        Gemini1_5Pro,
-        Gemini2_0Flash,
-        Gemini2_0FlashLite,
+        # Gemini1_5Flash8B,
+        # Gemini1_5Pro,
+        # Gemini2_0Flash,
+        # Gemini2_0FlashLite,
         Gemini2_0FlashThinkingExperimental,
-        Gemini2_0FlashExperimental
+        # Gemini2_0FlashExperimental
     ]
     
     for modelo_class in modelos:
@@ -128,12 +171,18 @@ def process_models_for_comparison(comparison_results, question, base_text, clien
         # Verifica se esse modelo já foi processado para esse par
         if not any(mr.model_name == model_name for mr in comparison_results.model_results):
             logging.info(f"Processando modelo: {model_name} para a questão: {question}")
-            answer_obj = modelo_inst.generate_answer(question, base_text, client)
-            llm_answer_obj = LLMAnswer(model_name, answer_obj.answer, comparison_results.ground_truth)
+            answer_obj = modelo_inst.generate_answer(question, base_text)
+            llm_answer_obj = LLMAnswer(model_name, answer_obj.answer, comparison_results.ground_truth, question)
             llm_answer_obj.calculate_similarity_score()
             comparison_results.model_results.append(llm_answer_obj)
         else:
-            logging.info(f"Modelo {model_name} já processado para essa questão, pulando.")
+            logging.info(f"Modelo {model_name} já processado para essa questão, pulando a geração da resposta.")
+            logging.info(f"Recalculando a similaridade para o modelo {model_name}.")
+            # Recalcula a similaridade para o modelo já processado
+            for mr in comparison_results.model_results:
+                if mr.model_name == model_name:
+                    mr.calculate_similarity_score()
+                    break
     return comparison_results
 
 def save_checkpoint(results_dict, results_path):
@@ -196,7 +245,7 @@ if __name__ == "__main__":
                 while True:
                     try:
                         comparison_result = process_models_for_comparison(
-                            comparison_result, qa.question, data.full_text, GeminiClient
+                            comparison_result, qa.question, data.full_text
                         )
                         break
                     except KeyboardInterrupt:
@@ -248,11 +297,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt as e:
         logging.error("Processamento interrompido pelo usuário.")
         
-    # Fechamento do GeminiClient
-    try:
-        GeminiClient._api_client._httpx_client.close()
-    except Exception as e:
-        logging.warning("Erro ao fechar o httpx client: %s", e)
-
-    GeminiClient.__del__ = lambda self: None
-    GeminiClient = None
+    

@@ -20,39 +20,16 @@ class LLMModel:
         self.model_name = model_name
         
     # virtual method to be implemented by subclasses
-    def generate_answer(self, question, base_text, client, model_name):
+    def query_model(self, prompt, model_name_query):
+        """
+        Send the prompt to a model until a valid JSON answer is returned.
+        """
+        raise NotImplementedError("Subclasses should implement this method")
+        
+    def generate_answer(self, question, base_text, model_name_query):
         prompt = self.generate_prompt(question, base_text)
-        while True:
-            try:
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=prompt,
-                    config={
-                        'response_mime_type': 'application/json',
-                        'response_schema': LLLAnswer
-                    }
-                )
-                break
-            except Exception as e:
-                # 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-1.5-pro'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '44s'}]}}
-                # se e contem 'RESOURCE_EXHAUSTED'
-                if "RESOURCE_EXHAUSTED" in str(e):
-                    logging.error(f"Resource exhausted: {e}")
-                    logging.warning("Waiting for 1minute before retrying...")
-                    time.sleep(60)
-                # checka se é keyboard e se sim, espera 30 segundos
-                elif "KeyboardInterrupt" in str(e):
-                    raise KeyboardInterrupt
-                else:
-                    logging.error(f"An error occurred: {e}")
-                    logging.warning("Waiting for 30 seconds before retrying...")
-                    time.sleep(30)
-                continue
-        model_answer = response.parsed
-        
-        
-        
-        return model_answer
+        response = self.query_model(prompt, model_name_query)
+        return response
         
 
     def generate_prompt(self, question, base_text):
@@ -91,6 +68,13 @@ class LLMModel:
 class NonJSONLLMModel(LLMModel):
     def __init__(self, model_name):
         super().__init__(model_name)
+    
+    # virtual method to be implemented by subclasses
+    def query_model(self, prompt, model_name_query):
+        """
+        Send the prompt to a model until a valid JSON answer is returned.
+        """
+        raise NotImplementedError("Subclasses should implement this method")
         
     def convert_answer_to_LLMAnswer(self, answer):
         # First checks if the answer is a valid json and then maps it to the LLMAnswer class
@@ -116,37 +100,7 @@ class NonJSONLLMModel(LLMModel):
         return answer
         
     # virtual method to be implemented by subclasses
-    def generate_answer(self, question, base_text, client, model_name):
+    def generate_answer(self, question, base_text, model_name_query):
         prompt = self.generate_prompt(question, base_text)
 
-        while True:
-            try:
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=prompt
-                )
-            # exception for RESOURCE_EXHAUSTED
-            except Exception as e:
-                # 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-1.5-pro'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '44s'}]}}
-                # se e contem 'RESOURCE_EXHAUSTED'
-                if "RESOURCE_EXHAUSTED" in str(e):
-                    logging.error(f"Resource exhausted: {e}")
-                    logging.warning("Waiting for 1minute before retrying...")
-                    time.sleep(60)
-                # checka se é keyboard e se sim, espera 30 segundos
-                elif "KeyboardInterrupt" in str(e):
-                    raise KeyboardInterrupt
-                else:
-                    logging.error(f"An error occurred: {e}")
-                    logging.warning("Waiting for 30 seconds before retrying...")
-                    time.sleep(30)
-                continue
-            # logging.info(f"Response: {response}")
-            
-            try:
-                model_answer = self.convert_answer_to_LLMAnswer(response.candidates[0].content.parts[0].text)
-                return model_answer
-            except ValueError as e:
-                logging.error(f"Failed to convert answer to LLMAnswer: {e}")
-                prompt = prompt + f"\nYou have already answered this question, but your answer was not in the correct format. Please answer again, but this time make sure to follow the instructions and return a valid JSON. Previous error: {e}"
-        
+        return self.query_model(prompt,model_name_query)

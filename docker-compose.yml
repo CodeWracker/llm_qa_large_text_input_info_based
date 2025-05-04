@@ -10,6 +10,7 @@ services:
       PYTHONUNBUFFERED: 1
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       NVIDIA_VISIBLE_DEVICES: all
+      OLLAMA_URL: ${OLLAMA_URL}
     #  entrypoint to keep the container running
     entrypoint: tail -f /dev/null
     deploy:
