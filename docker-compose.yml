@@ -7,7 +7,15 @@ services:
     volumes:
       - .:/app
     environment:
-      - PYTHONUNBUFFERED=1
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      PYTHONUNBUFFERED: 1
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      NVIDIA_VISIBLE_DEVICES: all
     #  entrypoint to keep the container running
     entrypoint: tail -f /dev/null
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+              count: 1 # Number of GPUs to use, adjust if you have more
