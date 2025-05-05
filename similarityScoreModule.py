@@ -164,6 +164,10 @@ def numbers_to_words(text):
     # Substitui cada número inteiro encontrado por sua versão por extenso
     lang = detect_language(text)
     logging.debug(f"Convertendo números para palavras no idioma: {lang}")
+    if not (lang == 'pt' or lang == 'en'):
+        logging.warning(f"Idioma não suportado para conversão de números: {lang}. Usando 'en' como padrão.")
+        lang = 'en'
+    # Função auxiliar para substituir números por palavras
     def replace_number(match):
         number = int(match.group())
         return num2words(number, lang=lang)
