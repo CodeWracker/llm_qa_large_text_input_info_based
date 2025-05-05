@@ -19,3 +19,4 @@ tqdm
 pandas
 pydantic
 google-genai
+num2words

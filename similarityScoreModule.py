@@ -14,7 +14,8 @@ from bert_score import score as bert_score
 from langdetect import detect, DetectorFactory
 
 
-
+import re
+from num2words import num2words
 
 sentense_transformer_model_sbert = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
 
@@ -157,14 +158,28 @@ def bertscore_similarity_score(reference_text, generated_text):
     logging.debug(f"BERTScore Similarity: {score_value:.4f}")
     return score_value
 
+
+
+def numbers_to_words(text):
+    # Substitui cada número inteiro encontrado por sua versão por extenso
+    lang = detect_language(text)
+    logging.debug(f"Convertendo números para palavras no idioma: {lang}")
+    def replace_number(match):
+        number = int(match.group())
+        return num2words(number, lang=lang)
+
+    # Substitui todos os números inteiros no texto
+    converted_text = re.sub(r'\b\d+\b', replace_number, text)
+    return converted_text
+
 def combined_similarity(reference_text, generated_text):
     """
     Calcula diversas métricas de similaridade entre dois textos e retorna um dicionário com os scores
     e uma pontuação combinada ponderada.
     """
     logging.info("Calculando a similaridade combinada.")
-    reference_text = str(reference_text)
-    generated_text = str(generated_text)
+    reference_text = numbers_to_words(str(reference_text))
+    generated_text = numbers_to_words(str(generated_text))
     scores = {
         'Cosine Similarity (TF-IDF)': cosine_similarity_score(reference_text, generated_text),
         'Jaccard Similarity': jaccard_similarity_score(reference_text, generated_text),
@@ -189,7 +204,7 @@ def combined_similarity(reference_text, generated_text):
     # METRICA AGORA É SOMENTE A MÉDIA PONDERADA ENTRE SBERT E BERTSCORE (ANALISE DE SEMANTICA)
     combined_score_value = 0.5 * scores['SBERT Similarity'] + 0.5 * scores['BERTScore Similarity'] 
     logging.debug(f"Scores de similaridade: {scores}")
-    logging.info(f"Pontuação de similaridade combinada (ponderada): {combined_score_value:.4f}")
+    logging.debug(f"Pontuação de similaridade combinada (ponderada): {combined_score_value:.4f}")
     return scores, combined_score_value
 
 if __name__ == "__main__":
@@ -198,8 +213,8 @@ if __name__ == "__main__":
     # Exemplos de uso quando o módulo é executado diretamente
 
     # Exemplo 1
-    reference_text = "ok, tá liberado. segue em frente"
-    generated_text = "sim, você pode fazer isso. está correto"
+    reference_text = "ok, all right, you can do that. it is correct, go for the room 400 on floor two"
+    generated_text = "yes, you can do that. it is correct, go for the room 401 on floor 2"
     scores, combined_score_value = combined_similarity(reference_text, generated_text)
     print("Exemplo 1:")
     for method, score in scores.items():
