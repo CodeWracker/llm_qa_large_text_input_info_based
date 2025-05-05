@@ -6,7 +6,7 @@ import json
 import os
 import re
 import time
-class LLLAnswer(BaseModel):
+class LLMAnswer(BaseModel):
     question: str
     unanswerable: bool
     answer: str
@@ -24,7 +24,7 @@ class LLMModel:
         """
         Send the prompt to a model until a valid JSON answer is returned.
         """
-        raise NotImplementedError("Subclasses should implement this method")
+        raise NotImplementedError("LLMModel.py - Subclasses should implement this method")
         
     def generate_answer(self, question, base_text, model_name_query):
         prompt = self.generate_prompt(question, base_text)
@@ -74,7 +74,7 @@ class NonJSONLLMModel(LLMModel):
         """
         Send the prompt to a model until a valid JSON answer is returned.
         """
-        raise NotImplementedError("Subclasses should implement this method")
+        raise NotImplementedError("LLMModel.py - Subclasses should implement this method")
         
     def convert_answer_to_LLMAnswer(self, answer):
         # First checks if the answer is a valid json and then maps it to the LLMAnswer class
@@ -91,7 +91,7 @@ class NonJSONLLMModel(LLMModel):
         
         parsed_answer = json.loads(answer)
         # logging.info(f"Parsed answer: {parsed_answer}")
-        answer = LLLAnswer(
+        answer = LLMAnswer(
             question=parsed_answer.get("question", None),
             unanswerable=parsed_answer.get("unanswerable", False),
             answer=parsed_answer.get("answer", None)
