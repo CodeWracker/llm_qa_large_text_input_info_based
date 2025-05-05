@@ -82,7 +82,7 @@ EVAL: {eval_answer}
 # Model interaction
 # ----------------------------------------------------------------------
 
-def query_model(model: str, prompt: str, initial_delay: float = 1.5) -> Dict:
+def query_model(model: str, prompt: str) -> Dict:
     """
     Send the prompt to a model until a valid JSON answer is returned.
     """
@@ -98,7 +98,6 @@ def query_model(model: str, prompt: str, initial_delay: float = 1.5) -> Dict:
         "Accept": "application/json",
     }
 
-    delay = initial_delay
     attempt = 1
     while True:
         try:
@@ -112,21 +111,19 @@ def query_model(model: str, prompt: str, initial_delay: float = 1.5) -> Dict:
             verdict = json.loads(content)
             # checks if the respose has valid JSON format
             if "is_correct" not in verdict or "justification" not in verdict:
-                raise ValueError("Invalid JSON format. Missing keys.")
+                raise ValueError("ai_jury.py - Invalid JSON format. Missing keys.")
             if not isinstance(verdict["is_correct"], bool):
-                raise ValueError("Invalid JSON format. 'is_correct' must be a boolean.")
+                raise ValueError("ai_jury.py - Invalid JSON format. 'is_correct' must be a boolean.")
             if not isinstance(verdict["justification"], str):
-                raise ValueError("Invalid JSON format. 'justification' must be a string.")
+                raise ValueError("ai_jury.py - Invalid JSON format. 'justification' must be a string.")
             if len(verdict["justification"]) == 0:
-                raise ValueError("Invalid JSON format. 'justification' must not be empty.")
+                raise ValueError("ai_jury.py - Invalid JSON format. 'justification' must not be empty.")
             # checks if the response is a valid JSON
             logging.info("Model %s answered on attempt %d", model, attempt)
             return verdict  # {"is_correct": bool, "justification": str}
         except Exception as exc:
             logging.warning("Attempt %d failed for model %s: %s", attempt, model, exc)
             attempt += 1
-            time.sleep(delay)
-            delay *= 2  # exponential back‑off
 
 # ----------------------------------------------------------------------
 # Verdict aggregation

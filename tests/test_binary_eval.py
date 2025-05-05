@@ -16,7 +16,7 @@ from huggingface_hub import InferenceApi
 # Exige que você tenha exportado seu token HF em HF_TOKEN
 HF_TOKEN = os.environ.get("HF_TOKEN")
 if not HF_TOKEN:
-    raise RuntimeError("Defina a variável de ambiente HF_TOKEN com seu token Hugging Face")
+    raise RuntimeError("test_binary_eval.py - Defina a variável de ambiente HF_TOKEN com seu token Hugging Face")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

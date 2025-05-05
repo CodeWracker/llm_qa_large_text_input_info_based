@@ -56,11 +56,11 @@ def cosine_similarity_score(reference_text, generated_text):
         tfidf_matrix = vectorizer.fit_transform([reference_text, generated_text])
         # Se o vocabulário ficar vazio, força a exceção
         if tfidf_matrix.shape[1] == 0:
-            raise ValueError("Empty vocabulary")
+            raise ValueError("similarityScoreModule.py - Empty vocabulary")
         score_value = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0]
         logging.debug(f"Similaridade do cosseno: {score_value:.4f}")
     except ValueError as e:
-        logging.error(f"Erro no cálculo do TF-IDF: {e}")
+        logging.error(f"similarityScoreModule.py - Erro no cálculo do TF-IDF: {e}")
         score_value = 0.0
     return score_value
 
