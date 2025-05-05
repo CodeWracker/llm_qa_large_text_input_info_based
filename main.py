@@ -12,6 +12,13 @@ from models.GoogleModels import (
     Gemini2_0FlashExperimental
 )
 
+from models.OllamaModels import (
+    DeepSeekR1_1_5b,
+    Llama32_1b,
+    Gemma3_1b
+)
+
+
 import pickle
 import logging
 import json
@@ -106,7 +113,7 @@ class LLMAnswer:
                     combined_score_value = 0.0
             else:
                 scores, combined_score_value = combined_similarity(self.answer, gt_answer)
-                ai_jury_veredict_result = ask_ai_jury(self.answer, gt_answer, self.question)
+            ai_jury_veredict_result = ask_ai_jury(self.answer, gt_answer, self.question)
                 
             
             logging.info(f"Similarity score between generated answer and ground truth answer: {combined_score_value:.4f}")
@@ -125,7 +132,17 @@ class LLMAnswer:
     def to_dict(self):
         # Transforma a lista de scores em um dicionário onde a chave é a resposta GT
         similarities = { item["gt_compared_answer"]: item["scores"] for item in self.scores }
-        ai_jury_results = { item["gt_compared_answer"]: item["ai_jury_veredict_result"] for item in self.scores }
+        # check if ai jury results are empty - necessary because this was added after the first implementation
+        ai_jury_results ={}
+        for score in self.scores:
+            #check if ai_jury_veredict_result key exists in score
+            if not "ai_jury_veredict_result" in score:
+                score["ai_jury_veredict_result"] = {}
+
+            ai_jury_results[score["gt_compared_answer"]] = score["ai_jury_veredict_result"]
+            
+            
+        
         return {
             "model_name": self.model_name,
             "answer": self.answer,
@@ -155,13 +172,17 @@ class ComparisonResult:
 def process_models_for_comparison(comparison_results, question, base_text):
     # Lista dos modelos a serem processados
     modelos = [
+        # the context is too big for the models from Ollama, it can't process and ends up hallucinating
+        # DeepSeekR1_1_5b,
+        # Llama32_1b,
+        # Gemma3_1b,
         Gemini1_5Flash,
-        # Gemini1_5Flash8B,
-        # Gemini1_5Pro,
-        # Gemini2_0Flash,
-        # Gemini2_0FlashLite,
+        Gemini1_5Flash8B,
+        Gemini1_5Pro,
+        Gemini2_0Flash,
+        Gemini2_0FlashLite,
         Gemini2_0FlashThinkingExperimental,
-        # Gemini2_0FlashExperimental
+        Gemini2_0FlashExperimental,
     ]
     
     for modelo_class in modelos:
@@ -180,6 +201,7 @@ def process_models_for_comparison(comparison_results, question, base_text):
             logging.info(f"Recalculando a similaridade para o modelo {model_name}.")
             # Recalcula a similaridade para o modelo já processado
             for mr in comparison_results.model_results:
+                mr.question = question # precisa atualizar a pergunta
                 if mr.model_name == model_name:
                     mr.calculate_similarity_score()
                     break
@@ -214,6 +236,8 @@ if __name__ == "__main__":
             else:
                 results_dict = loaded_results
             logging.info("Resultados carregados com sucesso.")
+            qtd_carregados = len(results_dict)
+            logging.info(f"Resultados carregados: {qtd_carregados} pares já processados.")
         else:
             results_dict = {}
             logging.info("Nenhum resultado anterior encontrado. Processando tudo do zero.")
@@ -249,10 +273,10 @@ if __name__ == "__main__":
                         )
                         break
                     except KeyboardInterrupt:
-                        logging.info("Processamento interrompido pelo usuário.")
+                        logging.info("main.py - Processamento interrompido pelo usuário.")
                         raise KeyboardInterrupt
                     except Exception as e:
-                        logging.error(f"Erro ao processar o modelo: {e}")
+                        logging.error(f"main.py - Erro ao processar o modelo: {e}")
                         logging.info("Tentando novamente após erro.")
                         time.sleep(2)
                         continue
@@ -295,6 +319,6 @@ if __name__ == "__main__":
         logging.info("Processamento completo do dataset.")
                 
     except KeyboardInterrupt as e:
-        logging.error("Processamento interrompido pelo usuário.")
+        logging.error(f"main.py - Processamento interrompido pelo usuário.")
         
     
