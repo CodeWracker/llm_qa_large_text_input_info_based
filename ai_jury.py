@@ -11,14 +11,6 @@ from typing import Dict, List
 
 import requests
 
-# ----------------------------------------------------------------------
-# Logging setup
-# ----------------------------------------------------------------------
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-)
 
 # ----------------------------------------------------------------------
 # Prompt builder
@@ -119,10 +111,10 @@ def query_model(model: str, prompt: str) -> Dict:
             if len(verdict["justification"]) == 0:
                 raise ValueError("ai_jury.py - Invalid JSON format. 'justification' must not be empty.")
             # checks if the response is a valid JSON
-            logging.info("Model %s answered on attempt %d", model, attempt)
+            logging.debug("Model %s answered on attempt %d", model, attempt)
             return verdict  # {"is_correct": bool, "justification": str}
         except Exception as exc:
-            logging.warning("Attempt %d failed for model %s: %s", attempt, model, exc)
+            logging.warning("AI Jury - Attempt %d failed for model %s: %s", attempt, model, exc)
             attempt += 1
 
 # ----------------------------------------------------------------------
@@ -151,9 +143,9 @@ def ask_ai_jury(question: str, reference: str, eval_answer: str) -> Dict:
     ]
     prompt = build_prompt(question, reference, eval_answer)
     models_opinion: Dict[str, Dict] = {}
-
+    logging.info(f"AI Jury - Asking models to evaluate the correctness of the answer. Models Council: {models}")
     for model in models:
-        logging.info("Querying model: %s", model)
+        logging.debug("AI Jury - Querying model: %s", model)
         models_opinion[model] = query_model(model, prompt)
 
     final_verdict = aggregate_verdicts(models_opinion)
@@ -167,6 +159,15 @@ def ask_ai_jury(question: str, reference: str, eval_answer: str) -> Dict:
 # ----------------------------------------------------------------------
 
 if __name__ == "__main__":
+    # ----------------------------------------------------------------------
+    # Logging setup
+    # ----------------------------------------------------------------------
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+    )
+
     question = "What is the capital of France?"
     reference_answer = "The capital of France is Paris."
     eval_answer = "The capital of France is Berlin."
