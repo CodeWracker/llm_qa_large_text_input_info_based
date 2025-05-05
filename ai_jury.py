@@ -31,6 +31,8 @@ Definition of **correct**:
 - Every factual statement in EVAL must match the content of REFERENCE.
 - Paraphrases and synonyms are fine, but any contradiction, omission, or extra fact that changes the meaning makes it **incorrect**.
 - Superficial or lexical similarity alone is **not** enough.
+- IMPORTANT: If REFERENCE == "N/A" and EVAL == "N/A" → is_correct MUST be true.
+
 
 Output format:
 - Exactly one ```json``` code block.
@@ -172,6 +174,19 @@ if __name__ == "__main__":
     reference_answer = "The capital of France is Paris."
     eval_answer = "The capital of France is Berlin."
 
+    print(f"Question: {question}")
+    print(f"Reference Answer: {reference_answer}")
+    print(f"Eval Answer: {eval_answer}")
+    print("Asking AI Jury...")
+
+    result = ask_ai_jury(question, reference_answer, eval_answer)
+    pprint(result)
+
+    
+    question = "Does the paper report macro F1?"
+    reference_answer = "yes"
+    eval_answer = "N/A"
+    print("n\n\n\n")
     print(f"Question: {question}")
     print(f"Reference Answer: {reference_answer}")
     print(f"Eval Answer: {eval_answer}")

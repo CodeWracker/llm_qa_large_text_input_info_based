@@ -249,6 +249,7 @@ if __name__ == "__main__":
 
         # Lista para armazenar os tempos dos últimos 5 processamentos
         last_times = []
+        
 
         qtd_textos = len(joined_dataset.dataset)
         for data in joined_dataset.dataset:
