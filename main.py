@@ -24,7 +24,7 @@ import logging
 import json
 import os
 import time
-
+import re
 
 # Remove any existing handlers
 for handler in logging.root.handlers[:]:
@@ -207,14 +207,29 @@ def process_models_for_comparison(comparison_results, question, base_text):
                     break
     return comparison_results
 
+_SURROGATE_RE = re.compile(r'[\ud800-\udfff]')
+
+def _clean_surrogates(obj):
+    if isinstance(obj, str):
+        # Substitui qualquer surrogate isolado pelo caractere de substituição U+FFFD
+        return _SURROGATE_RE.sub('\uFFFD', obj)
+    if isinstance(obj, list):
+        return [_clean_surrogates(i) for i in obj]
+    if isinstance(obj, dict):
+        return {k: _clean_surrogates(v) for k, v in obj.items()}
+    return obj
+
 def save_checkpoint(results_dict, results_path):
-    # Salva o checkpoint em formato pickle
+    # Pickle
     with open(results_path, "wb") as f:
         pickle.dump(results_dict, f)
-    # Salva o checkpoint em formato JSON
+
+    # JSON
+    json_data = [cr.to_dict() for cr in results_dict.values()]
+    json_data = _clean_surrogates(json_data)          # <- limpeza
     with open("results/llm_generated_dataset.json", "w", encoding="utf-8") as f:
-        json_data = [cr.to_dict() for cr in list(results_dict.values())]
         json.dump(json_data, f, ensure_ascii=False, indent=2)
+
     logging.info("Checkpoint salvo com sucesso.")
 
 
@@ -260,6 +275,8 @@ def get_statistics(last_times, total_questions, questions_processed, start_time)
                     elapsed_time_total = time.time() - start_time
                     
                     return average_time, elapsed_time_total, estimated_remaining_time, remaining_questions
+
+
 
 
 if __name__ == "__main__":
