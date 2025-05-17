@@ -66,10 +66,39 @@ class JoinedDataset:
 
     def remove_full_text(self):
         for data in self.dataset:
+
             data.full_text = ""
 
+class AiJuryModelOpinion:
+    def __init__(self, model_name, opinion):
+        self.is_correct = opinion["is_correct"]
+        self.justification = opinion["justification"]
+
+    def to_dict(self):
+        return {
+            "model_name": self.model_name,
+            "opinion": self.opinion
+        }
+
+
+class AiJury:
+    def __init__(self, question, reference_answer, eval_answer):
+        self.question = question
+        self.reference_answer = reference_answer
+        self.eval_answer = eval_answer
+  
+    def to_dict(self):
+        return {
+            "question": self.question,
+            "reference_answer": self.reference_answer,
+            "eval_answer": self.eval_answer,
+            "final_verdict": self.final_verdict,
+            "models_opinion": [opinion.to_dict() for opinion in self.models_opinion]
+        }
+
 class LLMAnswer:
-    def __init__(self, model_name, answer, option_answers_gt):
+    def __init__(self, model_name, answer, option_answers_gt, question=None):
+        self.question = question
         self.model_name = model_name
         self.answer = answer
         self.option_answers_gt = option_answers_gt
@@ -80,11 +109,21 @@ class LLMAnswer:
     def to_dict(self):
         # Transforma a lista de scores em um dicionário onde a chave é a resposta GT
         similarities = { item["gt_compared_answer"]: item["scores"] for item in self.scores }
+        # check if ai jury results are empty - necessary because this was added after the first implementation
+        ai_jury_results ={}
+        for score in self.scores:
+            #check if ai_jury_veredict_result key exists in score
+            if not "ai_jury_veredict_result" in score:
+                score["ai_jury_veredict_result"] = {}
+
+            ai_jury_results[score["gt_compared_answer"]] = score["ai_jury_veredict_result"]
+            
         return {
             "model_name": self.model_name,
             "answer": self.answer,
             "overall_similarity": self.similarity_score,
-            "similarities": similarities
+            "similarities": similarities,
+            "ai_jury_results": ai_jury_results
         }
 
 class ComparisonResult:
@@ -370,3 +409,158 @@ df_overall.to_csv(os.path.join(output_folder, 'overall_similarity.csv'), index=F
 df_detailed.to_csv(os.path.join(output_folder, 'detailed_similarity.csv'), index=False)
 
 print("Análises e imagens salvos na pasta:", output_folder)
+
+
+# -------------------------------------------------------------------------------
+# 14. Avaliação do AI Jury
+# -------------------------------------------------------------------------------
+
+# Listas auxiliares
+jury_records = []          # veredicto final por ground-truth
+jury_member_records = []   # votos de cada membro
+
+for comparison in data:
+    question = comparison['question']
+    for model in comparison['model_results']:
+        model_name = model['model_name']
+        ai_jury_results = model.get('ai_jury_results', {})
+
+        for gt_answer, verdict_dict in ai_jury_results.items():
+            if not verdict_dict:
+                continue
+
+            final_verdict = verdict_dict.get('final_verdict')
+            if final_verdict is None:
+                continue
+
+            # registro do veredito final (True = acerto)
+            jury_records.append({
+                'question'      : question,
+                'model_name'    : model_name,
+                'ground_truth'  : gt_answer,
+                'final_verdict' : bool(final_verdict)
+            })
+
+            # agora percorre o dict de opiniões individuais
+            for member_name, opinion_info in verdict_dict.get('models_opinion', {}).items():
+                # opinion_info tem is_correct e justification
+                member_vote = opinion_info.get('opinion')
+                if member_vote is None:
+                    continue
+                jury_member_records.append({
+                    'question'      : question,
+                    'model_name'    : model_name,
+                    'member'        : member_name,
+                    'member_vote'   : bool(member_vote),
+                    'correct'       : bool(member_vote) == bool(final_verdict)
+                })
+
+# -------------------------------------------------------------------------------
+# 15. DataFrames do júri
+# -------------------------------------------------------------------------------
+df_jury   = pd.DataFrame(jury_records)
+df_member = pd.DataFrame(jury_member_records)
+
+df_jury.to_csv(os.path.join(output_folder, 'jury_results.csv'), index=False)
+df_member.to_csv(os.path.join(output_folder, 'jury_member_votes.csv'), index=False)
+
+# -------------------------------------------------------------------------------
+# 16. Precisão, acertos e erros por modelo
+# -------------------------------------------------------------------------------
+precision_per_model = df_jury.groupby('model_name')['final_verdict'].mean().sort_values(ascending=False)
+counts_per_model    = df_jury.groupby(['model_name', 'final_verdict']).size().unstack(fill_value=0)
+
+precision_per_model.to_csv(os.path.join(output_folder, 'precision_per_model.csv'))
+counts_per_model.to_csv(os.path.join(output_folder, 'correct_incorrect_counts.csv'))
+
+# Gráfico – precisão
+plt.figure()
+sns.barplot(x=precision_per_model.index, y=precision_per_model.values, errorbar=None)
+plt.title('Precisão do AI Jury por Modelo')
+plt.ylabel('Precisão')
+plt.xlabel('Modelo')
+plt.ylim(0, 1)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig(os.path.join(output_folder, 'barplot_precision_per_model.png'))
+plt.close()
+
+# Gráfico – acertos e erros
+counts_per_model.plot(kind='bar', stacked=False, figsize=(10,6))
+plt.title('Contagem de Acertos (True) e Erros (False) por Modelo')
+plt.ylabel('Quantidade')
+plt.xlabel('Modelo')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig(os.path.join(output_folder, 'barplot_correct_incorrect_per_model.png'))
+plt.close()
+
+# -------------------------------------------------------------------------------
+# 17. Comparação entre veredicto do júri e métricas BERT / SBERT
+# -------------------------------------------------------------------------------
+metric_cols = [c for c in score_keys if 'bert' in c.lower() or 'sbert' in c.lower()]
+if metric_cols:
+    # junta verdictos com métricas
+    df_compare = pd.merge(
+        df_detailed,                   # contém métricas
+        df_jury[['question', 'model_name', 'final_verdict']],
+        on=['question', 'model_name'],
+        how='inner'
+    )
+    # correlação verdicto (0-1) x métricas
+    corr_vs_metrics = df_compare[metric_cols + ['final_verdict']].corr()['final_verdict'].drop('final_verdict')
+    corr_vs_metrics.to_csv(os.path.join(output_folder, 'corr_verdict_vs_metrics.csv'))
+
+    # boxplots métricas x veredicto
+    for col in metric_cols:
+        plt.figure()
+        sns.boxplot(x='final_verdict', y=col, data=df_compare)
+        plt.title(f'{col} vs Veredicto do Júri')
+        plt.xlabel('Veredicto do Júri (0 = erro, 1 = acerto)')
+        plt.ylabel(col)
+        plt.tight_layout()
+        fname = f'boxplot_{col.replace(" ", "_")}_vs_verdict.png'
+        plt.savefig(os.path.join(output_folder, fname))
+        plt.close()
+else:
+    logging.warning("Nenhuma coluna de métrica BERT / SBERT encontrada em score_keys.")
+
+# -------------------------------------------------------------------------------
+# 18. Votos por membro do júri e sua precisão
+# -------------------------------------------------------------------------------
+if not df_member.empty:
+    # barras True / False por membro e modelo
+    member_count = df_member.groupby(['model_name', 'member', 'member_vote']).size().unstack(fill_value=0)
+    member_prec  = df_member.groupby('member')['correct'].mean().sort_values(ascending=False)
+
+    member_count.to_csv(os.path.join(output_folder, 'member_vote_counts.csv'))
+    member_prec.to_csv(os.path.join(output_folder, 'member_precision.csv'))
+
+    # gráfico por modelo mostrando barra para cada membro (True / False)
+    for model_name, subdf in member_count.groupby(level=0):
+        subdf = subdf.droplevel(0)  # remove o índice do modelo
+        subdf.plot(kind='bar', stacked=False, figsize=(10,6))
+        plt.title(f'Votos True / False por Membro – {model_name}')
+        plt.ylabel('Quantidade')
+        plt.xlabel('Membro do Júri')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        fname = f'barplot_member_votes_{model_name}.png'.replace('/', '_')
+        plt.savefig(os.path.join(output_folder, fname))
+        plt.close()
+
+    # gráfico de precisão por membro
+    plt.figure()
+    sns.barplot(x=member_prec.index, y=member_prec.values, errorbar=None)
+    plt.title('Precisão Individual dos Membros do Júri')
+    plt.ylabel('Precisão')
+    plt.xlabel('Membro')
+    plt.ylim(0, 1)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_folder, 'barplot_member_precision.png'))
+    plt.close()
+else:
+    logging.warning("df_member vazio – não foi possível gerar gráficos de membros do júri.")
+
+print("Novas avaliações do AI Jury finalizadas – resultados adicionados em", output_folder)
