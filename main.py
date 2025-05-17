@@ -217,6 +217,51 @@ def save_checkpoint(results_dict, results_path):
         json.dump(json_data, f, ensure_ascii=False, indent=2)
     logging.info("Checkpoint salvo com sucesso.")
 
+
+
+def process_comparison_results(comparison_results, question, full_text):
+    
+    while True:
+        try:
+            return process_models_for_comparison(comparison_results, question, full_text)
+        except KeyboardInterrupt:
+            logging.info("main.py - Processamento interrompido pelo usuário.")
+            raise KeyboardInterrupt
+        except Exception as e:
+            logging.error(f"main.py - Erro ao processar o modelo: {e}")
+            logging.info("Tentando novamente após erro.")
+            time.sleep(2)
+            continue
+
+def handle_processing_and_checkpointing(comparison_result, question, full_text, results_dict, results_path):
+    """
+    Processa os modelos e salva o checkpoint.
+    """
+    # Processa apenas os modelos que ainda não foram computados para esse par
+    comparison_result = process_comparison_results(comparison_result, question, full_text)
+    # Atualiza ou adiciona o resultado no dicionário
+    results_dict[key] = comparison_result
+    # Salva checkpoint após cada pergunta processada
+    save_checkpoint(results_dict, results_path)
+    return comparison_result, results_dict
+
+def get_statistics(last_times, total_questions, questions_processed, start_time):
+                    """
+                    Calcula e retorna o tempo médio, tempo total decorrido e estimativa de tempo restante.
+                    """
+                    if not last_times:
+                        return 0, 0, 0
+                    
+                    # Calcula o tempo médio com base nos últimos 5 processamentos (ou menos, se ainda não houver 5)
+                    average_time = sum(last_times) / len(last_times)
+                    remaining_questions = total_questions - questions_processed
+                    estimated_remaining_time = average_time * remaining_questions
+                    
+                    elapsed_time_total = time.time() - start_time
+                    
+                    return average_time, elapsed_time_total, estimated_remaining_time, remaining_questions
+
+
 if __name__ == "__main__":
     try:
         # Carrega o dataset original
@@ -251,6 +296,8 @@ if __name__ == "__main__":
         last_times = []
         
 
+        INIT_FROM_QUESTION_NUMBER = 1380
+
         qtd_textos = len(joined_dataset.dataset)
         for data in joined_dataset.dataset:
             qtd_textos -= 1
@@ -266,27 +313,16 @@ if __name__ == "__main__":
                 # Inicia a medição do tempo para a pergunta atual
                 question_start = time.time()
 
-                # Processa apenas os modelos que ainda não foram computados para esse par
-                while True:
-                    try:
-                        comparison_result = process_models_for_comparison(
-                            comparison_result, qa.question, data.full_text
-                        )
-                        break
-                    except KeyboardInterrupt:
-                        logging.info("main.py - Processamento interrompido pelo usuário.")
-                        raise KeyboardInterrupt
-                    except Exception as e:
-                        logging.error(f"main.py - Erro ao processar o modelo: {e}")
-                        logging.info("Tentando novamente após erro.")
-                        time.sleep(2)
-                        continue
-                
-                # Atualiza ou adiciona o resultado no dicionário
-                results_dict[key] = comparison_result
-
-                # Salva checkpoint após cada pergunta processada
-                save_checkpoint(results_dict, results_path)
+                if(questions_processed > INIT_FROM_QUESTION_NUMBER):
+                    comparison_result, results_dict = handle_processing_and_checkpointing(
+                        comparison_result, 
+                        qa.question, 
+                        data.full_text, 
+                        results_dict, 
+                        results_path
+                    )
+                else:
+                    logging.info(f"Pultando processamento do texto {data.title} - Pergunta: {qa.question}")
                 
                 # Atualiza o contador de perguntas processadas
                 questions_processed += 1
@@ -297,12 +333,12 @@ if __name__ == "__main__":
                 if len(last_times) > 5:
                     last_times.pop(0)
                 
-                # Calcula o tempo médio com base nos últimos 5 processamentos (ou menos, se ainda não houver 5)
-                average_time = sum(last_times) / len(last_times)
-                remaining_questions = total_questions - questions_processed
-                estimated_remaining_time = average_time * remaining_questions
                 
-                elapsed_time_total = time.time() - start_time
+                # Calcula o tempo médio com base nos últimos 5 processamentos (ou menos, se ainda não houver 5)
+                average_time, elapsed_time_total, estimated_remaining_time, remaining_questions = get_statistics(
+                    last_times, total_questions, questions_processed, start_time
+                )
+                
                 
                 # Log de tempo decorrido e estimativa de tempo restante
                 logging.info(
