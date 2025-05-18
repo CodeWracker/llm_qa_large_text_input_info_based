@@ -215,21 +215,92 @@ if __name__ == "__main__":
     # Configuração do logging
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     # Exemplos de uso quando o módulo é executado diretamente
-
+    """
+    4
+    • four
+    • usually a car has 4 wheels
+    • if not broken, four
+    • two in the front and two in the back
+    \item Cars usually have 6 or more wheels depending on the model
+    \item I think it depends on the season
+    \item It has legs instead of wheels
+    \item The engine is what makes it move
+    \item Probably two, because bicycles have two
+    \item There are two wheels in the front
+    """
     # Exemplo 1
-    reference_text = "ok, all right, you can do that. it is correct, go for the room 400 on floor two"
-    generated_text = "yes, you can do that. it is correct, go for the room 401 on floor 2"
+    reference_text = "Four Wheels"
+    print(f"Referência: {reference_text}")
+    generated_text = "4"
     scores, combined_score_value = combined_similarity(reference_text, generated_text)
-    print("Exemplo 1:")
+    print(f"Exemplo 1: {generated_text}")
     for method, score in scores.items():
         print(f"{method}: {score:.4f}")
     print(f"\nCombined Similarity Score: {combined_score_value:.4f}\n")
 
     # Exemplo 2
-    reference_text = "vou mijar no banheiro"
-    generated_text = "urinarei no toalete"
+    generated_text = "Usually a car has 4 wheels"
     scores, combined_score_value = combined_similarity(reference_text, generated_text)
-    print("Exemplo 2:")
+    print(f'Exemplo 2: {generated_text}')
     for method, score in scores.items():
         print(f"{method}: {score:.4f}")
     print(f"\nCombined Similarity Score: {combined_score_value:.4f}")
+    
+    # Exemplo 3
+    generated_text = "If not broken, four"
+    scores, combined_score_value = combined_similarity(reference_text, generated_text)
+    print(f'Exemplo 3: {generated_text}')
+    for method, score in scores.items():
+        print(f"{method}: {score:.4f}")
+    print(f"\nCombined Similarity Score: {combined_score_value:.4f}")
+    # Exemplo 4
+    generated_text = "Two in the front and two in the back"
+    scores, combined_score_value = combined_similarity(reference_text, generated_text)
+    print(f'Exemplo 4: {generated_text}')
+    for method, score in scores.items():
+        print(f"{method}: {score:.4f}")
+    print(f"\nCombined Similarity Score: {combined_score_value:.4f}")
+    
+    # Exemplo 5
+    generated_text = "Cars usually have 6 or more wheels depending on the model"
+    scores, combined_score_value = combined_similarity(reference_text, generated_text)
+    print(f'Exemplo 5: {generated_text}')
+    for method, score in scores.items():
+        print(f"{method}: {score:.4f}")
+    print(f"\nCombined Similarity Score: {combined_score_value:.4f}")
+    # Exemplo 6
+    generated_text = "I think it depends on the season"
+    scores, combined_score_value = combined_similarity(reference_text, generated_text)
+    print(f'Exemplo 6: {generated_text}')
+    for method, score in scores.items():
+        print(f"{method}: {score:.4f}")
+    print(f"\nCombined Similarity Score: {combined_score_value:.4f}")
+    # Exemplo 7
+    generated_text = "It has legs instead of wheels"
+    scores, combined_score_value = combined_similarity(reference_text, generated_text)
+    print(f'Exemplo 7: {generated_text}')
+    for method, score in scores.items():
+        print(f"{method}: {score:.4f}")
+    print(f"\nCombined Similarity Score: {combined_score_value:.4f}")
+    # Exemplo 8
+    generated_text = "The engine is what makes it move"
+    scores, combined_score_value = combined_similarity(reference_text, generated_text)
+    print(f'Exemplo 8: {generated_text}')
+    for method, score in scores.items():
+        print(f"{method}: {score:.4f}")
+    print(f"\nCombined Similarity Score: {combined_score_value:.4f}")
+    # Exemplo 9
+    generated_text = "Probably two, because bicycles have two"
+    scores, combined_score_value = combined_similarity(reference_text, generated_text)
+    print(f'Exemplo 9: {generated_text}')
+    for method, score in scores.items():
+        print(f"{method}: {score:.4f}")
+    print(f"\nCombined Similarity Score: {combined_score_value:.4f}")
+    # Exemplo 10
+    generated_text = "There are two wheels in the front"
+    scores, combined_score_value = combined_similarity(reference_text, generated_text)
+    print(f'Exemplo 10: {generated_text}')
+    for method, score in scores.items():
+        print(f"{method}: {score:.4f}")
+    print(f"\nCombined Similarity Score: {combined_score_value:.4f}")
+    

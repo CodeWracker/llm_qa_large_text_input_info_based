@@ -160,6 +160,17 @@ def ask_ai_jury(question: str, reference: str, eval_answer: str) -> Dict:
 # Demo
 # ----------------------------------------------------------------------
 
+def demo(qyestion, reference, eval_answer):
+    """
+    Simple demo function to show how to use the AI Jury.
+    """
+    result = ask_ai_jury(qyestion, reference, eval_answer)
+    pprint(result)
+    if result["final_verdict"]:
+        print("The answer is correct according to the AI Jury.")
+    else:
+        print("The answer is incorrect according to the AI Jury.")
+
 if __name__ == "__main__":
     # ----------------------------------------------------------------------
     # Logging setup
@@ -169,28 +180,63 @@ if __name__ == "__main__":
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
     )
-
-    question = "What is the capital of France?"
-    reference_answer = "The capital of France is Paris."
-    eval_answer = "The capital of France is Berlin."
-
-    print(f"Question: {question}")
-    print(f"Reference Answer: {reference_answer}")
-    print(f"Eval Answer: {eval_answer}")
-    print("Asking AI Jury...")
-
-    result = ask_ai_jury(question, reference_answer, eval_answer)
-    pprint(result)
-
     
-    question = "Does the paper report macro F1?"
-    reference_answer = "yes"
-    eval_answer = "N/A"
-    print("n\n\n\n")
+    
+
+    question = "How many wheels does a car have?"
+    reference_answer = "Four Wheels"
+    
+    """
+    4
+    • four
+    • usually a car has 4 wheels
+    • if not broken, four
+    • two in the front and two in the back
+    \item Cars usually have 6 or more wheels depending on the model
+    \item I think it depends on the season
+    \item It has legs instead of wheels
+    \item The engine is what makes it move
+    \item Probably two, because bicycles have two
+    \item There are two wheels in the front
+    """
+    
+    
+
     print(f"Question: {question}")
     print(f"Reference Answer: {reference_answer}")
-    print(f"Eval Answer: {eval_answer}")
-    print("Asking AI Jury...")
-
-    result = ask_ai_jury(question, reference_answer, eval_answer)
-    pprint(result)
+    
+    
+    
+    eval_answer = "4"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "four"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "usually a car has 4 wheels"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "if not broken, four"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "two in the front and two in the back"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "Cars usually have 6 or more wheels depending on the model"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "I think it depends on the season"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "It has legs instead of wheels"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "The engine is what makes it move"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "Probably two, because bicycles have two"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)
+    eval_answer = "There are two wheels in the front"
+    print("Evaluating answer:", eval_answer)
+    demo(question, reference_answer, eval_answer)

@@ -455,6 +455,8 @@ for comparison in data:
                     'correct'       : bool(member_vote) == bool(final_verdict)
                 })
 
+
+
 # -------------------------------------------------------------------------------
 # 15. DataFrames do júri
 # -------------------------------------------------------------------------------
@@ -463,6 +465,9 @@ df_member = pd.DataFrame(jury_member_records)
 
 df_jury.to_csv(os.path.join(output_folder, 'jury_results.csv'), index=False)
 df_member.to_csv(os.path.join(output_folder, 'jury_member_votes.csv'), index=False)
+
+
+
 
 # -------------------------------------------------------------------------------
 # 16. Precisão, acertos e erros por modelo
@@ -564,3 +569,126 @@ else:
     logging.warning("df_member vazio – não foi possível gerar gráficos de membros do júri.")
 
 print("Novas avaliações do AI Jury finalizadas – resultados adicionados em", output_folder)
+
+# =====================================================================
+# 19. Novas análises: correlações com p-valores e comparação precisão
+# =====================================================================
+from scipy.stats import pearsonr, spearmanr, ttest_ind, mannwhitneyu
+
+# Pasta para salvar os novos resultados
+extra_folder = os.path.join(output_folder, "extra_analysis")
+os.makedirs(extra_folder, exist_ok=True)
+
+# ---------------------------------------------------------------------
+# 19.1 Função auxiliar para r e p
+def corr_with_p(x, y, method="pearson"):
+    """
+    Calcula r e p eliminando pares com NaN em qualquer das variáveis.
+    Retorna (np.nan, np.nan) se restarem menos de 3 pontos válidos.
+    """
+    x = pd.Series(x)
+    y = pd.Series(y)
+    mask = ~(x.isna() | y.isna())       # mantém apenas pares completos
+    x_valid = x[mask]
+    y_valid = y[mask]
+
+    if len(x_valid) < 3:
+        return np.nan, np.nan
+
+    if method == "pearson":
+        r, p = pearsonr(x_valid, y_valid)
+    else:
+        r, p = spearmanr(x_valid, y_valid)
+
+    return r, p
+
+# ---------------------------------------------------------------------
+# 19.2 Correlação (precisão x métricas de similaridade) por modelo
+precision_df = precision_per_model.rename("precision").to_frame()
+precision_df["overall_mean"] = overall_stats["mean"]
+precision_df["avg_metric_mean"] = df_detailed.groupby("model_name")["avg_metric"].mean()
+
+# inclui cada score individual
+for key in score_keys:
+    precision_df[f"{key}_mean"] = df_detailed.groupby("model_name")[key].mean()
+
+# Calcula correlações e p-valores
+corr_rows = []
+for col in precision_df.columns.drop("precision"):
+    r, p = corr_with_p(precision_df["precision"], precision_df[col])
+    corr_rows.append({"metric": col, "r": r, "p_value": p})
+
+df_corr_prec = pd.DataFrame(corr_rows).sort_values("r", ascending=False)
+df_corr_prec.to_csv(os.path.join(extra_folder, "correlation_precision_vs_metrics.csv"), index=False)
+
+# ---------------------------------------------------------------------
+# 19.3 Scatter plots precisão vs métricas
+for col in precision_df.columns.drop("precision"):
+    plt.figure()
+    sns.regplot(x=precision_df[col], y=precision_df["precision"])
+    r, p = corr_with_p(precision_df["precision"], precision_df[col])
+    plt.title(f"Precisão vs {col}\nr = {r:.3f}  |  p = {p:.3g}")
+    plt.xlabel(col)
+    plt.ylabel("Precisão")
+    fname = f"scatter_precision_vs_{col}.png".replace("/", "_")
+    plt.tight_layout()
+    plt.savefig(os.path.join(extra_folder, fname))
+    plt.close()
+
+# ---------------------------------------------------------------------
+# 19.4 Correlações detalhe x overall com p-valores
+corr_detail = []
+for key in score_keys:
+    r, p = corr_with_p(df_merged[key], df_merged["overall_similarity"])
+    corr_detail.append({"metric": key, "r": r, "p_value": p})
+df_corr_detail = pd.DataFrame(corr_detail).sort_values("r", ascending=False)
+df_corr_detail.to_csv(os.path.join(extra_folder, "correlation_overall_vs_each_metric.csv"), index=False)
+
+# ---------------------------------------------------------------------
+# 19.5 Testes unanswerable vs answerable
+ans   = df_overall[df_overall["unanswerable"] == False]["overall_similarity"].dropna()
+unans = df_overall[df_overall["unanswerable"] == True ]["overall_similarity"].dropna()
+
+t_stat, t_p   = ttest_ind(ans, unans, equal_var=False, nan_policy="omit")
+u_stat, u_p   = mannwhitneyu(ans, unans, alternative="two-sided")
+
+with open(os.path.join(extra_folder, "unanswerable_tests.txt"), "w") as f:
+    f.write(f"T-test:   statistic = {t_stat:.3f}, p = {t_p:.3g}\n")
+    f.write(f"Mann-Whitney: U = {u_stat:.3f}, p = {u_p:.3g}\n")
+
+# Boxplot já existia - aqui acrescentamos anotação de p para info rápida
+plt.figure()
+sns.boxplot(x="unanswerable", y="overall_similarity", data=df_overall)
+plt.title(f"Overall Similarity vs Unanswerable\nT-p = {t_p:.3g} | U-p = {u_p:.3g}")
+plt.xlabel("Unanswerable")
+plt.ylabel("Overall Similarity")
+plt.tight_layout()
+plt.savefig(os.path.join(extra_folder, "boxplot_overall_vs_unanswerable_with_p.png"))
+plt.close()
+
+# ---------------------------------------------------------------------
+# 19.6 Correlação inter-modelos com p-valores
+inter_r = []
+models = pivot_overall.columns.tolist()
+for i, m1 in enumerate(models):
+    for m2 in models[i+1:]:
+        r, p = corr_with_p(pivot_overall[m1], pivot_overall[m2])
+        inter_r.append({"model_1": m1, "model_2": m2, "r": r, "p_value": p})
+df_inter = pd.DataFrame(inter_r).sort_values("r", ascending=False)
+df_inter.to_csv(os.path.join(extra_folder, "inter_model_correlations_with_p.csv"), index=False)
+
+# ---------------------------------------------------------------------
+# 19.7 Correlação avg_metric vs overall_similarity com p-valor
+r_avg, p_avg = corr_with_p(df_merged["avg_metric"], df_merged["overall_similarity"])
+
+plt.figure()
+sns.regplot(x="avg_metric", y="overall_similarity", data=df_merged)
+plt.title(f"Overall Similarity vs avg_metric\nr = {r_avg:.3f}  |  p = {p_avg:.3g}")
+plt.tight_layout()
+plt.savefig(os.path.join(extra_folder, "scatter_overall_vs_avg_metric_with_p.png"))
+plt.close()
+
+with open(os.path.join(extra_folder, "corr_avg_vs_overall.txt"), "w") as f:
+    f.write(f"Pearson r = {r_avg:.4f}, p = {p_avg:.3g}\n")
+
+print("Novas correlações, p-valores e comparativos salvos em:", extra_folder)
