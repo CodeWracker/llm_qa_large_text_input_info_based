@@ -127,7 +127,8 @@ class OllamaClient:
             raise TransientError(str(exc)) from exc
         if r.status_code >= 400:
             tipo = "http_5xx" if r.status_code >= 500 else ("http_429" if r.status_code == 429 else "http_4xx")
-            self.incidents.failure(endpoint, model, tipo, r.status_code, _error_detail(r.text), time.time() - t0)
+            self.incidents.failure(endpoint, model, tipo, r.status_code,
+                                  _error_detail(r.content.decode("utf-8", "replace")), time.time() - t0)
         if r.status_code >= 500 or r.status_code == 429:
             raise TransientError(f"{r.status_code}: {r.text[:200]}")
         r.raise_for_status()
