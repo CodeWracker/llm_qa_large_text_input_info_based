@@ -9,11 +9,14 @@ import hashlib
 import json
 import logging
 import os
+import re
+import socket
 import sqlite3
 import threading
 import time
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import urlparse
 
 import numpy as np
 import requests
@@ -48,6 +51,47 @@ class SQLiteCache:
             self._conn.commit()
 
 
+def _error_detail(text: str) -> str:
+    """Resumo legível de uma resposta de erro: o <title> de páginas HTML ou o início do texto."""
+    m = re.search(r"<title>(.*?)</title>", text or "", re.IGNORECASE | re.DOTALL)
+    return (m.group(1) if m else (text or "")).strip()[:200]
+
+
+class IncidentLog:
+    """Registro de falhas do servidor (uma linha JSON por tentativa falha), para relatar à SeTIC.
+
+    O formato é compartilhado com outros experimentos: ver o README da pasta de incidentes.
+    Só host, rota, modelo e erro são gravados; nunca credenciais nem o conteúdo das mensagens.
+    """
+
+    def __init__(self, path: str | None, experiment: str, url: str):
+        self.path = Path(path) if path else None
+        if self.path is not None and not self.path.parent.is_dir():
+            self.path = None  # pasta ausente (outra máquina): não registra
+        self.experiment, self.host = experiment, urlparse(url).netloc
+        self.client = socket.gethostname()
+        self._lock = threading.Lock()
+        self._failing = False
+
+    def _write(self, **event) -> None:
+        if self.path is None:
+            return
+        row = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "experimento": self.experiment,
+               "servico": self.host, "cliente": self.client, "fonte": "automatico", **event}
+        with self._lock, open(self.path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+    def failure(self, endpoint: str, model: str | None, tipo: str, status: int | None, detalhe: str, dur: float):
+        self._failing = True
+        self._write(evento="falha", rota=endpoint, modelo=model, tipo=tipo, status=status,
+                    detalhe=detalhe, duracao_s=round(dur, 2))
+
+    def success(self, endpoint: str, model: str | None) -> None:
+        if self._failing:  # primeira resposta boa após falhas: marca o fim do episódio
+            self._failing = False
+            self._write(evento="recuperado", rota=endpoint, modelo=model)
+
+
 def _hash(obj) -> str:
     return hashlib.sha256(json.dumps(obj, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
@@ -60,6 +104,8 @@ class OllamaClient:
         self.opts = cfg["ollama"]
         self.session = requests.Session()
         self.chat_cache = SQLiteCache(cache_dir / "chat.sqlite")
+        self.incidents = IncidentLog(os.environ.get("OLLAMA_INCIDENT_LOG", self.opts.get("incident_log")),
+                                     self.opts.get("experiment", "llm-eval"), self.url)
         self.emb_cache = SQLiteCache(cache_dir / "embeddings.sqlite")
 
     # ------------------------------------------------------------------ HTTP
@@ -70,15 +116,22 @@ class OllamaClient:
         reraise=True,
     )
     def _post(self, endpoint: str, payload: dict) -> dict:
+        model, t0 = payload.get("model"), time.time()
         try:
             r = self.session.post(
                 f"{self.url}{endpoint}", json=payload, auth=self.auth, timeout=self.opts["timeout_s"]
             )
         except requests.RequestException as exc:  # rede, timeout
+            tipo = "timeout" if isinstance(exc, requests.Timeout) else "conexao"
+            self.incidents.failure(endpoint, model, tipo, None, f"{type(exc).__name__}: {str(exc)[:160]}", time.time() - t0)
             raise TransientError(str(exc)) from exc
+        if r.status_code >= 400:
+            tipo = "http_5xx" if r.status_code >= 500 else ("http_429" if r.status_code == 429 else "http_4xx")
+            self.incidents.failure(endpoint, model, tipo, r.status_code, _error_detail(r.text), time.time() - t0)
         if r.status_code >= 500 or r.status_code == 429:
             raise TransientError(f"{r.status_code}: {r.text[:200]}")
         r.raise_for_status()
+        self.incidents.success(endpoint, model)
         return r.json()
 
     @lru_cache(maxsize=None)

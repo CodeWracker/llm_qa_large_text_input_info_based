@@ -16,6 +16,9 @@ ollama:
   concurrency: 8        # requisições simultâneas ao servidor
   timeout_s: 900
   max_parse_retries: 3
+  experiment: llm-eval   # nome no registro de incidentes
+  # falhas do servidor (para relatar à SeTIC); sobrescrito por $OLLAMA_INCIDENT_LOG; ignorado se a pasta não existir
+  incident_log: /home/jovyan/privado/setic_infra_audit/incidentes_ollama/eventos.jsonl
 
 sample:
   qasper_split: test
