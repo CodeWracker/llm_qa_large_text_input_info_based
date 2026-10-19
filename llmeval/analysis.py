@@ -411,7 +411,7 @@ def fig_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
     gens = [g for g in cfg["generators"] if g["model"] in set(acc.model)]
     conds = [c["name"] for c in cfg["conditions"] if c["name"] in set(acc.condition)]
     style = {  # cor = família de condição; marcador distingue k nas variantes híbridas
-        "closed_book": (INK2, "x"), "full": (SERIES[0], "o"), "bm25_k5": (SERIES[1], "s"),
+        "closed_book": (INK2, "X"), "full": (SERIES[0], "o"), "bm25_k5": (SERIES[1], "s"),
         "dense_k5": (SERIES[2], "D"), "hybrid_k2": (SERIES[6], "<"), "hybrid_k5": (SERIES[6], "o"),
         "hybrid_k10": (SERIES[6], ">"),
     }
@@ -446,12 +446,15 @@ def fig_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
 
 
 def fig_cost(cfg, acc: pd.DataFrame, out: Path) -> None:
-    """Acurácia × tamanho médio do contexto (palavras, escala log), uma linha por modelo."""
+    """Acurácia × tamanho médio do contexto (palavras, escala log): varredura do híbrido
+    (k = 2, 5, 10) até o documento completo, uma linha por modelo."""
     if acc.empty:
         return
+    from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
+
     gens = [g for g in cfg["generators"] if g["model"] in set(acc.model)]
-    order = ["hybrid_k2", "bm25_k5", "dense_k5", "hybrid_k5", "hybrid_k10", "full"]
-    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 2.3), sharey=False)
+    order = ["hybrid_k2", "hybrid_k5", "hybrid_k10", "full"]
+    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 2.3))
     for ax, (ds, title) in zip(axes, (("qasper", "QASPER (jury)"), ("quality", "QuALITY (answer key)"))):
         sub = acc[(acc.dataset == ds) & acc.condition.isin(order)]
         for color, g in zip(SERIES, gens):
@@ -459,10 +462,13 @@ def fig_cost(cfg, acc: pd.DataFrame, out: Path) -> None:
             if r.empty:
                 continue
             ax.plot(r.context_words, r.acc * 100, color=color, marker="o", ms=3.5, lw=1.4, label=g["label"])
-            full = r.loc["full"] if "full" in r.index else None
-            if full is not None:
-                ax.plot(full.context_words, full.acc * 100, marker="s", color=color, ms=5, mec="white", mew=0.6)
+            if "full" in r.index:
+                f = r.loc["full"]
+                ax.plot(f.context_words, f.acc * 100, marker="s", color=color, ms=5.5, mec="white", mew=0.6)
         ax.set_xscale("log")
+        ax.xaxis.set_major_locator(LogLocator(subs=(1, 2, 5)))
+        ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
+        ax.xaxis.set_minor_formatter(NullFormatter())
         ax.set_xlabel("Mean context size (words, log scale)")
         ax.set_title(title, loc="left")
     axes[0].set_ylabel("Accuracy (%)")
