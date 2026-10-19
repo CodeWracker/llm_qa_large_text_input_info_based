@@ -92,5 +92,8 @@ def run_judging(cfg) -> None:
                 score=sum(VERDICT_SCORE[v] for v in valid) / len(valid) if valid else None,
             )
         rows.append(out)
+    missing = sum(1 for v in verdicts.values() for j in judges if v.get(j["model"]) is None)
+    if missing:
+        log.warning("%d votos ausentes (falha de formato ou de servidor); reexecute `judge` para refazê-los", missing)
     write_jsonl(results / "judgments.jsonl", rows)
     log.info("julgamento concluído: %d itens, %d chamadas únicas por juiz", len(rows), len(todo))

@@ -18,7 +18,7 @@ from pathlib import Path
 import numpy as np
 import requests
 from requests.utils import get_netrc_auth
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from tenacity import retry, retry_if_exception_type, stop_after_delay, wait_exponential
 
 log = logging.getLogger(__name__)
 
@@ -66,7 +66,7 @@ class OllamaClient:
     @retry(
         retry=retry_if_exception_type(TransientError),
         wait=wait_exponential(multiplier=2, max=120),
-        stop=stop_after_attempt(8),
+        stop=stop_after_delay(1800),  # aguenta quedas do servidor compartilhado de até ~30 min
         reraise=True,
     )
     def _post(self, endpoint: str, payload: dict) -> dict:
@@ -124,7 +124,13 @@ class OllamaClient:
             if attempt:  # nova semente para escapar de uma saída malformada determinística
                 payload["options"] = {**options, "seed": options["seed"] + attempt}
             t0 = time.time()
-            resp = self._post("/api/chat", payload)
+            try:
+                resp = self._post("/api/chat", payload)
+            except TransientError as exc:
+                # servidor fora do ar além da janela de retentativas: a chamada falha sozinha, sem
+                # derrubar o estágio e sem ir para o cache (uma nova execução a refaz)
+                log.error("servidor indisponível para %s: %s", model, str(exc)[:120])
+                return {"output": None, "error": f"servidor: {str(exc)[:120]}", "parse_attempts": attempt}
             msg = resp.get("message", {})
             content = msg.get("content", "")
             try:
