@@ -14,6 +14,7 @@ ollama:
   seed: 42
   keep_alive: 10m       # modelos rodam em sequência; libera o servidor compartilhado logo após o uso
   concurrency: 8        # threads por processo
+  circuit_breaker: 16    # falhas de servidor seguidas que interrompem o estágio (código 75)
   max_inflight: 8       # teto GLOBAL de requisições simultâneas (todos os processos; servidor compartilhado)
   timeout_s: 900
   max_parse_retries: 3

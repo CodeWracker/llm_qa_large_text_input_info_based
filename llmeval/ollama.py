@@ -32,6 +32,10 @@ class TransientError(RuntimeError):
     pass
 
 
+class ServerUnavailable(RuntimeError):
+    """Disjuntor aberto: falhas seguidas demais; o estágio deve parar e ser relançado depois."""
+
+
 class SQLiteCache:
     """Cache chave→JSON seguro para múltiplas threads."""
 
@@ -137,9 +141,21 @@ class OllamaClient:
         self.session = requests.Session()
         self.chat_cache = SQLiteCache(cache_dir / "chat.sqlite")
         self.slots = GlobalSlots(cache_dir / "slots", self.opts.get("max_inflight", 8))
+        # disjuntor: N falhas de servidor seguidas (somando as threads) param o estágio, em vez de
+        # gastar ~30 min de retentativas por item enquanto o servidor está tomado por outro modelo
+        self.breaker_n = self.opts.get("circuit_breaker", 16)
+        self._fail_streak, self._tripped = 0, False
+        self._breaker_lock = threading.Lock()
         self.incidents = IncidentLog(os.environ.get("OLLAMA_INCIDENT_LOG", self.opts.get("incident_log")),
                                      self.opts.get("experiment", "llm-eval"), self.url)
         self.emb_cache = SQLiteCache(cache_dir / "embeddings.sqlite")
+
+    def _note(self, ok: bool) -> None:
+        with self._breaker_lock:
+            self._fail_streak = 0 if ok else self._fail_streak + 1
+            if self._fail_streak >= self.breaker_n and not self._tripped:
+                self._tripped = True
+                log.error("disjuntor aberto: %d falhas seguidas do servidor", self._fail_streak)
 
     # ------------------------------------------------------------------ HTTP
     @retry(
@@ -150,6 +166,8 @@ class OllamaClient:
     )
     def _post(self, endpoint: str, payload: dict) -> dict:
         model, t0 = payload.get("model"), time.time()
+        if self._tripped:
+            raise ServerUnavailable(f"{self._fail_streak} falhas seguidas do servidor")
         try:
             with self.slots.hold():
                 t0 = time.time()  # o tempo na fila local não conta como latência do servidor
@@ -159,20 +177,29 @@ class OllamaClient:
         except requests.RequestException as exc:  # rede, timeout
             tipo = "timeout" if isinstance(exc, requests.Timeout) else "conexao"
             self.incidents.failure(endpoint, model, tipo, None, f"{type(exc).__name__}: {str(exc)[:160]}", time.time() - t0)
+            self._note(False)
             raise TransientError(str(exc)) from exc
         if r.status_code >= 400:
             tipo = "http_5xx" if r.status_code >= 500 else ("http_429" if r.status_code == 429 else "http_4xx")
             self.incidents.failure(endpoint, model, tipo, r.status_code,
                                   _error_detail(r.content.decode("utf-8", "replace")), time.time() - t0)
         if r.status_code >= 500 or r.status_code == 429:
+            self._note(False)
             raise TransientError(f"{r.status_code}: {r.text[:200]}")
         r.raise_for_status()
+        self._note(True)
         self.incidents.success(endpoint, model)
         return r.json()
 
     @lru_cache(maxsize=None)
     def capabilities(self, model: str) -> tuple[str, ...]:
-        return tuple(self._post("/api/show", {"model": model}).get("capabilities", []))
+        # persistido no cache: respostas já em cache não dependem do servidor estar no ar
+        key = _hash(["capabilities", model])
+        caps = self.chat_cache.get(key)
+        if caps is None:
+            caps = self._post("/api/show", {"model": model}).get("capabilities", [])
+            self.chat_cache.set(key, caps)
+        return tuple(caps)
 
     # ------------------------------------------------------------------ chat
     def chat_json(
