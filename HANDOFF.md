@@ -51,5 +51,7 @@ júri → métricas → análise); marcos em `results/logs/pipeline.log`. Se cai
 - Toda falha do Ollama (HTTP, timeout, conexão) e a recuperação vão automaticamente para
   `/home/jovyan/privado/setic_infra_audit/incidentes_ollama/eventos.jsonl` (o usuário relata à SeTIC).
   `relatorio.py` na mesma pasta gera `RELATORIO_INCIDENTES_OLLAMA.md`.
+- Disjuntor: 16 falhas seguidas do servidor encerram o estágio com código 75 e `run_chain.sh` pausa
+  ("cadeia pausada" no pipeline.log). Típico quando outro projeto mantém outro modelo carregado.
 - Um loop (CronCreate, 30 min, expira em 7 dias, morre com a sessão) verifica a cadeia e relança
-  `run_chain.sh` se ela caiu. Se a sessão morreu, recrie o loop. Encerrar processos só por PID (nunca `pkill -f`).
+  `run_chain.sh` se ela caiu ou pausou. Se a sessão morreu, recrie o loop. Encerrar processos só por PID (nunca `pkill -f`).
