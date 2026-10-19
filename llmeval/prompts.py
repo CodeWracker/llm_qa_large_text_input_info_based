@@ -71,10 +71,32 @@ def generation_messages(question: dict, context_kind: str, context_text: str | N
 
 
 _UNANS = re.compile(rf"\b{UNANSWERABLE}\b|^\s*n/?a\s*\.?$", re.IGNORECASE)
+# abstenções por extenso ("The document does not specify ..."), comuns em modelos menores
+_VERB = r"(?:specif|mention|provid|stat|say|contain|discuss|includ|report|describ|give|indicat)\w*"
+_UNANS_PHRASE = re.compile(
+    "|".join([
+        # "The document/paper ... does not specify ..."
+        r"\b(?:document|paper|text|article|excerpts?|passages?)\b[^.]{0,40}?"
+        r"\b(?:does not|doesn't|do not|don't|did not|is not|are not|not)\s+"
+        r"(?:explicitly\s+|clearly\s+|directly\s+)?" + _VERB,
+        # "Not specified (in the paper)."
+        r"^\s*not\s+(?:explicitly\s+)?(?:specified|mentioned|provided|stated|given|reported|discussed|described|available)\b",
+        # "The information is not provided/available"
+        r"\b(?:information|answer|details?|data)\s+(?:is|are|was|were)\s+not\s+(?:provided|available|given|specified|mentioned|stated|reported)\b",
+        r"^\s*no\s+(?:information|mention|details?)\b",
+        r"\bcannot be (?:determined|answered|inferred)\b",
+    ]),
+    re.IGNORECASE,
+)
 
 
 def is_abstention(answer: str | None) -> bool:
-    return answer is not None and bool(_UNANS.search(answer)) and len(answer.split()) <= 12
+    """Abstenção = marcador UNANSWERABLE ou frase curta dizendo que a informação não está disponível."""
+    if not answer or re.match(r"\s*(?:yes|no)\b(?!\s+(?:information|mention|details?|data)\b)", answer, re.IGNORECASE):
+        return False  # resposta sim/não explícita nunca é abstenção
+    if _UNANS.search(answer) and len(answer.split()) <= 12:
+        return True
+    return bool(_UNANS_PHRASE.search(answer)) and len(answer.split()) <= 25
 
 
 # --------------------------------------------------------------------- júri
@@ -83,7 +105,7 @@ JUDGE_SYSTEM = """You are an impartial grader. Decide whether a CANDIDATE answer
 Verdicts:
 - "correct": the candidate conveys the key information of at least one reference. Paraphrases, synonyms, abbreviations, different number formats and extra details that do not contradict the reference are acceptable.
 - "partially_correct": the candidate captures part of the key information of a reference but omits an essential element, or mixes correct information with a claim that conflicts with the references.
-- "incorrect": the candidate contradicts the references, answers a different question, is irrelevant, or says the information is unavailable.
+- "incorrect": the candidate contradicts the references, answers a different question, is irrelevant, or says the information is unavailable although a reference provides it.
 
 Judge meaning, not wording or length. Write a brief justification first, then the verdict.
 Respond in JSON: {"justification": "...", "verdict": "correct|partially_correct|incorrect"}"""
@@ -97,6 +119,8 @@ JUDGE_SCHEMA = {
     "required": ["justification", "verdict"],
 }
 VERDICT_SCORE = {"correct": 1.0, "partially_correct": 0.5, "incorrect": 0.0}
+# como uma referência "não respondível" é apresentada ao júri
+UNANSWERABLE_REFERENCE = "The document does not provide this information (the question is unanswerable)."
 
 
 def judge_messages(question: str, references: list[str], candidate: str) -> list[dict]:

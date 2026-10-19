@@ -3,7 +3,8 @@
 Casos de abstenção são decididos por regra, sem júri:
   modelo abstém  e UNANSWERABLE ∈ referências  -> correto
   modelo abstém  e UNANSWERABLE ∉ referências  -> incorreto
-  modelo responde e todas as referências são UNANSWERABLE -> incorreto
+Se o modelo responde e há referências UNANSWERABLE, elas são apresentadas ao júri
+como frase em linguagem natural (UNANSWERABLE_REFERENCE).
 Nos demais casos cada juiz j emite v_j ∈ {correct, partially_correct, incorrect};
 veredito final = maioria estrita de "correct"; nota graduada = média de s(v_j).
 """
@@ -17,7 +18,7 @@ from tqdm import tqdm
 from .data import UNANSWERABLE
 from .io import read_jsonl, write_jsonl
 from .ollama import OllamaClient
-from .prompts import JUDGE_SCHEMA, VERDICT_SCORE, judge_messages
+from .prompts import JUDGE_SCHEMA, UNANSWERABLE_REFERENCE, VERDICT_SCORE, judge_messages
 
 log = logging.getLogger(__name__)
 
@@ -28,9 +29,9 @@ def rule_verdict(row: dict, refs: list[str]) -> str | None:
     has_unans = UNANSWERABLE in refs
     if row["abstained"]:
         return "correct" if has_unans else "incorrect"
-    if not row["answer"] or all(r == UNANSWERABLE for r in refs):
+    if not row["answer"]:
         return "incorrect"
-    return None
+    return None  # inclusive quando todas as referências são UNANSWERABLE: o júri decide
 
 
 def run_judging(cfg) -> None:
@@ -47,7 +48,7 @@ def run_judging(cfg) -> None:
         q = questions[row["qid"]]
         if row["dataset"] == "quality" and (row["condition"] not in quality_conds or not row["answer"]):
             continue
-        refs = [r for r in q["references"] if r != UNANSWERABLE]
+        refs = [UNANSWERABLE_REFERENCE if r == UNANSWERABLE else r for r in q["references"]]
         rule = rule_verdict(row, q["references"])
         key = None
         if rule is None:
