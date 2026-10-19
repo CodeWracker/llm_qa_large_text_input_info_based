@@ -1,8 +1,14 @@
-*.json
-*.pickle
-*.pkl
-*.csv
-*.txt
+# ambiente
+.venv/
 **/__pycache__/
 **/.env
 **/*.log
+
+# dados brutos e caches (reprodutíveis via `python -m llmeval download/sample`)
+data/raw/
+data/cache/
+data/sample/documents.jsonl
+
+# artefatos grandes do piloto continuam versionados em legacy/results/*.zip
+*.pickle
+*.pkl

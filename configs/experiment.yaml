@@ -1,0 +1,64 @@
+# Configuração do experimento principal. Todos os estágios leem este arquivo.
+seed: 42
+
+paths:
+  raw: data/raw
+  sample: data/sample
+  cache: data/cache
+  results: results
+  paper: ../latex-llmeval      # figuras e tabelas são exportadas para cá
+
+ollama:
+  num_ctx: 32768        # fixo para todos os modelos/condições: evita recarregar o modelo no servidor
+  temperature: 0.0
+  seed: 42
+  keep_alive: 30m
+  concurrency: 8        # requisições simultâneas ao servidor
+  timeout_s: 900
+  max_parse_retries: 3
+
+sample:
+  qasper_split: test
+  qasper_per_type: 50           # extractive, abstractive, yes_no, unanswerable
+  quality_split: validation
+  quality_per_difficulty: 100   # easy / hard
+  max_questions_per_doc: 2
+
+chunking:
+  target_words: 200
+  max_words: 300
+
+retrieval:
+  embedding_model: bge-m3
+  rrf_k0: 60
+  bm25_k1: 1.5
+  bm25_b: 0.75
+  recall_ks: [1, 2, 3, 5, 10, 20]
+
+# Geradores: escada de tamanho, famílias diferentes. think=false nos modelos com raciocínio.
+generators:
+  - {model: "llama3.2:3b",         label: "Llama-3.2-3B",   family: llama,   params_b: 3.2}
+  - {model: "qwen3.5:4b",          label: "Qwen3.5-4B",     family: qwen,    params_b: 4.7}
+  - {model: "mistral:7b-instruct", label: "Mistral-7B",     family: mistral, params_b: 7.2}
+  - {model: "qwen3.5:9b",          label: "Qwen3.5-9B",     family: qwen,    params_b: 9.7}
+  - {model: "gemma4:31b",          label: "Gemma4-31B",     family: gemma,   params_b: 31.3}
+  - {model: "qwen3.5:122b",        label: "Qwen3.5-122B",   family: qwen,    params_b: 125.1}
+
+# Condições de contexto. k = número de trechos recuperados.
+conditions:
+  - {name: closed_book, context: none}
+  - {name: full,        context: full}
+  - {name: bm25_k5,     context: rag, retriever: bm25,   k: 5}
+  - {name: dense_k5,    context: rag, retriever: dense,  k: 5}
+  - {name: hybrid_k5,   context: rag, retriever: hybrid, k: 5}
+  - {name: hybrid_k2,   context: rag, retriever: hybrid, k: 2}
+  - {name: hybrid_k10,  context: rag, retriever: hybrid, k: 10}
+
+# Júri: três famílias distintas, nenhum modelo é também gerador.
+jury:
+  judges:
+    - {model: "gpt-oss:120b", label: "GPT-OSS-120B", family: gptoss, think: low}
+    - {model: "llama3.3:70b", label: "Llama-3.3-70B", family: llama}
+    - {model: "qwen3:32b",    label: "Qwen3-32B",     family: qwen,   think: false}
+  # No QuALITY o júri é usado apenas para meta-avaliação (rótulo objetivo disponível)
+  quality_conditions: [full, hybrid_k5]
