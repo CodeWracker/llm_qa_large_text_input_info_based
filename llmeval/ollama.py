@@ -5,6 +5,8 @@ fica em SQLite, então reexecutar qualquer estágio é idempotente e não gasta 
 """
 from __future__ import annotations
 
+import contextlib
+import fcntl
 import hashlib
 import json
 import logging
@@ -92,6 +94,36 @@ class IncidentLog:
             self._write(evento="recuperado", rota=endpoint, modelo=model)
 
 
+class GlobalSlots:
+    """Limite de requisições simultâneas ao servidor somando TODOS os processos do experimento.
+
+    São `n` arquivos de trava (flock); cada requisição segura um enquanto está no servidor.
+    O servidor é compartilhado com outros projetos, então o limite vale para a soma dos estágios.
+    """
+
+    def __init__(self, lock_dir: Path, n: int):
+        self.dir, self.n = Path(lock_dir), n
+        self.dir.mkdir(parents=True, exist_ok=True)
+
+    @contextlib.contextmanager
+    def hold(self):
+        while True:
+            for i in range(self.n):
+                f = open(self.dir / f"slot_{i}.lock", "w")
+                try:
+                    fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError:
+                    f.close()
+                    continue
+                try:
+                    yield
+                finally:
+                    fcntl.flock(f, fcntl.LOCK_UN)
+                    f.close()
+                return
+            time.sleep(0.25)
+
+
 def _hash(obj) -> str:
     return hashlib.sha256(json.dumps(obj, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
@@ -104,6 +136,7 @@ class OllamaClient:
         self.opts = cfg["ollama"]
         self.session = requests.Session()
         self.chat_cache = SQLiteCache(cache_dir / "chat.sqlite")
+        self.slots = GlobalSlots(cache_dir / "slots", self.opts.get("max_inflight", 8))
         self.incidents = IncidentLog(os.environ.get("OLLAMA_INCIDENT_LOG", self.opts.get("incident_log")),
                                      self.opts.get("experiment", "llm-eval"), self.url)
         self.emb_cache = SQLiteCache(cache_dir / "embeddings.sqlite")
@@ -118,9 +151,11 @@ class OllamaClient:
     def _post(self, endpoint: str, payload: dict) -> dict:
         model, t0 = payload.get("model"), time.time()
         try:
-            r = self.session.post(
-                f"{self.url}{endpoint}", json=payload, auth=self.auth, timeout=self.opts["timeout_s"]
-            )
+            with self.slots.hold():
+                t0 = time.time()  # o tempo na fila local não conta como latência do servidor
+                r = self.session.post(
+                    f"{self.url}{endpoint}", json=payload, auth=self.auth, timeout=self.opts["timeout_s"]
+                )
         except requests.RequestException as exc:  # rede, timeout
             tipo = "timeout" if isinstance(exc, requests.Timeout) else "conexao"
             self.incidents.failure(endpoint, model, tipo, None, f"{type(exc).__name__}: {str(exc)[:160]}", time.time() - t0)

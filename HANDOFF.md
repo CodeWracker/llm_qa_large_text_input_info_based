@@ -37,7 +37,8 @@ uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requi
 uv pip install --python .venv/bin/python torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
 # LaTeX local: /home/jovyan/privado/.persist/bin/tectonic -X compile main.tex
 ```
-O servidor Ollama mantém 1 modelo carregado por vez e é compartilhado: processe um
+O servidor Ollama mantém 1 modelo carregado por vez e é compartilhado com outros projetos: no máximo
+8 requisições simultâneas somando todos os processos (`max_inflight`, travas em `data/cache/slots`). Processe um
 modelo por vez. Os embeddings rodam localmente na GPU (`CUDA_VISIBLE_DEVICES=1`).
 
 ## Pipeline
