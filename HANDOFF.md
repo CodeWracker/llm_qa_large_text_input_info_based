@@ -45,3 +45,10 @@ modelo por vez. Os embeddings rodam localmente na GPU (`CUDA_VISIBLE_DEVICES=1`)
 `data/cache/*.sqlite`, então reexecutar é barato. A análise escreve `tables/*.tex` e
 `figures/*.pdf` direto em `../latex-llmeval`. `run_chain.sh` roda a cadeia completa (júri → análise intermediária → geração busca/raciocínio →
 júri → métricas → análise); marcos em `results/logs/pipeline.log`. Se cair, basta relançar: o cache preserva tudo.
+
+## Incidentes do servidor e loop
+- Toda falha do Ollama (HTTP, timeout, conexão) e a recuperação vão automaticamente para
+  `/home/jovyan/privado/setic_infra_audit/incidentes_ollama/eventos.jsonl` (o usuário relata à SeTIC).
+  `relatorio.py` na mesma pasta gera `RELATORIO_INCIDENTES_OLLAMA.md`.
+- Um loop (CronCreate, 30 min, expira em 7 dias, morre com a sessão) verifica a cadeia e relança
+  `run_chain.sh` se ela caiu. Se a sessão morreu, recrie o loop. Encerrar processos só por PID (nunca `pkill -f`).
