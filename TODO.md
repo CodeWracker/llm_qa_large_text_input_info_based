@@ -21,7 +21,7 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Resumo e Trabalhos Correlatos como `\todo` (PT) com strings de busca
 - [x] Diagrama principal: versão A aprovada
 - [x] RQ2 "parecer certo × estar certo"
-- [ ] Busca guiada (método + formalização) e RQ6 (raciocínio) no texto, tabelas e diagrama
+- [x] Busca guiada (método + formalização) e RQ6 (raciocínio) no texto, tabelas e diagrama (validado com Haiku)
 - [ ] Discussão de cada RQ com os números reais; depois Conclusão e Resumo
 - [ ] Revisar floats; conferir metadados do `.bib`
 
