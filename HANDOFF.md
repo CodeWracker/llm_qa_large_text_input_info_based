@@ -43,5 +43,5 @@ modelo por vez. Os embeddings rodam localmente na GPU (`CUDA_VISIBLE_DEVICES=1`)
 ## Pipeline
 `python -m llmeval {sample,generate,judge,metrics,analyze}`. Tudo fica em cache em
 `data/cache/*.sqlite`, então reexecutar é barato. A análise escreve `tables/*.tex` e
-`figures/*.pdf` direto em `../latex-llmeval`. `run_pipeline_after.sh <PID>` encadeia
-júri → métricas → análise depois da geração (logs em `results/logs/`).
+`figures/*.pdf` direto em `../latex-llmeval`. `run_chain.sh` roda a cadeia completa (júri → análise intermediária → geração busca/raciocínio →
+júri → métricas → análise); marcos em `results/logs/pipeline.log`. Se cair, basta relançar: o cache preserva tudo.
