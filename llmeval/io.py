@@ -22,8 +22,11 @@ def iter_jsonl(path: str | Path) -> Iterator[dict]:
 
 
 def write_jsonl(path: str | Path, rows: Iterable[dict]) -> None:
+    """Escrita atômica: leitores concorrentes nunca veem um arquivo pela metade."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as f:
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
+    tmp.replace(path)
