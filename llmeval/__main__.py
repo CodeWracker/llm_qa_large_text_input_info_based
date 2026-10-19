@@ -15,6 +15,8 @@ def main() -> None:
     ap.add_argument("--config", default=None)
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    for noisy in ("httpx", "urllib3", "sentence_transformers"):
+        logging.getLogger(noisy).setLevel(logging.WARNING)
     cfg = load_config(args.config)
 
     for stage in STAGES if args.stage == "all" else (args.stage,):

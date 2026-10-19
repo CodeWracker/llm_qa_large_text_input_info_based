@@ -4,7 +4,7 @@ Todas são agregadas como max sobre o conjunto de referências A:  s(â, A) = ma
   - EM e F1 de tokens: normalização SQuAD (minúsculas, sem pontuação/artigos).
   - ROUGE-L (F): maior subsequência comum de tokens.
   - Fuzzy: razão de Levenshtein normalizada sobre caracteres (rapidfuzz).
-  - Cosseno de embeddings: bge-m3 via Ollama.
+  - Cosseno de embeddings: bge-m3 (mesmo encoder da recuperação densa).
   - BERTScore F1 (roberta-large, reescalonado pela linha de base).
 """
 from __future__ import annotations
@@ -19,7 +19,7 @@ from rapidfuzz import fuzz
 
 from .data import UNANSWERABLE
 from .io import read_jsonl, write_jsonl
-from .ollama import OllamaClient
+from .embeddings import Embedder
 
 log = logging.getLogger(__name__)
 _ARTICLES = re.compile(r"\b(a|an|the)\b")
@@ -86,7 +86,6 @@ def run_metrics(cfg) -> None:
     sample, results = cfg.path("sample"), cfg.path("results")
     questions = {q["qid"]: q for q in read_jsonl(sample / "questions.jsonl")}
     gens = read_jsonl(results / "generations.jsonl")
-    client = OllamaClient(cfg, cfg.path("cache"))
 
     # pares (resposta, referência) não triviais; abstenções e referências UNANSWERABLE
     # seguem a convenção do QASPER: 1 se ambos são "não respondível", 0 caso contrário
@@ -101,9 +100,8 @@ def run_metrics(cfg) -> None:
     pos = {p: j for j, p in enumerate(uniq)}
     log.info("métricas: %d pares únicos", len(uniq))
 
-    emb_model = cfg["retrieval"]["embedding_model"]
     texts = sorted({t for p in uniq for t in p})
-    e = dict(zip(texts, client.embed(emb_model, texts)))
+    e = dict(zip(texts, Embedder(cfg, cfg.path("cache"))(texts)))
     cosine = np.array([float(e[p] @ e[r]) for p, r in uniq])
     bert = _bertscore(uniq)
 

@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 from .data import document_text
 from .io import read_jsonl, write_jsonl
+from .embeddings import Embedder
 from .ollama import OllamaClient
 from .prompts import LETTERS, generation_messages, is_abstention
 from .retrieval import DocumentIndex, chunk_document, evidence_recall, format_chunks
@@ -20,13 +21,17 @@ log = logging.getLogger(__name__)
 METHODS = ("bm25", "dense", "hybrid")
 
 
-def build_indices(cfg, client: OllamaClient, docs: list[dict]) -> dict[str, DocumentIndex]:
+def build_indices(cfg, embed: Embedder, docs: list[dict]) -> dict[str, DocumentIndex]:
     ch, rt = cfg["chunking"], cfg["retrieval"]
-    indices = {}
-    for doc in tqdm(docs, desc="indexando documentos"):
-        chunks = chunk_document(doc, ch["target_words"], ch["max_words"])
-        emb = client.embed(rt["embedding_model"], [f"{c.section}\n{c.text}".strip() for c in chunks])
-        indices[doc["doc_id"]] = DocumentIndex(chunks, emb, rt["bm25_k1"], rt["bm25_b"], rt["rrf_k0"])
+    chunked = {d["doc_id"]: chunk_document(d, ch["target_words"], ch["max_words"]) for d in docs}
+    # um único lote para todos os trechos de todos os documentos
+    flat = [(doc_id, c) for doc_id, cs in chunked.items() for c in cs]
+    emb = embed([f"{c.section}\n{c.text}".strip() for _, c in flat])
+    indices, start = {}, 0
+    for doc_id, cs in chunked.items():
+        indices[doc_id] = DocumentIndex(cs, emb[start : start + len(cs)], rt["bm25_k1"], rt["bm25_b"], rt["rrf_k0"])
+        start += len(cs)
+    log.info("indexados %d documentos, %d trechos", len(indices), len(flat))
     return indices
 
 
@@ -52,8 +57,9 @@ def run_generation(cfg) -> None:
     questions = read_jsonl(sample / "questions.jsonl")
     client = OllamaClient(cfg, cfg.path("cache"))
 
-    indices = build_indices(cfg, client, list(docs.values()))
-    emb = client.embed(cfg["retrieval"]["embedding_model"], [q["question"] for q in questions])
+    embed = Embedder(cfg, cfg.path("cache"))
+    indices = build_indices(cfg, embed, list(docs.values()))
+    emb = embed([q["question"] for q in questions])
     q_emb = {q["qid"]: e for q, e in zip(questions, emb)}
     write_jsonl(results / "retrieval.jsonl", retrieval_report(cfg, indices, questions, q_emb))
 

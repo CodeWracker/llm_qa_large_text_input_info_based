@@ -12,7 +12,7 @@ ollama:
   num_ctx: 32768        # fixo para todos os modelos/condições: evita recarregar o modelo no servidor
   temperature: 0.0
   seed: 42
-  keep_alive: 30m
+  keep_alive: 10m       # modelos rodam em sequência; libera o servidor compartilhado logo após o uso
   concurrency: 8        # requisições simultâneas ao servidor
   timeout_s: 900
   max_parse_retries: 3
@@ -29,7 +29,8 @@ chunking:
   max_words: 300
 
 retrieval:
-  embedding_model: bge-m3
+  embedding_backend: local     # local (GPU, sentence-transformers) | ollama
+  embedding_model: BAAI/bge-m3 # no backend ollama: bge-m3
   rrf_k0: 60
   bm25_k1: 1.5
   bm25_b: 0.75
