@@ -44,9 +44,17 @@ plt.rcParams.update({
 COND_LABEL = {
     "closed_book": "Closed book", "full": "Full doc.", "bm25_k5": "BM25 $k$=5",
     "dense_k5": "Dense $k$=5", "hybrid_k5": "Hybrid $k$=5", "hybrid_k2": "Hybrid $k$=2",
-    "hybrid_k10": "Hybrid $k$=10",
+    "hybrid_k10": "Hybrid $k$=10", "search_k5": "Search", "search_hybrid_k5": "Search+hyb.",
+    "rag_search_k5": r"Retr.$\to$search", "full_search_k5": r"Read$\to$search",
 }
 COND_TEX = {k: v for k, v in COND_LABEL.items()}
+# cor = família da condição (cinza, documento, BM25, denso, híbrido, busca); marcador = variante
+COND_STYLE = {
+    "closed_book": (INK2, "X"), "full": (SERIES[0], "o"), "bm25_k5": (SERIES[1], "s"),
+    "dense_k5": (SERIES[2], "D"), "hybrid_k2": (SERIES[6], "<"), "hybrid_k5": (SERIES[6], "o"),
+    "hybrid_k10": (SERIES[6], ">"), "search_k5": (SERIES[3], "^"), "search_hybrid_k5": (SERIES[3], "v"),
+    "rag_search_k5": (SERIES[3], "P"), "full_search_k5": (SERIES[0], "*"),
+}
 METRIC_LABEL = {
     "em": "Exact match", "token_f1": "Token F1", "rouge_l": "ROUGE-L", "fuzzy": "Fuzzy",
     "embed_cos": "Embedding cos.", "bertscore": "BERTScore",
@@ -540,7 +548,7 @@ def table_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
 \caption{{Accuracy (\%) of each generator under each context condition. QASPER answers are graded by the LLM jury (strict majority of \textsc{{correct}} votes, abstentions by rule); QuALITY answers by the answer key (chance level: 25\%). Best condition per model in bold. 95\% Wilson intervals are in the supplementary CSV; on $n=200$ questions per dataset their half-width is at most 6.9 points.}}
 \label{{tab:accuracy}}
 \footnotesize
-\setlength{{\tabcolsep}}{{5pt}}
+\setlength{{\tabcolsep}}{{3pt}}
 \begin{{tabular}}{{l{"r" * len(conds)}}}
 \toprule
 Model & {header} \\
@@ -558,11 +566,7 @@ def fig_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
         return
     gens = [g for g in cfg["generators"] if g["model"] in set(acc.model)]
     conds = [c["name"] for c in cfg["conditions"] if c["name"] in set(acc.condition)]
-    style = {  # cor = família de condição; marcador distingue k nas variantes híbridas
-        "closed_book": (INK2, "X"), "full": (SERIES[0], "o"), "bm25_k5": (SERIES[1], "s"),
-        "dense_k5": (SERIES[2], "D"), "hybrid_k2": (SERIES[6], "<"), "hybrid_k5": (SERIES[6], "o"),
-        "hybrid_k10": (SERIES[6], ">"),
-    }
+    style = COND_STYLE
     fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 0.38 * len(gens) + 0.9), sharey=True)
     offs = np.linspace(-0.3, 0.3, len(conds))
     for ax, (ds, title) in zip(axes, (("qasper", "QASPER (jury)"), ("quality", "QuALITY (answer key)"))):
@@ -587,8 +591,8 @@ def fig_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
     axes[0].set_yticks(range(len(gens)), [g["label"] for g in gens])
     axes[0].invert_yaxis()
     h, l = axes[0].get_legend_handles_labels()
-    fig.legend(h, l, ncol=len(conds), frameon=False, loc="lower center", bbox_to_anchor=(0.5, -0.02))
-    fig.subplots_adjust(bottom=0.22, wspace=0.06)
+    fig.legend(h, l, ncol=min(len(conds), 6), frameon=False, loc="lower center", bbox_to_anchor=(0.5, -0.06))
+    fig.subplots_adjust(bottom=0.26, wspace=0.06)
     fig.savefig(out / "figures" / "accuracy.pdf")
     plt.close(fig)
 
@@ -984,9 +988,109 @@ PLACEHOLDERS = {
     "plausible": dict(shape=(1, 2), size=(PAGE_W, 2.5), titles=["Similarity vs. accuracy per model",
                       "QuALITY: similarity of correct vs. incorrect answers"],
                       xlabel=[r"Mean similarity $\bar s$ (BERTScore)", ""], ylabel=["Accuracy (%)", "Similarity $S$ (BERTScore)"]),
+    "reasoning": dict(shape=(1, 2), size=(PAGE_W, 2.4), titles=["QASPER (jury)", "QuALITY (answer key)"],
+                      xlabel="Accuracy with minus without reasoning (pp)", ylabel="", xlim=(-30, 30),
+                      yticks="reasoners"),
     "rq1_roc": dict(shape=(1, 1), size=(COL_W, COL_W * 0.82), titles=[""], xlabel="False positive rate",
                     ylabel="True positive rate", xlim=(0, 1), ylim=(0, 1)),
 }
+
+
+# ===================================================================== RQ6 (raciocínio)
+def rq6_reasoning(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame:
+    """δ pareado (com − sem raciocínio) por modelo × condição × dataset; custo em tokens; teto esgotado."""
+    on = full_df[full_df.think]
+    rows = []
+    if not on.empty:
+        off = full_df[~full_df.think].set_index(["qid", "model", "condition"])
+        for (ds, m, c), g in on.groupby(["dataset", "model", "condition"]):
+            pair = g.set_index(["qid", "model", "condition"])[["y", "doc_id", "completion_tokens", "done_reason"]].join(
+                off[["y", "completion_tokens"]], rsuffix="_off", how="inner").dropna(subset=["y", "y_off"])
+            if pair.empty:
+                continue
+            d, lo, hi = cluster_bootstrap_diff(pair.y_off.values, pair.y.values, pair.doc_id.values)
+            rows.append({"dataset": ds, "model": m, "condition": c, "delta": d, "lo": lo, "hi": hi,
+                         "acc_off": pair.y_off.mean(), "acc_on": pair.y.mean(), "n": len(pair),
+                         "p": mcnemar_exact(pair.y_off.values, pair.y.values),
+                         "tokens_off": pair.completion_tokens_off.median(), "tokens_on": pair.completion_tokens.median(),
+                         "exhausted": (pair.done_reason == "length").mean()})
+    res = pd.DataFrame(rows)
+    if not res.empty:
+        res["p_holm"] = holm(res.p.values)
+        res["token_ratio"] = res.tokens_on / res.tokens_off
+        res.to_csv(cfg.path("results") / "analysis" / "reasoning.csv", index=False)
+
+    gens = [g for g in cfg["generators"] if g["family"] in ("qwen", "gemma")]
+    if not res.empty:
+        gens = [g for g in cfg["generators"] if g["model"] in set(res.model)]
+    show = ["closed_book", "full", "hybrid_k5", "search_hybrid_k5", "full_search_k5"]
+    lines = []
+    for ds, name in (("qasper", "QASPER"), ("quality", "QuALITY")):
+        lines.append(rf"\multicolumn{{{len(show) + 3}}}{{l}}{{\emph{{{name}}}}} \\")
+        for g in gens:
+            sub = res[(res.dataset == ds) & (res.model == g["model"])] if not res.empty else res
+            cells = []
+            for c in show:
+                r = sub[sub.condition == c] if not sub.empty else sub
+                if r.empty:
+                    cells.append(r"\pending")
+                else:
+                    r = r.iloc[0]
+                    cells.append(f"{100 * r.delta:+.1f}".replace("-", "$-$") + pval_marker(r.p_holm))
+            ratio = sub.token_ratio.median() if not sub.empty else np.nan
+            exh = sub.exhausted.mean() if not sub.empty else np.nan
+            cells += [r"\pending" if pd.isna(ratio) else f"{ratio:.0f}$\\times$", r"\pending" if pd.isna(exh) else pct(exh)]
+            lines.append(f"{g['label']} & " + " & ".join(cells) + r" \\")
+    header = " & ".join(COND_TEX[c] for c in show)
+    write(out / "tables" / "reasoning.tex", rf"""% Gerado por `python -m llmeval analyze` (rq6_reasoning). Não editar à mão.
+\begin{{table*}}[t]
+\centering
+\caption{{Effect of reasoning: paired accuracy difference with minus without reasoning (percentage points) on the same questions, for a subset of conditions (all conditions in \cref{{fig:reasoning}}). Exact McNemar test with Holm correction over all model--condition--dataset pairs: $^{{*}}p<0.05$, $^{{**}}p<0.01$, $^{{***}}p<0.001$. Tokens: median ratio of generated tokens with and without reasoning, over conditions. Budget: share of answers lost because reasoning exhausted the budget of 4096 tokens (\%).}}
+\label{{tab:reasoning}}
+\footnotesize
+\setlength{{\tabcolsep}}{{4pt}}
+\begin{{tabular}}{{l{"r" * len(show)}rr}}
+\toprule
+Model & {header} & Tokens & Budget \\
+\midrule
+{chr(10).join(lines)}
+\bottomrule
+\end{{tabular}}
+\end{{table*}}
+""")
+    if not res.empty:
+        fig_reasoning(cfg, res, out)
+    return res
+
+
+def fig_reasoning(cfg, res: pd.DataFrame, out: Path) -> None:
+    gens = [g for g in cfg["generators"] if g["model"] in set(res.model)]
+    conds = [c["name"] for c in cfg["conditions"] if c["name"] in set(res.condition)]
+    offs = np.linspace(-0.32, 0.32, len(conds))
+    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 0.5 * len(gens) + 1.1), sharey=True)
+    for ax, (ds, title) in zip(axes, (("qasper", "QASPER (jury)"), ("quality", "QuALITY (answer key)"))):
+        sub = res[res.dataset == ds]
+        for off, c in zip(offs, conds):
+            for yi, g in enumerate(gens):
+                r = sub[(sub.model == g["model"]) & (sub.condition == c)]
+                if r.empty:
+                    continue
+                r = r.iloc[0]
+                color, marker = COND_STYLE[c]
+                ax.plot([100 * r.lo, 100 * r.hi], [yi + off] * 2, color=color, lw=0.9, alpha=0.6)
+                ax.plot(100 * r.delta, yi + off, marker=marker, color=color, ls="none", ms=4.5, mec="white",
+                        mew=0.5, label=COND_LABEL[c] if yi == 0 else None)
+        ax.axvline(0, color=INK2, lw=0.8)
+        ax.set_title(title, loc="left")
+        ax.set_xlabel("Accuracy with minus without reasoning (pp)")
+        ax.grid(axis="y", visible=False)
+    axes[0].set_yticks(range(len(gens)), [g["label"] for g in gens])
+    axes[0].invert_yaxis()
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, ncol=6, frameon=False, loc="lower center", bbox_to_anchor=(0.5, -0.06))
+    fig.subplots_adjust(bottom=0.24, wspace=0.06)
+    fig.savefig(out / "figures" / "reasoning.pdf")
+    plt.close(fig)
 
 
 def placeholder_figures(cfg, out: Path, only_missing: bool = True) -> None:
@@ -1007,7 +1111,11 @@ def placeholder_figures(cfg, out: Path, only_missing: bool = True) -> None:
             if spec.get("yticks") == "models" and i == 0:
                 ax.set_yticks(range(len(cfg["generators"])), [g["label"] for g in cfg["generators"]])
                 ax.invert_yaxis()
-            elif spec.get("yticks") == "models":
+            elif spec.get("yticks") == "reasoners" and i == 0:
+                labels = [g["label"] for g in cfg["generators"] if g["family"] in ("qwen", "gemma")]
+                ax.set_yticks(range(len(labels)), labels)
+                ax.invert_yaxis()
+            elif spec.get("yticks") in ("models", "reasoners"):
                 ax.set_yticks([])
             ax.text(0.5, 0.5, "não calculado", transform=ax.transAxes, ha="center", va="center",
                     color="#e34948", fontsize=9, alpha=0.8)
@@ -1040,6 +1148,7 @@ def run_analysis(cfg) -> None:
         rq1_instruments(cfg, pd.DataFrame(columns=["dataset", "y_jury", "y_objective", "jury_source"]), out)
         rq1_reliability(cfg, pd.DataFrame(columns=["dataset", "jury_source", "votes", "y_objective", "family"]), out)
         rq2_plausible(cfg, pd.DataFrame(columns=["dataset", "y"]), out, None)
+        rq6_reasoning(cfg, pd.DataFrame(columns=["think"]), out)
         return
 
     full_df = load_frame(cfg)
@@ -1059,3 +1168,4 @@ def run_analysis(cfg) -> None:
         rq1_reliability(cfg, df, out)
         fig_roc(cfg, df, out)
     rq2_plausible(cfg, df, out, instruments)
+    rq6_reasoning(cfg, full_df, out)
