@@ -17,9 +17,11 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Preâmbulo, bibliografia (só métodos/datasets), introdução com RQs, metodologia formal, setup, ameaças à validade
 - [x] Resumo e Trabalhos Correlatos como `\todo` (PT) com strings de busca
 - [x] Tabelas de amostra e modelos; placeholders de tabelas e figuras
-- [x] Diagrama principal refeito em TikZ no estilo do original
+- [x] Diagrama principal: versão A aprovada (figura única, formas e cor discreta por tipo)
+- [x] Nova RQ2 "parecer certo × estar certo" (decomposição s̄ = μ⁰ + Acc·Δ, inversão de ranking, viés do avaliador); RQs renumeradas para 1–5
 - [x] Push para o Overleaf (credencial persistida no ZFS)
-- [ ] Escrever a discussão de cada RQ com os números reais (substituir os `\todo` da Seção V)
+- [ ] Escrever a discussão de cada RQ (1–5) com os números reais (substituir os `\todo` da Seção V)
+- [ ] Decidir se o estudo piloto entra como motivação da RQ2 (há `\todo` na introdução)
 - [ ] Conclusão; revisar o posicionamento dos floats; conferir os metadados do `.bib`
 - [ ] Decidir se as figuras antigas do piloto em `images/` devem ser removidas
 
