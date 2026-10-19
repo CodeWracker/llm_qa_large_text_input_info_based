@@ -17,7 +17,8 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Preâmbulo, bibliografia (só métodos/datasets), introdução com RQs, metodologia formal, setup, ameaças à validade
 - [x] Resumo e Trabalhos Correlatos como `\todo` (PT) com strings de busca
 - [x] Tabelas de amostra e modelos; placeholders de tabelas e figuras
-- [ ] Push para o Overleaf (bloqueado: falta o token no `~/.netrc`)
+- [x] Diagrama principal refeito em TikZ no estilo do original
+- [x] Push para o Overleaf (credencial persistida no ZFS)
 - [ ] Escrever a discussão de cada RQ com os números reais (substituir os `\todo` da Seção V)
 - [ ] Conclusão; revisar o posicionamento dos floats; conferir os metadados do `.bib`
 - [ ] Decidir se as figuras antigas do piloto em `images/` devem ser removidas

@@ -9,7 +9,8 @@ com júri de 3 LLMs validado contra gabarito. Artigo IEEE em `../latex-llmeval`.
 
 ## Repositórios (já existem, nunca rodar `git init`)
 - `llm_qa_large_text_input_info_based/`: código, remoto GitHub, autor `CodeWracker`.
-- `latex-llmeval/`: artigo, remoto Overleaf (push exige token no `~/.netrc`).
+- `latex-llmeval/`: artigo, remoto Overleaf. Token em `/home/jovyan/privado/.persist/git/credentials`
+  (credential helper `store`, via `~/.gitconfig` -> ZFS; `return_by_death.sh` recria o link).
 - Commits em português ("adiciona…", "corrige…"), um por unidade lógica, push logo após.
   **Nunca** adicionar Co-Authored-By nem qualquer atribuição ao Claude.
 
@@ -25,7 +26,8 @@ com júri de 3 LLMs validado contra gabarito. Artigo IEEE em `../latex-llmeval`.
 ## Ambiente (recriar se o container foi resetado)
 ```bash
 source /etc/profile.d/99-persist-env.sh      # OLLAMA_URL
-# ~/.netrc -> /home/jovyan/privado/.persist/.netrc (auth Basic do Ollama e do Overleaf)
+# /root é efêmero: rode /home/jovyan/privado/.persist/return_by_death.sh para recriar os links
+# (~/.netrc = auth do Ollama; ~/.gitconfig = credencial do Overleaf)
 cd llm_qa_large_text_input_info_based
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt
 uv pip install --python .venv/bin/python torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
