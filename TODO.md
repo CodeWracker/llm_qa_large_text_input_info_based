@@ -7,7 +7,7 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Amostra: 400 perguntas, 272 documentos (`data/sample/questions.jsonl`)
 - [x] Revocação de evidência (`results/retrieval.jsonl`): com k=5, denso 74% > híbrido 65% > BM25 57%
 - [x] Geração principal: 6 modelos × 7 condições × 400 = 16.800 respostas (2 falhas de formato)
-- [~] Júri sobre a geração principal (caiu por HTTP 500 do servidor às 11:44 de 19/10; relançado por `run_chain.sh`, o cache preserva o que já foi julgado)
+- [~] Júri sobre a geração principal: 3.995/4.523 itens do GPT-OSS prontos; o resto trava com HTTP 504 após 600 s (servidor disputado por outro usuário, 19/10 12:20+). Incidentes em `setic_infra_audit/incidentes_ollama`
 - [ ] Cadeia automática (`run_chain.sh`, log em `results/logs/pipeline.log`):
   geração das 4 condições de busca + passada com raciocínio → júri → métricas → análise.
   Em paralelo: métricas/análise intermediárias (`*_interim.log`) para escrever RQ1–5.
