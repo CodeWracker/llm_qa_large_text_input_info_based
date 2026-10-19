@@ -61,10 +61,12 @@ def run_judging(cfg) -> None:
     for judge in judges:
         def call(key, judge=judge):
             question, refs, answer = key
-            res = client.chat_json(
-                judge["model"], judge_messages(question, list(refs), answer), JUDGE_SCHEMA,
-                think=judge.get("think", False), num_predict=2048,
-            )
+            messages = judge_messages(question, list(refs), answer)
+            res = client.chat_json(judge["model"], messages, JUDGE_SCHEMA,
+                                   think=judge.get("think", False), num_predict=2048)
+            if res.get("output") is None:  # raciocínio longo esgotou o teto: uma segunda chance maior
+                res = client.chat_json(judge["model"], messages, JUDGE_SCHEMA,
+                                       think=judge.get("think", False), num_predict=8192)
             return key, res.get("output")
         with ThreadPoolExecutor(cfg["ollama"]["concurrency"]) as ex:
             futures = [ex.submit(call, k) for k in todo]
@@ -75,7 +77,7 @@ def run_judging(cfg) -> None:
     # 3) agrega
     rows = []
     for row, rule, key in items:
-        out = {k: row[k] for k in ("qid", "dataset", "model", "condition")}
+        out = {k: row.get(k, False) for k in ("qid", "dataset", "model", "condition", "think")}
         if rule is not None:
             out.update(source="rule", verdict=rule, correct=rule == "correct", score=VERDICT_SCORE[rule])
         else:

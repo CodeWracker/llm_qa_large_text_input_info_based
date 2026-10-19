@@ -125,24 +125,36 @@ class OllamaClient:
                 payload["options"] = {**options, "seed": options["seed"] + attempt}
             t0 = time.time()
             resp = self._post("/api/chat", payload)
-            content = resp.get("message", {}).get("content", "")
+            msg = resp.get("message", {})
+            content = msg.get("content", "")
             try:
                 parsed = json.loads(content)
             except json.JSONDecodeError as exc:
                 last_err = f"{exc}: {content[:200]!r}"
                 log.warning("JSON inválido de %s (tentativa %d): %s", model, attempt + 1, last_err)
+                if resp.get("done_reason") == "length":
+                    # o teto de tokens (em geral consumido pelo raciocínio) se repetiria com outra semente
+                    # é um desfecho determinístico (temperatura 0): vai para o cache como falha
+                    failed = {"output": None, "error": f"num_predict={num_predict} esgotado",
+                              "done_reason": "length", "prompt_tokens": resp.get("prompt_eval_count"),
+                              "completion_tokens": resp.get("eval_count"),
+                              "latency_s": round(time.time() - t0, 3), "parse_attempts": attempt + 1}
+                    self.chat_cache.set(key, failed)
+                    return failed
                 continue
             result = {
                 "output": parsed,
                 "prompt_tokens": resp.get("prompt_eval_count"),
-                "completion_tokens": resp.get("eval_count"),
+                "completion_tokens": resp.get("eval_count"),  # inclui os tokens de raciocínio
+                "thinking_words": len((msg.get("thinking") or "").split()),
+                "done_reason": resp.get("done_reason"),
                 "latency_s": round(time.time() - t0, 3),
                 "truncated": (resp.get("prompt_eval_count") or 0) >= options["num_ctx"] - 8,
                 "parse_attempts": attempt + 1,
             }
             self.chat_cache.set(key, result)
             return result
-        # falhas não vão para o cache: uma nova execução tenta de novo
+        # falhas de formato não vão para o cache: uma nova execução tenta de novo
         return {"output": None, "error": last_err, "parse_attempts": self.opts["max_parse_retries"]}
 
     # ------------------------------------------------------------- embeddings
