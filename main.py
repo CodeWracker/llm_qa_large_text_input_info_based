@@ -94,6 +94,9 @@ class LLMAnswer:
         logging.info(f"Instância de LLMAnswer criada para o modelo: {model_name} - Resposta: {answer}")
 
     def calculate_similarity_score(self):
+        # recalcula do zero para não duplicar entradas quando o modelo já foi processado
+        self.scores = []
+        self.similarity_score = None
         for gt_answer in self.option_answers_gt:
             # Verifica se a resposta do modelo ou o ground truth são "N/A"
             answer_is_na = self.answer.strip().upper() == "N/A"
@@ -113,7 +116,8 @@ class LLMAnswer:
                     combined_score_value = 0.0
             else:
                 scores, combined_score_value = combined_similarity(self.answer, gt_answer)
-            ai_jury_veredict_result = ask_ai_jury(self.answer, gt_answer, self.question)
+            # assinatura: ask_ai_jury(question, reference, eval_answer)
+            ai_jury_veredict_result = ask_ai_jury(self.question, gt_answer, self.answer)
                 
             
             logging.info(f"Similarity score between generated answer and ground truth answer: {combined_score_value:.4f}")

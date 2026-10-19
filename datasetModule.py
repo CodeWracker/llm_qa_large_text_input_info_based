@@ -138,9 +138,10 @@ def process_quality(dataset, dataset_name):
         title = item.get("title", "")
         full_text = item.get("article", "")
         question = item.get("question", "")
-        options = item.get("options", [])
-        # Usa as opções como respostas
-        option_answers = FreeFormAnswer(options)
+        options = list(item.get("options", []))
+        # gold_label é 1-indexado; somente a alternativa correta é ground truth
+        gold_label = item.get("gold_label")
+        option_answers = FreeFormAnswer([options[gold_label - 1]])
         qa = QuestionAnswer(question, False, option_answers)
         processed_data.append(DatasetData(title, "", full_text, [qa], "quality"))
     return processed_data
