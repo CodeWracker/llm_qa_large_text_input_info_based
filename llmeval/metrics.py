@@ -121,7 +121,7 @@ def run_metrics(cfg) -> None:
     rows = []
     for i, g in enumerate(gens):
         refs = questions[g["qid"]]["references"]
-        out = {k: g[k] for k in ("qid", "dataset", "model", "condition")}
+        out = {k: g.get(k, False) for k in ("qid", "dataset", "model", "condition", "think")}
         if i in best:
             out.update({n: float(v) for n, v in best[i].items()})
         else:  # abstenção ou resposta vazia

@@ -17,6 +17,8 @@ CONTEXT_INTRO = {
     "rag": "The user provides excerpts retrieved from a document. They are only part of the "
     "document and may not contain the answer.",
     "none": "No document is provided.",
+    "full_search": "The user provides the full text of a document, followed by the passages of the "
+    "same document that matched a keyword search you requested.",
 }
 
 FREEFORM_SYSTEM = """You answer questions about a scientific paper.
@@ -40,6 +42,7 @@ GROUNDING = {
     "full": "Use only the information in the document; do not rely on prior knowledge.",
     "rag": "Use only the information in the excerpts; do not rely on prior knowledge.",
     "none": "Answer from your own knowledge.",
+    "full_search": "Use only the information in the document; do not rely on prior knowledge.",
 }
 
 FREEFORM_SCHEMA = {
@@ -54,20 +57,61 @@ MC_SCHEMA = {
 }
 
 
-def generation_messages(question: dict, context_kind: str, context_text: str | None) -> tuple[list, dict]:
+def _question_parts(question: dict) -> list[str]:
+    parts = [f"Question: {question['question']}"]
+    if question["dataset"] == "quality":
+        parts.append("Options:\n" + "\n".join(f"{l}. {o}" for l, o in zip(LETTERS, question["options"])))
+    return parts
+
+
+def generation_messages(question: dict, context_kind: str, context_text: str | None,
+                        search_text: str | None = None) -> tuple[list, dict]:
+    """`search_text`: só em full_search, os trechos casados pela busca, após o documento."""
     mc = question["dataset"] == "quality"
     system = (MC_SYSTEM if mc else FREEFORM_SYSTEM).format(
         context_intro=CONTEXT_INTRO[context_kind], grounding=GROUNDING[context_kind]
     )
     parts = []
     if context_kind != "none":
-        label = "Document" if context_kind == "full" else "Excerpts"
+        label = "Excerpts" if context_kind == "rag" else "Document"
         parts.append(f"{label}:\n<<<\n{context_text}\n>>>")
-    parts.append(f"Question: {question['question']}")
-    if mc:
-        parts.append("Options:\n" + "\n".join(f"{l}. {o}" for l, o in zip(LETTERS, question["options"])))
+    if context_kind == "full_search":
+        parts.append(f"Search results:\n<<<\n{search_text or 'No passage matched the search terms.'}\n>>>")
+    parts += _question_parts(question)
     messages = [{"role": "system", "content": system}, {"role": "user", "content": "\n\n".join(parts)}]
     return messages, (MC_SCHEMA if mc else FREEFORM_SCHEMA)
+
+
+# ------------------------------------------------------- busca por termos
+# Uma chamada de ferramenta única e forçada: o gerador escolhe os termos (saída estruturada)
+# e uma função faz a busca exata no documento. `view` é o que o gerador leu antes de escolher.
+SEARCH_SYSTEM = """You can search a {genre} with an exact keyword search, like Ctrl+F: it returns the passages that contain any of your search terms (case-insensitive).
+{view_intro}
+List up to {max_terms} search terms that are likely to appear verbatim in the passage that answers the question. Each term is a word or a short phrase (at most 3 words). Prefer specific terms (names, technical terms, numbers) over generic words.
+Respond in JSON: {{"terms": ["...", "..."]}}"""
+
+SEARCH_VIEW = {
+    "none": "You have not seen the document; only the question is available.",
+    "rag": "The user provides excerpts retrieved from the document. Use them to choose better terms; "
+    "the search covers the whole document.",
+    "full": "The user provides the full text of the document. Use it to choose terms that lead to the "
+    "passages needed to answer.",
+}
+
+
+def search_messages(question: dict, view: str, view_text: str | None, max_terms: int) -> tuple[list, dict]:
+    genre = "story or article" if question["dataset"] == "quality" else "scientific paper"
+    system = SEARCH_SYSTEM.format(genre=genre, view_intro=SEARCH_VIEW[view], max_terms=max_terms)
+    parts = []
+    if view != "none":
+        parts.append(f"{'Document' if view == 'full' else 'Excerpts'}:\n<<<\n{view_text}\n>>>")
+    parts += _question_parts(question)
+    schema = {
+        "type": "object",
+        "properties": {"terms": {"type": "array", "items": {"type": "string"}, "maxItems": max_terms}},
+        "required": ["terms"],
+    }
+    return [{"role": "system", "content": system}, {"role": "user", "content": "\n\n".join(parts)}], schema
 
 
 _UNANS = re.compile(rf"\b{UNANSWERABLE}\b|^\s*n/?a\s*\.?$", re.IGNORECASE)

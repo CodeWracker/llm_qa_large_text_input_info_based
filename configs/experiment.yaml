@@ -36,7 +36,18 @@ retrieval:
   bm25_b: 0.75
   recall_ks: [1, 2, 3, 5, 10, 20]
 
-# Geradores: escada de tamanho, famílias diferentes. think=false nos modelos com raciocínio.
+generation:
+  num_predict: 256          # resposta curta em JSON
+  think_pass: true          # segunda passada com raciocínio ligado nos modelos que o suportam (RQ6)
+  think_num_predict: 4096   # teto (raciocínio + resposta); estourar o teto é registrado como falha
+
+# Busca por termos (Ctrl+F): o gerador escolhe os termos, uma função busca no documento
+search:
+  max_terms: 5
+  num_predict: 128          # passo dos termos, sem raciocínio
+  view_k: 5                 # trechos do RAG híbrido lidos antes de escolher os termos (view: rag)
+
+# Geradores: escada de tamanho, famílias diferentes. Passada principal com think=false.
 generators:
   - {model: "llama3.2:3b",         label: "Llama-3.2-3B",   family: llama,   params_b: 3.2}
   - {model: "qwen3.5:4b",          label: "Qwen3.5-4B",     family: qwen,    params_b: 4.7}
@@ -54,6 +65,11 @@ conditions:
   - {name: hybrid_k5,   context: rag, retriever: hybrid, k: 5}
   - {name: hybrid_k2,   context: rag, retriever: hybrid, k: 2}
   - {name: hybrid_k10,  context: rag, retriever: hybrid, k: 10}
+  # busca guiada pelo gerador; view = o que ele leu antes de escolher os termos
+  - {name: search_k5,        context: search,      view: none, k: 5}                 # só a busca
+  - {name: search_hybrid_k5, context: search,      view: none, k: 5, fuse: hybrid}   # busca + RAG (RRF)
+  - {name: rag_search_k5,    context: search,      view: rag,  k: 5, fuse: hybrid}   # lê o RAG, busca, funde
+  - {name: full_search_k5,   context: full_search, view: full, k: 5}                 # lê tudo, busca, relê com os achados
 
 # Júri: três famílias distintas, nenhum modelo é também gerador.
 jury:

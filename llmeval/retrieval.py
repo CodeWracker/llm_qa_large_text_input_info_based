@@ -5,6 +5,8 @@ Notação (seguida no artigo):
   BM25(q, c)   = sum_t IDF(t) * f(t,c)(k1+1) / (f(t,c) + k1(1 - b + b|c|/avgdl))
   dense(q, c)  = cos(E(q), E(c))
   RRF(c)       = sum_r 1 / (k0 + rank_r(c))
+  busca por termos (Ctrl+F): T = termos escolhidos pelo gerador; um trecho c é casado
+  se contém algum t ∈ T; ordena por (|{t ∈ T : t ∈ c}|, sum_t ocorrências(t, c))
 """
 from __future__ import annotations
 
@@ -103,13 +105,34 @@ class BM25:
         return out
 
 
-def rrf(rankings: list[np.ndarray], k0: int = 60) -> np.ndarray:
-    """Reciprocal Rank Fusion. `rankings`: arrays de índices ordenados do melhor ao pior."""
-    n = len(rankings[0])
+def rrf(rankings: list[np.ndarray], k0: int = 60, n: int | None = None) -> np.ndarray:
+    """Reciprocal Rank Fusion. `rankings`: arrays de índices ordenados do melhor ao pior.
+
+    Um ranking parcial (só os trechos casados pela busca) contribui apenas para os seus trechos.
+    """
+    n = len(rankings[0]) if n is None else n
     fused = np.zeros(n)
     for ranking in rankings:
-        fused[ranking] += 1.0 / (k0 + np.arange(1, n + 1))
+        fused[ranking] += 1.0 / (k0 + np.arange(1, len(ranking) + 1))
     return fused
+
+
+def term_pattern(term: str) -> re.Pattern | None:
+    """Casamento estilo Ctrl+F: sem distinção de maiúsculas, início de palavra, espaços flexíveis."""
+    words = term.split()
+    if not words:
+        return None
+    return re.compile(r"(?<!\w)" + r"\s+".join(map(re.escape, words)), re.IGNORECASE)
+
+
+def keyword_hits(chunks: list[Chunk], terms: list[str]) -> list[tuple[int, int]]:
+    """Por trecho: (nº de termos distintos encontrados, nº total de ocorrências)."""
+    pats = [p for p in map(term_pattern, terms) if p is not None]
+    out = []
+    for c in chunks:
+        counts = [len(p.findall(f"{c.section}\n{c.text}")) for p in pats]
+        out.append((sum(n > 0 for n in counts), sum(counts)))
+    return out
 
 
 class DocumentIndex:
@@ -137,6 +160,26 @@ class DocumentIndex:
         top = self.rank(method, query, query_emb)[:k]
         # trechos reapresentados na ordem do documento: preserva a narrativa para o leitor-modelo
         return [self.chunks[i] for i in sorted(top)]
+
+    def search(self, terms: list[str]) -> np.ndarray:
+        """Ranking parcial da busca por termos: só trechos com pelo menos um termo."""
+        hits = keyword_hits(self.chunks, terms)
+        matched = [i for i, (d, _) in enumerate(hits) if d > 0]
+        return np.array(sorted(matched, key=lambda i: (-hits[i][0], -hits[i][1], i)), dtype=int)
+
+    def search_retrieve(self, terms: list[str], k: int, fuse_with: str | None = None,
+                        query: str = "", query_emb=None) -> tuple[list[Chunk], int]:
+        """Top-k da busca por termos, opcionalmente fundida (RRF) a um recuperador.
+
+        Retorna os trechos (na ordem do documento) e o número de trechos casados pela busca.
+        """
+        found = self.search(terms)
+        if fuse_with is None:
+            top = found[:k]
+        else:
+            s = rrf([self.rank(fuse_with, query, query_emb), found], self.k0, n=len(self.chunks))
+            top = np.argsort(-s, kind="stable")[:k]
+        return [self.chunks[i] for i in sorted(top)], len(found)
 
 
 def evidence_recall(retrieved: list[Chunk], evidence_sets: list[list[int]]) -> float | None:

@@ -77,17 +77,23 @@ def load_frame(cfg) -> pd.DataFrame:
     q = pd.DataFrame(questions)[["qid", "doc_id", "stratum", "doc_words"]]
     q["evidence_pos"] = q.qid.map(evidence_position(questions, docs))
 
-    keys = ["qid", "dataset", "model", "condition"]
-    df = pd.DataFrame(read_jsonl(results / "generations.jsonl")).merge(q, on="qid")
+    keys = ["qid", "dataset", "model", "condition", "think"]
+
+    def frame(rows):  # linhas anteriores ao fator raciocínio não têm a coluna `think`
+        f = pd.DataFrame(rows)
+        f["think"] = f["think"].fillna(False).astype(bool) if "think" in f else False
+        return f
+
+    df = frame(read_jsonl(results / "generations.jsonl")).merge(q, on="qid")
     df = df.rename(columns={"correct": "y_objective"})
     judg = read_jsonl(results / "judgments.jsonl")
     if judg:
-        j = pd.DataFrame(judg).rename(columns={"correct": "y_jury", "score": "jury_score", "source": "jury_source"})
+        j = frame(judg).rename(columns={"correct": "y_jury", "score": "jury_score", "source": "jury_source"})
         df = df.merge(j[keys + ["y_jury", "jury_score", "jury_source"] + [c for c in ("votes",) if c in j]],
                       on=keys, how="left")
     met = read_jsonl(results / "metrics.jsonl")
     if met:
-        df = df.merge(pd.DataFrame(met), on=keys, how="left")
+        df = df.merge(frame(met), on=keys, how="left")
     # rótulo usado para acurácia: objetivo no QuALITY, júri (validado na RQ1) no QASPER
     df["y"] = np.where(df.dataset == "quality", df.get("y_objective"), df.get("y_jury"))
     df["y"] = df["y"].astype(float)
@@ -1036,7 +1042,8 @@ def run_analysis(cfg) -> None:
         rq2_plausible(cfg, pd.DataFrame(columns=["dataset", "y"]), out, None)
         return
 
-    df = load_frame(cfg)
+    full_df = load_frame(cfg)
+    df = full_df[~full_df.think].copy()  # RQ1–RQ5: desenho principal, sem raciocínio
     acc = accuracy_table(cfg, df)
     table_accuracy(cfg, acc, out)
     fig_accuracy(cfg, acc, out)
