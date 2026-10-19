@@ -817,6 +817,54 @@ Answer & Gold & EM & F1 & ROUGE-L & Fuzzy & Emb.\ cos. & BERTScore & {jh} & Jury
 """)
 
 
+# ============================================================ placeholders
+# Mesmo layout das figuras reais, sem dados: o artigo mostra o que falta calcular.
+PLACEHOLDERS = {
+    "accuracy": dict(shape=(1, 2), size=(PAGE_W, 3.2), titles=["QASPER (jury)", "QuALITY (answer key)"],
+                     xlabel="Accuracy (%)", ylabel="", xlim=(0, 100), yticks="models"),
+    "cost_accuracy": dict(shape=(1, 2), size=(PAGE_W, 2.3), titles=["QASPER (jury)", "QuALITY (answer key)"],
+                          xlabel="Mean context size (words, log scale)", ylabel="Accuracy (%)", ylim=(0, 100)),
+    "retrieval": dict(shape=(1, 2), size=(PAGE_W, 2.2),
+                      titles=["QASPER evidence recall", "Accuracy by retrieval outcome (Hybrid $k$=5)"],
+                      xlabel=["Retrieved chunks $k$", "Retrieval outcome"],
+                      ylabel=["Evidence recall@$k$ (%)", "Accuracy (%)"], ylim=(0, 100)),
+    "length_position": dict(shape=(1, 2), size=(PAGE_W, 2.1),
+                            titles=["QASPER, full document, all models", "Full document, by length tercile"],
+                            xlabel=["Position of first evidence paragraph (% of document)",
+                                    "Median document length in tercile (words)"],
+                            ylabel="Accuracy (%)", ylim=(0, 100)),
+    "rq1_roc": dict(shape=(1, 1), size=(COL_W, COL_W * 0.82), titles=[""], xlabel="False positive rate",
+                    ylabel="True positive rate", xlim=(0, 1), ylim=(0, 1)),
+}
+
+
+def placeholder_figures(cfg, out: Path, only_missing: bool = True) -> None:
+    for name, spec in PLACEHOLDERS.items():
+        path = out / "figures" / f"{name}.pdf"
+        if only_missing and path.exists():
+            continue
+        fig, axes = plt.subplots(*spec["shape"], figsize=spec["size"], squeeze=False)
+        for i, ax in enumerate(axes.flat):
+            pick = lambda v: v[i] if isinstance(v, list) else v  # noqa: E731
+            ax.set_title(pick(spec["titles"]), loc="left")
+            ax.set_xlabel(pick(spec.get("xlabel", "")))
+            ax.set_ylabel(pick(spec.get("ylabel", "")))
+            if "xlim" in spec:
+                ax.set_xlim(*spec["xlim"])
+            if "ylim" in spec:
+                ax.set_ylim(*spec["ylim"])
+            if spec.get("yticks") == "models" and i == 0:
+                ax.set_yticks(range(len(cfg["generators"])), [g["label"] for g in cfg["generators"]])
+                ax.invert_yaxis()
+            elif spec.get("yticks") == "models":
+                ax.set_yticks([])
+            ax.text(0.5, 0.5, "não calculado", transform=ax.transAxes, ha="center", va="center",
+                    color="#e34948", fontsize=9, alpha=0.8)
+        fig.savefig(path)
+        plt.close(fig)
+        log.info("placeholder %s", path)
+
+
 # ===================================================================== main
 def run_analysis(cfg) -> None:
     out = Path(cfg.path("paper"))
@@ -826,6 +874,7 @@ def run_analysis(cfg) -> None:
     from .ollama import OllamaClient
 
     client = OllamaClient(cfg, cfg.path("cache"))
+    placeholder_figures(cfg, out)  # figuras reais abaixo sobrescrevem as que tiverem dados
     table_sample(cfg, out)
     table_models(cfg, out, client)
     car_example(cfg, client, out)
