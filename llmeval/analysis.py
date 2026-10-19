@@ -354,7 +354,149 @@ def fig_roc(cfg, df: pd.DataFrame, out: Path) -> None:
     plt.close(fig)
 
 
-# ===================================================================== RQ2/RQ3
+
+# ===================================================================== RQ2
+def rq2_plausible(cfg, df: pd.DataFrame, out: Path, instruments: pd.DataFrame | None, metric: str = "bertscore"):
+    """Parecer certo × estar certo (Seção "Looking right versus being right").
+
+    Estima, por modelo e dataset, os termos de s̄_m = μ⁰_m + Acc_m·Δ_m, a FAR e o viés de um
+    avaliador por similaridade no limiar τ* da RQ1, τ de Kendall entre rankings e o GEE
+    S ~ Y·log2(P). Abstenções ficam de fora (a similaridade delas é definida por convenção).
+    """
+    from scipy.stats import kendalltau
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+
+    sub = df[df.y.notna() & df[metric].notna() & ~df.abstained.astype(bool)].copy() if metric in df else df.iloc[0:0]
+    gens = [g for g in cfg["generators"]]
+    rows, summary = [], {}
+    for ds in ("qasper", "quality"):
+        d = sub[sub.dataset == ds]
+        if d.empty:
+            continue
+        thr = np.nan
+        if instruments is not None and not instruments.empty:
+            r = instruments[(instruments.target == ds) & (instruments.instrument == METRIC_LABEL[metric])]
+            thr = float(r.threshold.iloc[0]) if len(r) else np.nan
+        for g in gens:
+            x = d[d.model == g["model"]]
+            if x.empty:
+                continue
+            y = x.y.astype(int)
+            mu0, mu1 = x[metric][y == 0].mean(), x[metric][y == 1].mean()
+            acc = y.mean()
+            far = (x[metric][y == 0] >= thr).mean() if not np.isnan(thr) else np.nan
+            tpr = (x[metric][y == 1] >= thr).mean() if not np.isnan(thr) else np.nan
+            auc = youden(y, x[metric])[0] if y.nunique() == 2 else np.nan
+            rows.append({"dataset": ds, "model": g["model"], "params_b": g["params_b"], "n": len(x), "acc": acc,
+                         "s_mean": x[metric].mean(), "mu0": mu0, "mu1": mu1, "delta": mu1 - mu0, "auroc": auc,
+                         "far": far, "bias": (1 - acc) * far - acc * (1 - tpr) if not np.isnan(thr) else np.nan,
+                         "threshold": thr})
+        m = pd.DataFrame([r for r in rows if r["dataset"] == ds])
+        cells = d.groupby(["model", "condition"]).agg(s=(metric, "mean"), acc=("y", "mean"))
+        rev = sum(1 for i, a in m.iterrows() for j, b in m.iterrows() if a.s_mean > b.s_mean and a.acc < b.acc)
+        info = {"tau_models": kendalltau(m.s_mean, m.acc)[0] if len(m) > 2 else np.nan,
+                "tau_cells": kendalltau(cells.s, cells.acc)[0] if len(cells) > 2 else np.nan,
+                "reversals": rev, "pairs": len(m) * (len(m) - 1) // 2}
+        try:
+            d = d.assign(log2p=np.log2(d.params_b), Y=d.y.astype(int), S=d[metric]).sort_values("doc_id")
+            fit = smf.gee("S ~ Y * log2p + C(condition)", "doc_id", d, family=sm.families.Gaussian(),
+                          cov_struct=sm.cov_struct.Exchangeable()).fit()
+            ci = fit.conf_int()
+            for k, term in (("b2", "log2p"), ("b3", "Y:log2p")):
+                info[k] = (fit.params[term], ci.loc[term, 0], ci.loc[term, 1], fit.pvalues[term])
+        except Exception as exc:  # poucos dados / modelos
+            log.warning("GEE da RQ2 falhou (%s): %s", ds, exc)
+        summary[ds] = info
+    res = pd.DataFrame(rows)
+    if not res.empty:
+        res.to_csv(cfg.path("results") / "analysis" / "plausible.csv", index=False)
+        pd.DataFrame(summary).T.to_csv(cfg.path("results") / "analysis" / "plausible_summary.csv")
+
+    def cells_for(ds, g):
+        r = res[(res.dataset == ds) & (res.model == g["model"])] if not res.empty else res
+        if r.empty:
+            return [r"\pending"] * 5
+        r = r.iloc[0]
+        return [pct(r.acc), f"{r.s_mean:.3f}", f"{r.mu0:.3f}", f"{r.delta:.3f}", pct(r.far)]
+
+    lines = [f"{g['label']} & " + " & ".join(cells_for("qasper", g) + cells_for("quality", g)) + r" \\" for g in gens]
+
+    def fmt_sum(ds, key):
+        v = summary.get(ds, {}).get(key)
+        if v is None or (isinstance(v, float) and np.isnan(v)):
+            return r"\pending"
+        if isinstance(v, tuple):
+            return f"{v[0]:+.4f} [{v[1]:+.4f}, {v[2]:+.4f}]"
+        return f"{v:.2f}" if isinstance(v, float) else str(v)
+
+    foot = "\n".join([
+        rf"\multicolumn{{1}}{{l}}{{Kendall $\tau_K$ (models / cells)}} & \multicolumn{{5}}{{c}}{{{fmt_sum('qasper', 'tau_models')} / {fmt_sum('qasper', 'tau_cells')}}} & \multicolumn{{5}}{{c}}{{{fmt_sum('quality', 'tau_models')} / {fmt_sum('quality', 'tau_cells')}}} \\",
+        rf"\multicolumn{{1}}{{l}}{{Reversed pairs (\cref{{eq:reversal}})}} & \multicolumn{{5}}{{c}}{{{fmt_sum('qasper', 'reversals')} of {fmt_sum('qasper', 'pairs')}}} & \multicolumn{{5}}{{c}}{{{fmt_sum('quality', 'reversals')} of {fmt_sum('quality', 'pairs')}}} \\",
+        rf"\multicolumn{{1}}{{l}}{{$\beta_2$ (\cref{{eq:plausible}})}} & \multicolumn{{5}}{{c}}{{{fmt_sum('qasper', 'b2')}}} & \multicolumn{{5}}{{c}}{{{fmt_sum('quality', 'b2')}}} \\",
+        rf"\multicolumn{{1}}{{l}}{{$\beta_3$ (\cref{{eq:plausible}})}} & \multicolumn{{5}}{{c}}{{{fmt_sum('qasper', 'b3')}}} & \multicolumn{{5}}{{c}}{{{fmt_sum('quality', 'b3')}}} \\",
+    ])
+    hdr = r"Acc. & $\bar s$ & $\hat\mu^{(0)}$ & $\hat\Delta$ & FAR"
+    write(out / "tables" / "plausible.tex", rf"""% Gerado por `python -m llmeval analyze` (rq2_plausible). Não editar à mão.
+\begin{{table*}}[t]
+\centering
+\caption{{Looking right versus being right, with BERTScore as the similarity $S$ (abstentions excluded). Per generator: accuracy (\%), mean similarity $\bar s$, mean similarity of incorrect answers $\hat\mu^{{(0)}}$, separation $\hat\Delta=\hat\mu^{{(1)}}-\hat\mu^{{(0)}}$ (\cref{{eq:decomp}}) and false-acceptance rate at the RQ1 threshold (\%). Bottom: rank agreement between $\bar s$ and accuracy, number of model pairs that satisfy the reversal condition, and the size coefficients of \cref{{eq:plausible}} (95\% CI). Correctness is the jury verdict on QASPER and the answer key on QuALITY.}}
+\label{{tab:plausible}}
+\footnotesize
+\setlength{{\tabcolsep}}{{3.5pt}}
+\begin{{tabular}}{{l rrrrr rrrrr}}
+\toprule
+ & \multicolumn{{5}}{{c}}{{QASPER (jury)}} & \multicolumn{{5}}{{c}}{{QuALITY (answer key)}} \\
+\cmidrule(lr){{2-6}} \cmidrule(lr){{7-11}}
+Model & {hdr} & {hdr} \\
+\midrule
+{chr(10).join(lines)}
+\midrule
+{foot}
+\bottomrule
+\end{{tabular}}
+\end{{table*}}
+""")
+
+    # figura: (esq.) s̄ × acurácia por modelo; (dir.) S de respostas certas × erradas no QuALITY
+    if res.empty:
+        return res
+    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 2.5), gridspec_kw={"width_ratios": [1, 1.5]})
+    ax = axes[0]
+    for color, marker, (ds, name) in zip(SERIES, ("o", "s"), (("qasper", "QASPER (jury)"), ("quality", "QuALITY (key)"))):
+        r = res[res.dataset == ds]
+        ax.plot(r.s_mean, r.acc * 100, ls="none", marker=marker, color=color, ms=5, label=name)
+        for _, row in r.iterrows():
+            lab = next(g["label"] for g in gens if g["model"] == row.model).split("-")[-1]
+            ax.annotate(lab, (row.s_mean, row.acc * 100), xytext=(3, 2), textcoords="offset points", fontsize=5.5, color=INK2)
+    ax.set(xlabel=r"Mean similarity $\bar s$ (BERTScore)", ylabel="Accuracy (%)")
+    ax.legend(frameon=False, fontsize=6.5)
+    ax.set_title("Similarity vs. accuracy per model", loc="left")
+    ax = axes[1]
+    d = sub[sub.dataset == "quality"]
+    models = [g for g in gens if g["model"] in set(d.model)]
+    pos = np.arange(len(models))
+    for k, (yv, color, name) in enumerate(((1, SERIES[2], "correct"), (0, SERIES[7], "incorrect"))):
+        data = [d[(d.model == g["model"]) & (d.y == yv)][metric].values for g in models]
+        bp = ax.boxplot(data, positions=pos + (-0.18 if yv else 0.18), widths=0.32, patch_artist=True,
+                        showfliers=False, medianprops={"color": INK, "lw": 1})
+        for b in bp["boxes"]:
+            b.set(facecolor=color, alpha=0.55, edgecolor=INK2, lw=0.6)
+        ax.plot([], [], color=color, lw=6, alpha=0.55, label=name)
+    thr = res[res.dataset == "quality"].threshold.dropna()
+    if len(thr):
+        ax.axhline(thr.iloc[0], color=INK2, ls="--", lw=0.9)
+        ax.text(-0.55, thr.iloc[0], r"$\tau^\star$", va="bottom", fontsize=7, color=INK2)
+    ax.set_xticks(pos, [g["label"] for g in models], rotation=20, ha="right")
+    ax.set_ylabel("Similarity $S$ (BERTScore)")
+    ax.grid(axis="x", visible=False)
+    ax.legend(frameon=False, ncol=2, fontsize=6.5, loc="lower left")
+    ax.set_title("QuALITY: similarity of correct vs. incorrect answers", loc="left")
+    fig.savefig(out / "figures" / "plausible.pdf")
+    plt.close(fig)
+    return res
+
+# ===================================================================== RQ3/RQ4 (full doc. e RAG)
 def accuracy_table(cfg, df: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for (ds, m, c), g in df[df.y.notna()].groupby(["dataset", "model", "condition"]):
@@ -503,7 +645,7 @@ def rq3_paired(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame:
         _placeholder_paired(cfg, out)
         return res
     res["p_holm"] = holm(res.p.values)
-    res.to_csv(cfg.path("results") / "analysis" / "rq3_paired.csv", index=False)
+    res.to_csv(cfg.path("results") / "analysis" / "paired.csv", index=False)
 
     gens = [g for g in cfg["generators"] if g["model"] in models]
     header = " & ".join(g["label"].replace("-", "\\mbox{-}") for g in gens)
@@ -519,7 +661,7 @@ def rq3_paired(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame:
                 cells.append("--" if r.empty else f"{100 * r.delta.iloc[0]:+.1f}{pval_marker(r.p_holm.iloc[0])}")
             lines.append(f"{COND_TEX[c]} & " + " & ".join(cells) + r" \\")
         blocks.append("\n".join(lines))
-    write(out / "tables" / "rq3_paired.tex", rf"""% Gerado por `python -m llmeval analyze` (rq3_paired). Não editar à mão.
+    write(out / "tables" / "paired.tex", rf"""% Gerado por `python -m llmeval analyze` (paired). Não editar à mão.
 \begin{{table*}}[t]
 \centering
 \caption{{Paired difference in accuracy (percentage points) of each condition relative to the full document, per model. Positive values mean the condition is better than reading the whole document. Significance by exact McNemar test with Holm correction over all {len(res)} comparisons: $^{{*}}p<0.05$, $^{{**}}p<0.01$, $^{{***}}p<0.001$. Cluster-bootstrap 95\% intervals are in the supplementary CSV.}}
@@ -547,7 +689,7 @@ def _placeholder_paired(cfg, out):
         lines = [rf"\multicolumn{{{len(gens) + 1}}}{{l}}{{\emph{{{name}}}}} \\"]
         lines += [f"{COND_TEX[c]} & " + " & ".join([r"\pending"] * len(gens)) + r" \\" for c in conds]
         blocks.append("\n".join(lines))
-    write(out / "tables" / "rq3_paired.tex", rf"""% Placeholder gerado por `python -m llmeval analyze` (rq3_paired) antes dos resultados.
+    write(out / "tables" / "paired.tex", rf"""% Placeholder gerado por `python -m llmeval analyze` (paired) antes dos resultados.
 \begin{{table*}}[t]
 \centering
 \caption{{Paired difference in accuracy (percentage points) of each condition relative to the full document, per model. Positive values mean the condition is better than reading the whole document. Exact McNemar test with Holm correction: $^{{*}}p<0.05$, $^{{**}}p<0.01$, $^{{***}}p<0.001$.}}
@@ -677,7 +819,7 @@ def fig_length_position(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame | None
             qa["y"] = qa.y.astype(int)
             qa["pos2"] = qa.evidence_pos**2
             fit = gee_logit(qa.sort_values("doc_id"), "y ~ evidence_pos + pos2 + C(model)", "doc_id")
-            fit.to_csv(cfg.path("results") / "analysis" / "rq2_position_fit.csv")
+            fit.to_csv(cfg.path("results") / "analysis" / "position_fit.csv")
         except Exception as exc:
             log.warning("ajuste de posição falhou: %s", exc)
 
@@ -697,7 +839,7 @@ def fig_length_position(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame | None
     return fit
 
 
-# ===================================================================== RQ4
+# ===================================================================== RQ5
 def table_abstention(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame:
     qs = {q["qid"]: q for q in read_jsonl(cfg.path("sample") / "questions.jsonl")}
     sub = df[df.dataset == "qasper"].copy()
@@ -716,7 +858,7 @@ def table_abstention(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame:
                          "abstain_rate": g.abstained.mean()})
     res = pd.DataFrame(rows)
     if not res.empty:
-        res.to_csv(cfg.path("results") / "analysis" / "rq4_abstention.csv", index=False)
+        res.to_csv(cfg.path("results") / "analysis" / "abstention.csv", index=False)
     lines = []
     for g in cfg["generators"]:
         cells = []
@@ -833,6 +975,9 @@ PLACEHOLDERS = {
                             xlabel=["Position of first evidence paragraph (% of document)",
                                     "Median document length in tercile (words)"],
                             ylabel="Accuracy (%)", ylim=(0, 100)),
+    "plausible": dict(shape=(1, 2), size=(PAGE_W, 2.5), titles=["Similarity vs. accuracy per model",
+                      "QuALITY: similarity of correct vs. incorrect answers"],
+                      xlabel=[r"Mean similarity $\bar s$ (BERTScore)", ""], ylabel=["Accuracy (%)", "Similarity $S$ (BERTScore)"]),
     "rq1_roc": dict(shape=(1, 1), size=(COL_W, COL_W * 0.82), titles=[""], xlabel="False positive rate",
                     ylabel="True positive rate", xlim=(0, 1), ylim=(0, 1)),
 }
@@ -888,6 +1033,7 @@ def run_analysis(cfg) -> None:
         table_gee(cfg, pd.DataFrame(columns=["y", "condition"]), out)
         rq1_instruments(cfg, pd.DataFrame(columns=["dataset", "y_jury", "y_objective", "jury_source"]), out)
         rq1_reliability(cfg, pd.DataFrame(columns=["dataset", "jury_source", "votes", "y_objective", "family"]), out)
+        rq2_plausible(cfg, pd.DataFrame(columns=["dataset", "y"]), out, None)
         return
 
     df = load_frame(cfg)
@@ -900,7 +1046,9 @@ def run_analysis(cfg) -> None:
     fig_recall(cfg, out, df)
     fig_length_position(cfg, df, out)
     table_abstention(cfg, df, out)
+    instruments = None
     if "y_jury" in df:
-        rq1_instruments(cfg, df, out)
+        instruments = rq1_instruments(cfg, df, out)
         rq1_reliability(cfg, df, out)
         fig_roc(cfg, df, out)
+    rq2_plausible(cfg, df, out, instruments)
