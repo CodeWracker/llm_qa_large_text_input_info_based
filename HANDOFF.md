@@ -17,6 +17,8 @@ com júri de 3 LLMs validado contra gabarito. Artigo IEEE em `../latex-llmeval`.
 ## Regras do usuário para o artigo
 - Fio narrativo contínuo: intro → problema/RQs → método/formalização → setup →
   resultados respondendo às RQs. Antecipar "tá, mas como fez isso?".
+- O artigo descreve UM estudo contínuo: nunca mencionar piloto, versões anteriores ou cronologia dos testes.
+- Resumo e Conclusão ficam em `\todo` até haver resultados; introdução sem números de resultado.
 - `\todo{...}` = só fonte vermelha (`\textcolor{red}`), texto sempre em português, NUNCA caixas/todonotes.
 - Resumo e Trabalhos Correlatos ficam como `\todo{}`
   (Trabalhos Correlatos traz as strings de busca).
