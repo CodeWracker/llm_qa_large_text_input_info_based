@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Vigia o servidor Ollama compartilhado e roda run_chain.sh assim que ele fica livre.
-# Livre = nenhum modelo alheio ao experimento carregado em /api/ps por LIVRE_N checagens seguidas
-# (intervalo de INTERVALO s). Se a cadeia pausar (código 75), volta a vigiar; termina quando a cadeia
-# conclui. Uso: setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 &
+# Livre = por LIVRE_N checagens seguidas (intervalo de INTERVALO s), nenhum modelo alheio ao experimento
+# em /api/ps ou só modelos alheios ociosos (expires_at parado = nenhuma requisição; o Ollama descarrega
+# um modelo ocioso quando outro é pedido, mesmo com keep_alive infinito). Se a cadeia pausar (código 75), volta a vigiar;
+# termina quando a cadeia conclui. Uso: setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 &
 set -uo pipefail
 cd "$(dirname "$0")"
 source /etc/profile.d/99-persist-env.sh
@@ -11,7 +12,7 @@ LIVRE_N=${LIVRE_N:-3}
 LOG=results/logs/pipeline.log
 echo $$ > results/logs/aguarda.pid
 
-# modelos alheios carregados agora (vazio = livre); "erro" se /api/ps não respondeu
+# modelos alheios carregados agora como "nome@expires_at" (vazio = nenhum); "erro" se /api/ps não respondeu
 alheios() {
   .venv/bin/python - <<'EOF'
 import json, os, subprocess, yaml
@@ -20,7 +21,7 @@ nossos = {g["model"] for g in c["generators"]} | {j["model"] for j in c["jury"][
 r = subprocess.run(["curl", "-s", "-m", "30", "--netrc", os.environ["OLLAMA_URL"].rstrip("/") + "/api/ps"],
                    capture_output=True, text=True)
 try:
-    print(" ".join(m["name"] for m in json.loads(r.stdout)["models"] if m["name"] not in nossos))
+    print(" ".join(f"{m['name']}@{m.get('expires_at')}" for m in json.loads(r.stdout)["models"] if m["name"] not in nossos))
 except (ValueError, KeyError):
     print("erro")
 EOF
@@ -28,10 +29,13 @@ EOF
 
 echo "$(date -Is) vigia iniciado (pid $$)" >> "$LOG"
 while true; do
-  livres=0
+  livres=0; antes=""
   while [ "$livres" -lt "$LIVRE_N" ]; do
     a=$(alheios)
-    if [ -z "$a" ]; then livres=$((livres + 1)); else livres=0; fi
+    if [ "$a" = "erro" ]; then livres=0; a=""
+    elif [ -z "$a" ] || [ "$a" = "$antes" ]; then livres=$((livres + 1))
+    else livres=0; fi
+    antes=$a
     [ "$livres" -lt "$LIVRE_N" ] && sleep "$INTERVALO"
   done
   echo "$(date -Is) vigia: servidor livre, relançando a cadeia" >> "$LOG"

@@ -53,8 +53,8 @@ júri → métricas → análise); marcos em `results/logs/pipeline.log`. Se cai
   `relatorio.py` na mesma pasta gera `RELATORIO_INCIDENTES_OLLAMA.md`.
 - Disjuntor: 16 falhas seguidas do servidor encerram o estágio com código 75 e `run_chain.sh` pausa
   ("cadeia pausada" no pipeline.log). Típico quando outro projeto mantém outro modelo carregado.
-- `aguarda_servidor.sh` (vigia, PID em `results/logs/aguarda.pid`) espera o servidor ficar sem modelo alheio
-  carregado por 3 min, roda `run_chain.sh` e volta a vigiar se ela pausar. Lançar com
+- `aguarda_servidor.sh` (vigia, PID em `results/logs/aguarda.pid`) espera 3 min sem modelo alheio carregado
+  ou só com modelo alheio ocioso (`expires_at` parado), roda `run_chain.sh` e volta a vigiar se ela pausar. Lançar com
   `setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 < /dev/null &`.
 - Um loop (CronCreate, de hora em hora, expira em 7 dias, morre com a sessão) confere cadeia e vigia e
   relança o vigia se ele morreu. Se a sessão morreu, recrie o loop. Encerrar processos só por PID (nunca `pkill -f`).
