@@ -932,8 +932,10 @@ def car_example(cfg, client, out: Path) -> None:
     votes = {}
     for j in judges:
         for a in answers:
-            r = client.chat_json(j["model"], judge_messages(CAR_QUESTION, [CAR_REFERENCE], a), JUDGE_SCHEMA,
-                                 think=j.get("think", False), num_predict=2048)
+            msgs = judge_messages(CAR_QUESTION, [CAR_REFERENCE], a)
+            r = client.chat_json(j["model"], msgs, JUDGE_SCHEMA, think=j.get("think", False), num_predict=2048)
+            if r.get("output") is None:  # como no júri: raciocínio pode esgotar o orçamento
+                r = client.chat_json(j["model"], msgs, JUDGE_SCHEMA, think=j.get("think", False), num_predict=8192)
             votes[j["model"], a] = (r.get("output") or {}).get("verdict")
     sym = {"correct": r"\checkmark", "partially_correct": r"$\sim$", "incorrect": r"$\times$", None: "?"}
     lines = []
