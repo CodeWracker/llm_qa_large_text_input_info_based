@@ -153,6 +153,10 @@ def run_generation(cfg) -> None:
             desc = gen["label"] + (" +think" if think else "")
             for f in tqdm(as_completed(futures), total=len(futures), desc=desc):
                 rows.append(f.result())
-        write_jsonl(results / "generations.jsonl", rows)  # checkpoint por (modelo, raciocínio)
+        # checkpoint por (modelo, raciocínio) em arquivo à parte: leitores de generations.jsonl
+        # (análise intermediária em paralelo) nunca veem uma geração pela metade
+        write_jsonl(results / "generations.partial.jsonl", rows)
+    write_jsonl(results / "generations.jsonl", rows)
+    (results / "generations.partial.jsonl").unlink(missing_ok=True)
     n_err = sum(1 for r in rows if r.get("error"))
     log.info("geração concluída: %d respostas, %d falhas (formato ou teto de tokens)", len(rows), n_err)
