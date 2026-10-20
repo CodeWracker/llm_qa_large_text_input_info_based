@@ -1,4 +1,4 @@
-"""CLI: python -m llmeval {sample,generate,judge,metrics,analyze,all} [--config ...]"""
+"""CLI: python -m llmeval {sample,generate,judge,metrics,analyze,all} [--config ...] [--no-think]"""
 from __future__ import annotations
 
 import argparse
@@ -14,11 +14,14 @@ def main() -> None:
     ap = argparse.ArgumentParser(prog="llmeval")
     ap.add_argument("stage", choices=STAGES + ("all",))
     ap.add_argument("--config", default=None)
+    ap.add_argument("--no-think", action="store_true", help="geração sem a passada com raciocínio (RQ6)")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     for noisy in ("httpx", "urllib3", "sentence_transformers"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     cfg = load_config(args.config)
+    if args.no_think:
+        cfg["generation"]["think_pass"] = False
     from .ollama import ServerUnavailable
 
     try:
