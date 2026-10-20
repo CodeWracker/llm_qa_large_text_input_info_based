@@ -6,6 +6,7 @@ existirem (modelos ou condições faltantes são simplesmente omitidos).
 """
 from __future__ import annotations
 
+import itertools
 import logging
 from pathlib import Path
 
@@ -530,7 +531,18 @@ def accuracy_table(cfg, df: pd.DataFrame) -> pd.DataFrame:
 def table_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
     models = [g for g in cfg["generators"]]
     conds = [c["name"] for c in cfg["conditions"]]
-    header = " & ".join(COND_TEX[c] for c in conds)
+    header = " & ".join(COND_TEX[c].replace("Hybrid", "Hyb.") for c in conds)
+    # linha de grupos sobre as colunas: recuperação (RAG) e busca guiada pelo modelo
+    family = {"rag": "Retrieval", "search": "Model-guided search", "full_search": "Model-guided search"}
+    groups, cmid = [], []
+    col = 2
+    for fam, run in itertools.groupby(cfg["conditions"], key=lambda c: family.get(c["context"])):
+        n = len(list(run))
+        groups.append(rf"\multicolumn{{{n}}}{{c}}{{{fam}}}" if fam else " & ".join([""] * n))
+        if fam:
+            cmid.append(rf"\cmidrule(lr){{{col}-{col + n - 1}}}")
+        col += n
+    group_row = " & " + " & ".join(groups) + r" \\" + chr(10) + " ".join(cmid)
     blocks = []
     for ds, name in (("qasper", "QASPER (jury verdict)"), ("quality", "QuALITY (answer key)")):
         lines = [rf"\multicolumn{{{len(conds) + 1}}}{{l}}{{\emph{{{name}}}}} \\"]
@@ -554,6 +566,7 @@ def table_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
 \setlength{{\tabcolsep}}{{3pt}}
 \begin{{tabular}}{{l{"r" * len(conds)}}}
 \toprule
+{group_row}
 Model & {header} \\
 \midrule
 {(chr(10) + r"\midrule" + chr(10)).join(blocks)}
@@ -570,8 +583,8 @@ def fig_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
     gens = [g for g in cfg["generators"] if g["model"] in set(acc.model)]
     conds = [c["name"] for c in cfg["conditions"] if c["name"] in set(acc.condition)]
     style = COND_STYLE
-    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 0.38 * len(gens) + 0.9), sharey=True)
-    offs = np.linspace(-0.3, 0.3, len(conds))
+    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 0.5 * len(gens) + 1.0), sharey=True)
+    offs = np.linspace(-0.36, 0.36, len(conds))
     for ax, (ds, title) in zip(axes, (("qasper", "QASPER (jury)"), ("quality", "QuALITY (answer key)"))):
         sub = acc[acc.dataset == ds]
         for off, c in zip(offs, conds):
@@ -582,11 +595,11 @@ def fig_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
                     continue
                 r = r.iloc[0]
                 ax.plot([r.lo * 100, r.hi * 100], [yi + off] * 2, color=color, lw=0.9, alpha=0.6)
-                ax.plot(r.acc * 100, yi + off, marker=marker, color=color, ls="none", ms=4.5,
+                ax.plot(r.acc * 100, yi + off, marker=marker, color=color, ls="none", ms=7 if marker == "*" else 4.5,
                         mec="white", mew=0.5, label=COND_LABEL[c] if yi == 0 else None)
         if ds == "quality":
             ax.axvline(25, color=INK2, lw=0.8, ls=":")
-            ax.text(25.5, len(gens) - 0.45, "chance", color=INK2, fontsize=6.5, va="top")
+            ax.text(24, -0.45, "chance", color=INK2, fontsize=6.5, va="top", ha="right")
         ax.set_title(title, loc="left")
         ax.set_xlabel("Accuracy (%)")
         ax.set_xlim(0, 100)
@@ -594,8 +607,8 @@ def fig_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
     axes[0].set_yticks(range(len(gens)), [g["label"] for g in gens])
     axes[0].invert_yaxis()
     h, l = axes[0].get_legend_handles_labels()
-    fig.legend(h, l, ncol=min(len(conds), 6), frameon=False, loc="lower center", bbox_to_anchor=(0.5, -0.06))
-    fig.subplots_adjust(bottom=0.26, wspace=0.06)
+    fig.legend(h, l, ncol=min(len(conds), 6), frameon=False, loc="upper center", bbox_to_anchor=(0.5, 0.0))
+    fig.subplots_adjust(wspace=0.06)
     fig.savefig(out / "figures" / "accuracy.pdf")
     plt.close(fig)
 
@@ -940,7 +953,9 @@ def car_example(cfg, client, out: Path) -> None:
             if r.get("output") is None:  # como no júri: raciocínio pode esgotar o orçamento
                 r = client.chat_json(j["model"], msgs, JUDGE_SCHEMA, think=j.get("think", False), num_predict=8192)
             votes[j["model"], a] = (r.get("output") or {}).get("verdict")
-    sym = {"correct": r"\checkmark", "partially_correct": r"$\sim$", "incorrect": r"$\times$", None: "?"}
+    sym = {"correct": r"\checkmark", "partially_correct": r"$\sim$", "incorrect": r"$\times$", None: "--"}
+    missing = " A dash marks a vote not returned in a valid format, which the jury treats as not correct." \
+        if None in votes.values() else ""
     lines = []
     for i, (a, ok) in enumerate(CAR_ANSWERS):
         vals = [LEXICAL[m](a, CAR_REFERENCE) for m in ("em", "token_f1", "rouge_l", "fuzzy")] + [cos[i], bert[i]]
@@ -957,7 +972,7 @@ def car_example(cfg, client, out: Path) -> None:
     write(out / "tables" / "car_example.tex", rf"""% Gerado por `python -m llmeval analyze` (car_example). Não editar à mão.
 \begin{{table*}}[t]
 \centering
-\caption{{The motivating example: answers to ``{CAR_QUESTION}'' compared with the reference ``{CAR_REFERENCE}''. The first five answers are correct, the last six are not. Metrics are computed as defined in \cref{{sec:measuring}}; the last four columns are the votes of the three judges (\checkmark{{}} correct, $\sim$ partial, $\times$ incorrect) and the jury verdict.}}
+\caption{{The motivating example: answers to ``{CAR_QUESTION}'' compared with the reference ``{CAR_REFERENCE}''. The first five answers are correct, the last six are not. Metrics are computed as defined in \cref{{sec:measuring}}; the last four columns are the votes of the three judges (\checkmark{{}} correct, $\sim$ partial, $\times$ incorrect) and the jury verdict.{missing}}}
 \label{{tab:car}}
 \footnotesize
 \setlength{{\tabcolsep}}{{4pt}}
