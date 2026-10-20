@@ -1025,7 +1025,8 @@ def rq6_reasoning(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame:
         res["token_ratio"] = res.tokens_on / res.tokens_off
         res.to_csv(cfg.path("results") / "analysis" / "reasoning.csv", index=False)
 
-    gens = [g for g in cfg["generators"] if g["family"] in ("qwen", "gemma")]
+    allowed = cfg["generation"].get("think_models")
+    gens = [g for g in cfg["generators"] if (g["model"] in allowed if allowed else g["family"] in ("qwen", "gemma"))]
     if not res.empty:
         gens = [g for g in cfg["generators"] if g["model"] in set(res.model)]
     show = ["closed_book", "full", "hybrid_k5", "search_hybrid_k5", "full_search_k5"]

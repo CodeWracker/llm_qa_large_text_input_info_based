@@ -30,7 +30,9 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 ## Decisões do usuário (19/10/2026)
 - Sem anotação humana: a validação do júri fica no QuALITY e a limitação vai para as ameaças.
 - Alvo de publicação indefinido: escrever no formato IEEE conferência sem cortar; enxugar depois.
-- Raciocínio: todos os modelos que suportam, todas as condições, teto de 4096; vira a RQ6; roda após o júri principal.
+- Raciocínio: teto de 4096; vira a RQ6; roda após o júri principal. 20/10: a ~22 s/item seriam 4–6 dias, então só
+  Qwen3.5-4B e 9B (pequenos, mesma família), todas as condições; o texto justifica pelo limite de infraestrutura
+  (mostrar a direção do efeito).
 - Júri mantido (testar autopreferência na RQ1). Amostra mantida em 400.
 - Trabalhos Correlatos: só as strings; o usuário pesquisa (Scopus, ScienceDirect...).
 - `legacy/` e menções ao piloto removidos também do repositório de código; `images/` removido do artigo.

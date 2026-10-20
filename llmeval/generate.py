@@ -141,9 +141,12 @@ def run_generation(cfg) -> None:
         return row
 
     # passada sem raciocínio para todos; depois, com raciocínio, nos modelos que o suportam
+    # (restritos a `think_models`, se definido)
     runs = [(g, False) for g in cfg["generators"]]
     if gen_cfg.get("think_pass"):
-        runs += [(g, True) for g in cfg["generators"] if "thinking" in client.capabilities(g["model"])]
+        allowed = gen_cfg.get("think_models")
+        runs += [(g, True) for g in cfg["generators"] if "thinking" in client.capabilities(g["model"])
+                 and (allowed is None or g["model"] in allowed)]
     rows = []
     # um modelo por vez: evita disputar memória do servidor carregando vários modelos
     for gen, think in runs:

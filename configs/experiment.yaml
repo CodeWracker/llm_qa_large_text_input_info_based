@@ -44,6 +44,7 @@ retrieval:
 generation:
   num_predict: 256          # resposta curta em JSON
   think_pass: true          # segunda passada com raciocínio ligado nos modelos que o suportam (RQ6)
+  think_models: ["qwen3.5:4b", "qwen3.5:9b"]  # limite de infraestrutura: só dois modelos pequenos da mesma família
   think_num_predict: 4096   # teto (raciocínio + resposta); estourar o teto é registrado como falha
 
 # Busca por termos (Ctrl+F): o gerador escolhe os termos, uma função busca no documento
