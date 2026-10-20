@@ -12,3 +12,8 @@ data/sample/documents.jsonl
 # artefatos grandes do piloto continuam versionados em legacy/results/*.zip
 *.pickle
 *.pkl
+
+# resultados: logs e arquivos intermediários
+results/logs/
+results/*.partial.jsonl
+results/metrics_interim.jsonl
