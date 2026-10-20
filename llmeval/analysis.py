@@ -175,16 +175,16 @@ def table_models(cfg, out: Path, client=None) -> None:
             except Exception as exc:  # servidor indisponível: tabela sai sem essas colunas
                 log.warning("api/show %s: %s", m, exc)
 
-    def row(entry, role):
+    def row(entry):
         q, ctx = info.get(entry["model"], ("--", None))
         ctxs = f"{ctx // 1024}k" if ctx else "--"
         params = entry.get("params_b")
         ps = f"{params:g}" if params else "--"
-        return f"{role} & {entry['label']} & \\texttt{{{entry['model']}}} & {ps} & {q.replace('_', chr(92) + '_')} & {ctxs} \\\\"
+        return f"{entry['label']} & \\texttt{{{entry['model']}}} & {ps} & {q.replace('_', chr(92) + '_')} & {ctxs} \\\\"
 
     params = {"gpt-oss:120b": 116.8, "llama3.3:70b": 70.6, "qwen3:32b": 32.8}
-    gens = "\n".join(row(g, "Gen.") for g in cfg["generators"])
-    judges = "\n".join(row({**j, "params_b": params.get(j["model"])}, "Judge") for j in cfg["jury"]["judges"])
+    gens = "\n".join(row(g) for g in cfg["generators"])
+    judges = "\n".join(row({**j, "params_b": params.get(j["model"])}) for j in cfg["jury"]["judges"])
     write(out / "tables" / "models.tex", rf"""% Gerado por `python -m llmeval analyze` (table_models). Não editar à mão.
 \begin{{table}}[t]
 \centering
@@ -192,12 +192,14 @@ def table_models(cfg, out: Path, client=None) -> None:
 \label{{tab:models}}
 \footnotesize
 \setlength{{\tabcolsep}}{{3pt}}
-\begin{{tabular}}{{lllrll}}
+\begin{{tabular}}{{llrll}}
 \toprule
-Role & Model & Ollama tag & Params & Quant. & Ctx \\
+Model & Ollama tag & Params & Quant. & Ctx \\
 \midrule
+\multicolumn{{5}}{{l}}{{\emph{{Generators}}}} \\
 {gens}
 \midrule
+\multicolumn{{5}}{{l}}{{\emph{{Judges}}}} \\
 {judges}
 \bottomrule
 \end{{tabular}}
@@ -483,6 +485,7 @@ Model & {hdr} & {hdr} \\
         for _, row in r.iterrows():
             lab = next(g["label"] for g in gens if g["model"] == row.model).split("-")[-1]
             ax.annotate(lab, (row.s_mean, row.acc * 100), xytext=(3, 2), textcoords="offset points", fontsize=5.5, color=INK2)
+    ax.margins(x=0.12)  # espaço para os rótulos dos pontos na borda
     ax.set(xlabel=r"Mean similarity $\bar s$ (BERTScore)", ylabel="Accuracy (%)")
     ax.legend(frameon=False, fontsize=6.5)
     ax.set_title("Similarity vs. accuracy per model", loc="left")

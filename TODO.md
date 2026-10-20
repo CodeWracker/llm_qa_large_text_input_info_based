@@ -7,10 +7,11 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Amostra: 400 perguntas, 272 documentos (`data/sample/questions.jsonl`)
 - [x] Revocação de evidência (`results/retrieval.jsonl`): com k=5, denso 74% > híbrido 65% > BM25 57%
 - [x] Geração principal: 6 modelos × 7 condições × 400 = 16.800 respostas (2 falhas de formato)
-- [~] Júri sobre a geração principal: 3.995/4.523 itens do GPT-OSS prontos; o resto trava com HTTP 504 após 600 s (servidor disputado por outro usuário, 19/10 12:20+). Incidentes em `setic_infra_audit/incidentes_ollama`
-- [ ] Cadeia automática (`run_chain.sh`, log em `results/logs/pipeline.log`):
-  geração das 4 condições de busca + passada com raciocínio → júri → métricas → análise.
-  Em paralelo: métricas/análise intermediárias (`*_interim.log`) para escrever RQ1–5.
+- [x] Júri sobre a geração principal: 3 juízes × 4.523 itens (20/10 05:37; 1 voto ausente). Servidor tomado por outro projeto 19/10 12:20 → 20/10 03:43 (incidentes em `setic_infra_audit/incidentes_ollama`)
+- [x] Análise intermediária do desenho principal (7 condições): reconstruída só do cache fora de `results/`
+  (o checkpoint da geração em curso sobrescrevia `generations.jsonl`; corrigido em `generate.py` para as próximas rodadas)
+- [~] Cadeia automática (`run_chain.sh` via vigia `aguarda_servidor.sh`, log em `results/logs/pipeline.log`):
+  geração das 4 condições de busca + passada com raciocínio → júri → métricas → análise final.
 - [ ] Implementar a análise da RQ6 (thinking × sem thinking, pareado; tokens/latência; truncamento)
 - [ ] Tabelas com 11 condições: verificar largura (talvez dividir RAG × busca)
 - [ ] Inspecionar respostas: abstenção, falhas de JSON, teto de tokens, buscas sem achados
@@ -22,7 +23,8 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Diagrama principal: versão A aprovada
 - [x] RQ2 "parecer certo × estar certo"
 - [x] Busca guiada (método + formalização) e RQ6 (raciocínio) no texto, tabelas e diagrama (validado com Haiku)
-- [ ] Discussão de cada RQ com os números reais; depois Conclusão e Resumo
+- [~] Discussão de RQ1–RQ5 escrita com os números do desenho principal; ao fim da cadeia, atualizar números
+  (RQ1/QASPER e RQ2 passam a incluir as 4 condições de busca), escrever busca (RQ4) e RQ6, depois Conclusão e Resumo
 - [ ] Revisar floats; conferir metadados do `.bib`
 
 ## Decisões do usuário (19/10/2026)
