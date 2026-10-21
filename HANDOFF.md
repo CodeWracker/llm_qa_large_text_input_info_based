@@ -54,7 +54,9 @@ métricas → análise) e depois a RQ6 (geração com raciocínio → júri → 
 - Disjuntor: 16 falhas seguidas do servidor encerram o estágio com código 75 e `run_chain.sh` pausa
   ("cadeia pausada" no pipeline.log). Típico quando outro projeto mantém outro modelo carregado.
 - `aguarda_servidor.sh` (vigia, PID em `results/logs/aguarda.pid`) espera 3 min sem modelo alheio carregado
-  ou só com modelo alheio ocioso (`expires_at` parado), roda `run_chain.sh` e volta a vigiar se ela pausar. Lançar com
+  ou só com modelo alheio ocioso (`expires_at` parado; com keep_alive infinito, como o qwen2.5:32b do ClinicalSimilarity,
+  conta como ocupado), roda `run_chain.sh` (que pula a fase 1 já concluída) e volta a vigiar se ela pausar. Lançar com
   `setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 < /dev/null &`.
 - Um loop (CronCreate, de hora em hora, expira em 7 dias, morre com a sessão) confere cadeia e vigia e
   relança o vigia se ele morreu. Se a sessão morreu, recrie o loop. Encerrar processos só por PID (nunca `pkill -f`).
+- Após reboot da máquina: `OLLAMA_URL` e `~/.netrc` somem até o usuário rodar `/home/jovyan/privado/.persist/return_by_death.sh`.
