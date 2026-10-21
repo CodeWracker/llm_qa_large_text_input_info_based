@@ -2,7 +2,8 @@
 # Cadeia completa, em duas fases. Fase 1, desenho principal (11 condições, sem raciocínio):
 # geração (o que falta) -> júri -> métricas -> análise. Fase 2, RQ6: passada com raciocínio
 # (2ª passada refaz falhas de servidor) -> júri -> métricas -> análise final.
-# Tudo fica em cache: relançar retoma de onde parou. Marcos em results/logs/pipeline.log.
+# Tudo fica em cache: relançar retoma de onde parou (a fase 1, se concluída, é pulada).
+# Marcos em results/logs/pipeline.log.
 set -uo pipefail
 cd "$(dirname "$0")"
 source /etc/profile.d/99-persist-env.sh
@@ -18,11 +19,15 @@ run() {  # run <log> <args...>; código 75 = servidor indisponível: pausa a cad
     exit 75
   fi
 }
-run generate_main generate --no-think
-run judge_main judge
-run metrics_main metrics
-run analyze_main analyze
-echo "$(date -Is) fase 1 (desenho principal) concluída" >> results/logs/pipeline.log
+# fase 1 já concluída (marco no log): pula direto para a RQ6. Refazer a fase 1 só tentaria de novo
+# os votos ausentes do júri, e eles voltam a ser tentados no júri final
+if ! grep -q "fase 1 (desenho principal) concluída" results/logs/pipeline.log; then
+  run generate_main generate --no-think
+  run judge_main judge
+  run metrics_main metrics
+  run analyze_main analyze
+  echo "$(date -Is) fase 1 (desenho principal) concluída" >> results/logs/pipeline.log
+fi
 run generate generate
 run generate_retry generate
 run judge_final judge
