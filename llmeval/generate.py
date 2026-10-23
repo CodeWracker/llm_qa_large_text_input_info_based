@@ -141,7 +141,7 @@ def run_generation(cfg) -> None:
         return row
 
     # passada sem raciocínio para todos; depois, com raciocínio, nos modelos que o suportam
-    # (restritos a `think_models`, se definido)
+    # (restritos a `think_models` e às condições de `think_conditions`, se definidos)
     runs = [(g, False) for g in cfg["generators"]]
     if gen_cfg.get("think_pass"):
         allowed = gen_cfg.get("think_models")
@@ -149,8 +149,10 @@ def run_generation(cfg) -> None:
                  and (allowed is None or g["model"] in allowed)]
     rows = []
     # um modelo por vez: evita disputar memória do servidor carregando vários modelos
+    think_conds = gen_cfg.get("think_conditions")
     for gen, think in runs:
-        tasks = [(gen, think, q, c) for q in questions for c in cfg["conditions"]]
+        conds = [c for c in cfg["conditions"] if not think or think_conds is None or c["name"] in think_conds]
+        tasks = [(gen, think, q, c) for q in questions for c in conds]
         with ThreadPoolExecutor(cfg["ollama"]["concurrency"]) as ex:
             futures = [ex.submit(job, *t) for t in tasks]
             desc = gen["label"] + (" +think" if think else "")

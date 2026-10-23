@@ -1044,7 +1044,8 @@ def rq6_reasoning(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame:
     gens = [g for g in cfg["generators"] if (g["model"] in allowed if allowed else g["family"] in ("qwen", "gemma"))]
     if not res.empty:
         gens = [g for g in cfg["generators"] if g["model"] in set(res.model)]
-    show = ["closed_book", "full", "hybrid_k5", "search_hybrid_k5", "full_search_k5"]
+    show = cfg["generation"].get("think_conditions") or ["closed_book", "full", "hybrid_k5", "search_hybrid_k5",
+                                                         "full_search_k5"]
     lines = []
     for ds, name in (("qasper", "QASPER"), ("quality", "QuALITY")):
         lines.append(rf"\multicolumn{{{len(show) + 3}}}{{l}}{{\emph{{{name}}}}} \\")
@@ -1066,7 +1067,7 @@ def rq6_reasoning(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame:
     write(out / "tables" / "reasoning.tex", rf"""% Gerado por `python -m llmeval analyze` (rq6_reasoning). Não editar à mão.
 \begin{{table*}}[t]
 \centering
-\caption{{Effect of reasoning: paired accuracy difference with minus without reasoning (percentage points) on the same questions, for a subset of conditions (all conditions in \cref{{fig:reasoning}}). Exact McNemar test with Holm correction over all model--condition--dataset pairs: $^{{*}}p<0.05$, $^{{**}}p<0.01$, $^{{***}}p<0.001$. Tokens: median ratio of generated tokens with and without reasoning, over conditions. Budget: share of answers lost because reasoning exhausted the budget of 4096 tokens (\%).}}
+\caption{{Effect of reasoning: paired accuracy difference with minus without reasoning (percentage points) on the same questions, in the five conditions run with reasoning. Exact McNemar test with Holm correction over all model--condition--dataset pairs: $^{{*}}p<0.05$, $^{{**}}p<0.01$, $^{{***}}p<0.001$. Tokens: median ratio of generated tokens with and without reasoning, over conditions. Budget: share of answers lost because reasoning exhausted the budget of 4096 tokens (\%).}}
 \label{{tab:reasoning}}
 \footnotesize
 \setlength{{\tabcolsep}}{{4pt}}
