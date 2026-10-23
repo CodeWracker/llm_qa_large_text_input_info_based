@@ -59,4 +59,5 @@ métricas → análise) e depois a RQ6 (geração com raciocínio → júri → 
   `setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 < /dev/null &`.
 - Um loop (CronCreate, de hora em hora, expira em 7 dias, morre com a sessão) confere cadeia e vigia e
   relança o vigia se ele morreu. Se a sessão morreu, recrie o loop. Encerrar processos só por PID (nunca `pkill -f`).
+- `IGNORAR_ALHEIOS=1` no vigia: servidor cedido pelo usuário (outros modelos carregados não bloqueiam).
 - Após reboot da máquina: `OLLAMA_URL` e `~/.netrc` somem até o usuário rodar `/home/jovyan/privado/.persist/return_by_death.sh`.

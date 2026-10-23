@@ -11,7 +11,8 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Fase 1 da cadeia (20/10 13:29): desenho principal completo, 6 modelos × 11 condições × 400 = 26.400 respostas
   (7 falhas), júri (5.406 itens únicos/juiz, 9 votos ausentes), métricas e análise; resultados commitados
 - [~] Fase 2 (`run_chain.sh` via vigia `aguarda_servidor.sh`, log em `results/logs/pipeline.log`): raciocínio em
-  Qwen3.5-4B e 9B → júri → métricas → análise final (estimativa: 2–3 dias)
+  Qwen3.5-4B e 9B, 5 condições (2 × 5 × 400 = 4.000) → júri → métricas → análise final. 23/10: servidor cedido
+  (ClinicalSimilarity desligado; avisar o usuário quando puder religar), 16 req., ~150 itens/h
 - [ ] Implementar a análise da RQ6 (thinking × sem thinking, pareado; tokens/latência; truncamento)
 - [x] Tabela/figura de acurácia com 11 condições (cabeçalho agrupado Retrieval × Model-guided search)
 - [x] Busca: termos copiados da pergunta, buscas sem achado e revocação dos trechos (calculados à parte, no texto da RQ4)
@@ -32,7 +33,8 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - Alvo de publicação indefinido: escrever no formato IEEE conferência sem cortar; enxugar depois.
 - Raciocínio: teto de 4096; vira a RQ6; roda após o júri principal. 20/10: a ~22 s/item seriam 4–6 dias, então só
   Qwen3.5-4B e 9B (pequenos, mesma família), todas as condições; o texto justifica pelo limite de infraestrutura
-  (mostrar a direção do efeito).
+  (mostrar a direção do efeito). 23/10: mesmo com 16 req. o servidor dá ~150 itens/h, então só 5 condições
+  (closed book, full, hybrid k=5, search+hyb., read→search).
 - Júri mantido (testar autopreferência na RQ1). Amostra mantida em 400.
 - Trabalhos Correlatos: só as strings; o usuário pesquisa (Scopus, ScienceDirect...).
 - `legacy/` e menções ao piloto removidos também do repositório de código; `images/` removido do artigo.
