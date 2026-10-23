@@ -4,7 +4,7 @@
 # em /api/ps ou só modelos alheios ociosos (expires_at parado = nenhuma requisição; o Ollama descarrega
 # um modelo ocioso quando outro é pedido). Modelo alheio com keep_alive infinito conta sempre como ocupado:
 # seu expires_at não muda com o uso. Se a cadeia pausar (código 75), volta a vigiar;
-# termina quando a cadeia conclui. Uso: setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 &
+# termina quando a cadeia conclui. Uso: [IGNORAR_ALHEIOS=1] setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 &
 set -uo pipefail
 cd "$(dirname "$0")"
 source /etc/profile.d/99-persist-env.sh
@@ -14,7 +14,9 @@ LOG=results/logs/pipeline.log
 echo $$ > results/logs/aguarda.pid
 
 # modelos alheios carregados agora como "nome@expires_at" (vazio = nenhum); "erro" se /api/ps não respondeu
+# IGNORAR_ALHEIOS=1: servidor cedido ao experimento pelo usuário; modelos alheios carregados não bloqueiam
 alheios() {
+  [ "${IGNORAR_ALHEIOS:-0}" = 1 ] && { echo ""; return; }
   .venv/bin/python - <<'EOF'
 import json, os, subprocess, time, yaml
 c = yaml.safe_load(open("configs/experiment.yaml"))
