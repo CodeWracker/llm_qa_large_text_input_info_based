@@ -10,13 +10,11 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Júri sobre a geração principal: 3 juízes × 4.523 itens (20/10 05:37; 1 voto ausente). Servidor tomado por outro projeto 19/10 12:20 → 20/10 03:43 (incidentes em `setic_infra_audit/incidentes_ollama`)
 - [x] Fase 1 da cadeia (20/10 13:29): desenho principal completo, 6 modelos × 11 condições × 400 = 26.400 respostas
   (7 falhas), júri (5.406 itens únicos/juiz, 9 votos ausentes), métricas e análise; resultados commitados
-- [~] Fase 2 (`run_chain.sh` via vigia `aguarda_servidor.sh`, log em `results/logs/pipeline.log`): raciocínio em
-  Qwen3.5-4B e 9B, 5 condições (2 × 5 × 400 = 4.000) → júri → métricas → análise final. 23/10: servidor cedido
-  (ClinicalSimilarity desligado; avisar o usuário quando puder religar), 16 req., ~150 itens/h
-- [ ] Implementar a análise da RQ6 (thinking × sem thinking, pareado; tokens/latência; truncamento)
+- [x] Fase 2 concluída (24/10 21:02): raciocínio em Qwen3.5-4B e 9B, 5 condições (4.000 respostas; 1.170 perdidas por
+  esgotar o orçamento de 4096), júri final (3 votos ausentes), métricas e análise; resultados commitados
+- [x] Análise da RQ6: δ pareado com todas as respostas e só com as concluídas no orçamento; tokens; orçamento esgotado
 - [x] Tabela/figura de acurácia com 11 condições (cabeçalho agrupado Retrieval × Model-guided search)
 - [x] Busca: termos copiados da pergunta, buscas sem achado e revocação dos trechos (calculados à parte, no texto da RQ4)
-- [ ] Recommitar `results/` ao fim da fase 2 (`generations.jsonl` passa a incluir as respostas com raciocínio)
 
 ## Artigo (`../latex-llmeval`)
 - [x] Preâmbulo, bibliografia (só métodos/datasets), introdução com RQs, metodologia formal, setup, ameaças à validade
@@ -25,7 +23,8 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] RQ2 "parecer certo × estar certo"
 - [x] Busca guiada (método + formalização) e RQ6 (raciocínio) no texto, tabelas e diagrama (validado com Haiku)
 - [x] Discussão de RQ1–RQ5, incluindo a busca guiada (RQ4), com os números finais do desenho principal
-- [ ] RQ6 (após a fase 2), depois Conclusão e Resumo
+- [x] RQ6 e Conclusão escritas com os resultados finais
+- [ ] Resumo (fica em `\\todo` até o usuário pedir) e Trabalhos Correlatos (usuário faz o levantamento)
 - [ ] Revisar floats; conferir metadados do `.bib`
 
 ## Decisões do usuário (19/10/2026)
