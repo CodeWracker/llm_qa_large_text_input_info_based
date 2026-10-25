@@ -488,8 +488,8 @@ Model & {hdr} & {hdr} \\
             ax.annotate(lab, (row.s_mean, row.acc * 100), xytext=(3, 2), textcoords="offset points", fontsize=5.5, color=INK2)
     ax.margins(x=0.12)  # espaço para os rótulos dos pontos na borda
     ax.set(xlabel=r"Mean similarity $\bar s$ (BERTScore)", ylabel="Accuracy (%)")
-    ax.legend(frameon=False, fontsize=6.5)
-    ax.set_title("Similarity vs. accuracy per model", loc="left")
+    ax.legend(frameon=False, fontsize=6.5, loc="upper right")  # canto vazio: não cobre os pontos nem os rótulos
+    ax.set_title("(a) Similarity vs. accuracy per model", loc="left")
     ax = axes[1]
     d = sub[sub.dataset == "quality"]
     models = [g for g in gens if g["model"] in set(d.model)]
@@ -508,8 +508,12 @@ Model & {hdr} & {hdr} \\
     ax.set_xticks(pos, [g["label"] for g in models], rotation=20, ha="right")
     ax.set_ylabel("Similarity $S$ (BERTScore)")
     ax.grid(axis="x", visible=False)
-    ax.legend(frameon=False, ncol=2, fontsize=6.5, loc="lower left")
-    ax.set_title("QuALITY: similarity of correct vs. incorrect answers", loc="left")
+    # faixa livre acima de S=1 para a legenda, sem cobrir os bigodes
+    ax.set_ylim(top=1.25)
+    ax.set_yticks(np.arange(-0.2, 1.01, 0.2))
+    ax.legend(frameon=False, ncol=2, fontsize=6.5, loc="upper center")
+    ax.set_title("(b) QuALITY: similarity of correct vs. incorrect answers", loc="left")
+    fig.subplots_adjust(wspace=0.3)  # afasta o rótulo do eixo de (b) do painel (a)
     fig.savefig(out / "figures" / "plausible.pdf")
     plt.close(fig)
     return res
