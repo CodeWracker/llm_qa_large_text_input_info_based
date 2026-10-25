@@ -24,7 +24,7 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Busca guiada (método + formalização) e RQ6 (raciocínio) no texto, tabelas e diagrama (validado com Haiku)
 - [x] Discussão de RQ1–RQ5, incluindo a busca guiada (RQ4), com os números finais do desenho principal
 - [x] RQ6 e Conclusão escritas com os resultados finais
-- [ ] Resumo (fica em `\\todo` até o usuário pedir) e Trabalhos Correlatos (usuário faz o levantamento)
+- [ ] Resumo (fica em `\todo` até o usuário pedir) e Trabalhos Correlatos (usuário faz o levantamento)
 - [ ] Revisar floats; conferir metadados do `.bib`
 
 ## Decisões do usuário (19/10/2026)
