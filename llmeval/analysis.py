@@ -1029,7 +1029,14 @@ def rq6_reasoning(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame:
             if pair.empty:
                 continue
             d, lo, hi = cluster_bootstrap_diff(pair.y_off.values, pair.y.values, pair.doc_id.values)
+            # só as respostas em que o raciocínio terminou dentro do orçamento: separa "raciocinar piora"
+            # de "raciocinar não termina" (resposta perdida conta como errada no δ acima)
+            ok = pair[pair.done_reason != "length"]
+            d_ok, lo_ok, hi_ok = (cluster_bootstrap_diff(ok.y_off.values, ok.y.values, ok.doc_id.values)
+                                  if len(ok) else (np.nan, np.nan, np.nan))
             rows.append({"dataset": ds, "model": m, "condition": c, "delta": d, "lo": lo, "hi": hi,
+                         "delta_ok": d_ok, "lo_ok": lo_ok, "hi_ok": hi_ok, "n_ok": len(ok),
+                         "p_ok": mcnemar_exact(ok.y_off.values, ok.y.values) if len(ok) else np.nan,
                          "acc_off": pair.y_off.mean(), "acc_on": pair.y.mean(), "n": len(pair),
                          "p": mcnemar_exact(pair.y_off.values, pair.y.values),
                          "tokens_off": pair.completion_tokens_off.median(), "tokens_on": pair.completion_tokens.median(),
@@ -1099,9 +1106,12 @@ def fig_reasoning(cfg, res: pd.DataFrame, out: Path) -> None:
                     continue
                 r = r.iloc[0]
                 color, marker = COND_STYLE[c]
+                ms = 7 if marker == "*" else 4.5
                 ax.plot([100 * r.lo, 100 * r.hi], [yi + off] * 2, color=color, lw=0.9, alpha=0.6)
-                ax.plot(100 * r.delta, yi + off, marker=marker, color=color, ls="none", ms=4.5, mec="white",
+                ax.plot(100 * r.delta, yi + off, marker=marker, color=color, ls="none", ms=ms, mec="white",
                         mew=0.5, label=COND_LABEL[c] if yi == 0 else None)
+                # vazado: só respostas concluídas dentro do orçamento
+                ax.plot(100 * r.delta_ok, yi + off, marker=marker, mfc="none", mec=color, ls="none", ms=ms, mew=0.9)
         ax.axvline(0, color=INK2, lw=0.8)
         ax.set_title(title, loc="left")
         ax.set_xlabel("Accuracy with minus without reasoning (pp)")
@@ -1109,8 +1119,11 @@ def fig_reasoning(cfg, res: pd.DataFrame, out: Path) -> None:
     axes[0].set_yticks(range(len(gens)), [g["label"] for g in gens])
     axes[0].invert_yaxis()
     h, l = axes[0].get_legend_handles_labels()
-    fig.legend(h, l, ncol=6, frameon=False, loc="lower center", bbox_to_anchor=(0.5, -0.06))
-    fig.subplots_adjust(bottom=0.24, wspace=0.06)
+    h += [plt.Line2D([], [], marker="o", color=INK2, ls="none", ms=4.5, mec="white"),
+          plt.Line2D([], [], marker="o", mfc="none", mec=INK2, ls="none", ms=4.5, mew=0.9)]
+    l += ["All answers", "Completed within budget"]
+    fig.legend(h, l, ncol=4, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.03))
+    fig.subplots_adjust(wspace=0.06)
     fig.savefig(out / "figures" / "reasoning.pdf")
     plt.close(fig)
 
