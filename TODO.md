@@ -27,6 +27,11 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [ ] Resumo (fica em `\todo` até o usuário pedir) e Trabalhos Correlatos (usuário faz o levantamento)
 - [ ] Revisar floats; conferir metadados do `.bib`
 
+## Pendências do usuário
+- [ ] Repor o acesso SSH da conta CodeWracker ao GitHub (a chave se perdeu no reboot); depois disso, `git push` dos
+  commits locais. Não usar `/home/jovyan/compartilhado/.ssh/id_ed25519_github`: é de outra pessoa (ArthurgLeonida)
+- [ ] Avisar o dono ou o administrador de que essa chave privada sem senha está exposta na pasta compartilhada
+
 ## Decisões do usuário (19/10/2026)
 - Sem anotação humana: a validação do júri fica no QuALITY e a limitação vai para as ameaças.
 - Alvo de publicação indefinido: escrever no formato IEEE conferência sem cortar; enxugar depois.
