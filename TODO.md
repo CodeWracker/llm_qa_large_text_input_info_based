@@ -23,13 +23,14 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] RQ2 "parecer certo × estar certo"
 - [x] Busca guiada (método + formalização) e RQ6 (raciocínio) no texto, tabelas e diagrama (validado com Haiku)
 - [x] Discussão de RQ1–RQ5, incluindo a busca guiada (RQ4), com os números finais do desenho principal
-- [x] RQ6 e Conclusão escritas com os resultados finais
+- [x] RQ6 e Conclusão escritas com os resultados finais; conclusão em texto corrido guiado pelas RQs
+- [x] Figura 4 com painéis (a)/(b) e τ* explicado na legenda
 - [ ] Resumo (fica em `\todo` até o usuário pedir) e Trabalhos Correlatos (usuário faz o levantamento)
 - [ ] Revisar floats; conferir metadados do `.bib`
 
 ## Pendências do usuário
-- [ ] Repor o acesso SSH da conta CodeWracker ao GitHub (a chave se perdeu no reboot); depois disso, `git push` dos
-  commits locais. Não usar `/home/jovyan/compartilhado/.ssh/id_ed25519_github`: é de outra pessoa (ArthurgLeonida)
+- [x] Acesso SSH da conta CodeWracker reposto em `~/.ssh` (26/10); commits locais enviados. Não usar
+  `/home/jovyan/compartilhado/.ssh/id_ed25519_github`: é de outra pessoa (ArthurgLeonida)
 - [ ] Avisar o dono ou o administrador de que essa chave privada sem senha está exposta na pasta compartilhada
 
 ## Decisões do usuário (19/10/2026)

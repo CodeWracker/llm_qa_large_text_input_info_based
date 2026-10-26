@@ -30,8 +30,10 @@ com júri de 3 LLMs validado contra gabarito. Artigo IEEE em `../latex-llmeval`.
 ## Ambiente (recriar se o container foi resetado)
 ```bash
 source /etc/profile.d/99-persist-env.sh      # OLLAMA_URL
-# /root é efêmero: rode /home/jovyan/privado/.persist/return_by_death.sh para recriar os links
-# (~/.netrc = auth do Ollama; ~/.gitconfig = credencial do Overleaf)
+# o container pode rodar como root ou como jovyan; o HOME é efêmero: rode
+# /home/jovyan/privado/.persist/return_by_death.sh para recriar os links (~/.ssh, ~/.netrc, ~/.gitconfig)
+# se o git acusar "dubious ownership": sudo chown -R jovyan:users /home/jovyan/compartilhado/ralph/llm-eval
+# (~/.netrc = auth do Ollama; ~/.gitconfig = credencial do Overleaf; ~/.ssh = chave do GitHub, conta CodeWracker)
 cd llm_qa_large_text_input_info_based
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt
 uv pip install --python .venv/bin/python torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
