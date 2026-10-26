@@ -251,12 +251,21 @@ def rq1_instruments(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame:
             lines.append(f"{x.instrument} & {auc} & {thr} & {pct(x.acc)} & {x.kappa:.3f} \\\\")
         return "\n".join(lines) if lines else r"\pending & \pending & \pending & \pending & \pending \\"
 
+    # validação humana no QASPER: as células são macros \hum{chave} preenchidas por scripts/evaluate_human_results.py
+    def hum_slug(label):
+        return "".join(c if c.isalnum() or c == "." else "-" for c in label.lower()).strip("-")
+    human = [r"Annotator 1 vs.\ annotator 2 & -- & -- & \hum{inter-acc} & \hum{inter-kappa} \\",
+             r"LLM jury (majority) & -- & -- & \hum{jury-acc} & \hum{jury-kappa} \\"]
+    human += [rf"Judge: {j['label']} & -- & -- & \hum{{judge-{hum_slug(j['label'])}-acc}} "
+              rf"& \hum{{judge-{hum_slug(j['label'])}-kappa}} \\" for j in cfg["jury"]["judges"]]
+    human = "\n".join(human)
+
     nq = int(res[res.target == "quality"].n.max()) if not res.empty and (res.target == "quality").any() else 0
     nj = int(res[res.target == "qasper"].n.max()) if not res.empty and (res.target == "qasper").any() else 0
     write(out / "tables" / "rq1_instruments.tex", rf"""% Gerado por `python -m llmeval analyze` (rq1_instruments). Não editar à mão.
 \begin{{table}}[t]
 \centering
-\caption{{Grading instruments as classifiers of correctness. Top: against the objective QuALITY label ($n={nq}$ answers). Bottom: against the jury verdict on QASPER answers graded by the jury ($n={nj}$). $\tau^\star$ is the Youden-optimal threshold; accuracy and Cohen's $\kappa$ are computed at $\tau^\star$, an optimistic upper bound for a thresholded metric.}}
+\caption{{Grading instruments as classifiers of correctness. Top: against the objective QuALITY label ($n={nq}$ answers). Middle: against the jury verdict on QASPER answers graded by the jury ($n={nj}$). Bottom: a stratified sample of QASPER answers graded by two human annotators; the first row is their agreement with each other ($n=\hum{{n}}$), the others the agreement with the answers on which both annotators agree ($n=\hum{{cons-n}}$). $\tau^\star$ is the Youden-optimal threshold; accuracy and Cohen's $\kappa$ are computed at $\tau^\star$, an optimistic upper bound for a thresholded metric.}}
 \label{{tab:rq1}}
 \footnotesize
 \setlength{{\tabcolsep}}{{4pt}}
@@ -269,6 +278,9 @@ Instrument & AUROC & $\tau^\star$ & Acc.\,(\%) & $\kappa$ \\
 \midrule
 \multicolumn{{5}}{{l}}{{\emph{{Reference: jury verdict (QASPER)}}}} \\
 {block("qasper")}
+\midrule
+\multicolumn{{5}}{{l}}{{\emph{{Reference: human annotators (QASPER sample)}}}} \\
+{human}
 \bottomrule
 \end{{tabular}}
 \end{{table}}
