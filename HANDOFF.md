@@ -18,10 +18,11 @@ com júri de 3 LLMs validado contra gabarito. Artigo IEEE em `../latex-llmeval`.
 - Fio narrativo contínuo: intro → problema/RQs → método/formalização → setup →
   resultados respondendo às RQs. Antecipar "tá, mas como fez isso?".
 - O artigo descreve UM estudo contínuo: nunca mencionar piloto, versões anteriores ou cronologia dos testes.
-- Resumo e Conclusão ficam em `\todo` até haver resultados; introdução sem números de resultado.
+- Introdução sem números de resultado.
 - `\todo{...}` = só fonte vermelha (`\textcolor{red}`), texto sempre em português, NUNCA caixas/todonotes.
-- Resumo e Trabalhos Correlatos ficam como `\todo{}`
-  (Trabalhos Correlatos traz as strings de busca).
+- Trabalhos Correlatos fica como `\todo{}` (traz eixos e strings de busca). O resumo já é a versão final.
+- Números da validação humana entram por macros `\hum{chave}` (`tables/human_agreement.tex`, gerado por
+  `scripts/evaluate_human_results.py`; ver `human_eval/README.md`).
 - Citar só datasets, técnicas, métodos computacionais/estatísticos. Não buscar
   nem inventar referências de apoio a afirmações; no máximo `\todo{buscar referência para isso}`.
 - Decisões já tomadas com o usuário: ver o fim do `TODO.md`.

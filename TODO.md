@@ -15,6 +15,7 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Análise da RQ6: δ pareado com todas as respostas e só com as concluídas no orçamento; tokens; orçamento esgotado
 - [x] Tabela/figura de acurácia com 11 condições (cabeçalho agrupado Retrieval × Model-guided search)
 - [x] Busca: termos copiados da pergunta, buscas sem achado e revocação dos trechos (calculados à parte, no texto da RQ4)
+- [x] Validação humana (26/10): amostra de 120 respostas do QASPER, `human_eval/qasper_annotator.html`, `scripts/evaluate_human_results.py`
 
 ## Artigo (`../latex-llmeval`)
 - [x] Preâmbulo, bibliografia (só métodos/datasets), introdução com RQs, metodologia formal, setup, ameaças à validade
@@ -25,16 +26,21 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Discussão de RQ1–RQ5, incluindo a busca guiada (RQ4), com os números finais do desenho principal
 - [x] RQ6 e Conclusão escritas com os resultados finais; conclusão em texto corrido guiado pelas RQs
 - [x] Figura 4 com painéis (a)/(b) e τ* explicado na legenda
-- [ ] Resumo (fica em `\todo` até o usuário pedir) e Trabalhos Correlatos (usuário faz o levantamento)
+- [x] Reenquadramento em extração de dados de revisões sistemáticas (26/10): resumo final, introdução com a pergunta norteadora,
+  IV-A, ameaças e conclusão; Liu 2024, Schick 2023 e Souza & Panisson 2026 (RQ6) citados
+- [ ] Trabalhos Correlatos (usuário faz o levantamento; eixos e strings atualizados)
 - [ ] Revisar floats; conferir metadados do `.bib`
 
 ## Pendências do usuário
 - [x] Acesso SSH da conta CodeWracker reposto em `~/.ssh` (26/10); commits locais enviados. Não usar
   `/home/jovyan/compartilhado/.ssh/id_ed25519_github`: é de outra pessoa (ArthurgLeonida)
 - [ ] Avisar o dono ou o administrador de que essa chave privada sem senha está exposta na pasta compartilhada
+- [ ] Anotar as 120 respostas (Rodrigo Ferraz e Rodrigo Guedes), pôr os CSVs em `human_eval/results/`, rodar
+  `python scripts/evaluate_human_results.py` e me pedir para comentar os números (há um `\todo` na RQ1)
 
 ## Decisões do usuário (19/10/2026)
-- Sem anotação humana: a validação do júri fica no QuALITY e a limitação vai para as ameaças.
+- ~~Sem anotação humana~~ 26/10: validação humana no QASPER (120 respostas, dois anotadores), sem novas gerações.
+- 26/10: artigo enquadrado em extração de dados de revisões sistemáticas; QASPER é o cenário-alvo e QuALITY o controle; sem RQ7.
 - Alvo de publicação indefinido: escrever no formato IEEE conferência sem cortar; enxugar depois.
 - Raciocínio: teto de 4096; vira a RQ6; roda após o júri principal. 20/10: a ~22 s/item seriam 4–6 dias, então só
   Qwen3.5-4B e 9B (pequenos, mesma família), todas as condições; o texto justifica pelo limite de infraestrutura
