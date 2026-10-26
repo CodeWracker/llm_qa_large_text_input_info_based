@@ -15,6 +15,8 @@ Atualizar a cada etapa concluída. Formato: `[x]` feito, `[~]` em andamento, `[ 
 - [x] Análise da RQ6: δ pareado com todas as respostas e só com as concluídas no orçamento; tokens; orçamento esgotado
 - [x] Tabela/figura de acurácia com 11 condições (cabeçalho agrupado Retrieval × Model-guided search)
 - [x] Busca: termos copiados da pergunta, buscas sem achado e revocação dos trechos (calculados à parte, no texto da RQ4)
+- [~] Varredura de orçamento da RQ6 (26/10): tetos 512–8192, `run_budget.sh` agendado para 27/10 00:24 UTC
+  (determinismo → 512/1024/2048 → 8192 nos ~1.900 itens cortados, ~30 h → júri → análise `tables/budget.tex`)
 - [x] Validação humana (26/10): amostra de 120 respostas do QASPER, `human_eval/qasper_annotator.html`, `scripts/evaluate_human_results.py`
 
 ## Artigo (`../latex-llmeval`)
