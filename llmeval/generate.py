@@ -2,7 +2,9 @@
 
 Condições de busca: o gerador primeiro escolhe termos (chamada de ferramenta única, via saída
 estruturada), depois responde com os trechos que os contêm (opcionalmente fundidos ao RAG).
-O raciocínio (think) é uma segunda passada, só nos modelos que o suportam.
+O raciocínio (think) é uma segunda passada, só nos modelos que o suportam. Com `--budget B` roda só essa
+passada, com teto B, e grava results/generations_b<B>.jsonl (varredura de orçamento da RQ6); o cliente
+deduz do cache de outros orçamentos as respostas cujo desfecho já se sabe (ver OllamaClient._project).
 
 Também grava results/retrieval.jsonl com a revocação de evidência de cada recuperador
 para vários k (calculada sem chamar os geradores).
@@ -60,12 +62,16 @@ def run_generation(cfg) -> None:
     docs = {d["doc_id"]: d for d in read_jsonl(sample / "documents.jsonl")}
     questions = read_jsonl(sample / "questions.jsonl")
     client = OllamaClient(cfg, cfg.path("cache"))
+    gen_cfg, search_cfg = cfg["generation"], cfg["search"]
+    budget = gen_cfg.get("budget_run")  # varredura de orçamento: só a passada com raciocínio, com este teto
+    client.dry_run = bool(gen_cfg.get("dry_run"))
 
     embed = Embedder(cfg, cfg.path("cache"))
     indices = build_indices(cfg, embed, list(docs.values()))
     emb = embed([q["question"] for q in questions])
     q_emb = {q["qid"]: e for q, e in zip(questions, emb)}
-    write_jsonl(results / "retrieval.jsonl", retrieval_report(cfg, indices, questions, q_emb))
+    if budget is None:
+        write_jsonl(results / "retrieval.jsonl", retrieval_report(cfg, indices, questions, q_emb))
 
     # contexto de cada (pergunta, condição) é independente do gerador, exceto nas condições de busca
     contexts: dict[tuple[str, str], dict] = {}
@@ -84,7 +90,8 @@ def run_generation(cfg) -> None:
                 "context_words": len(text.split()) if text else 0,
             }
 
-    gen_cfg, search_cfg = cfg["generation"], cfg["search"]
+    think_np = budget or gen_cfg["think_num_predict"]
+    partial = "generations.partial.jsonl" if budget is None else f"generations_b{budget}.partial.jsonl"
 
     def view_text(q, view):
         if view == "full":
@@ -98,7 +105,7 @@ def run_generation(cfg) -> None:
         """Passo 1: termos do gerador. Passo 2: busca (Ctrl+F) e, se pedido, fusão RRF com o RAG."""
         messages, schema = search_messages(q, cond["view"], view_text(q, cond["view"]), search_cfg["max_terms"])
         res = client.chat_json(gen["model"], messages, schema, think=think,
-                               num_predict=gen_cfg["think_num_predict"] if think else search_cfg["num_predict"])
+                               num_predict=think_np if think else search_cfg["num_predict"])
         raw = (res.get("output") or {}).get("terms") or []
         terms = list(dict.fromkeys(t.strip() for t in raw if isinstance(t, str) and t.strip()))[: search_cfg["max_terms"]]
         idx = indices[q["doc_id"]]
@@ -112,7 +119,7 @@ def run_generation(cfg) -> None:
         meta = {
             "search_terms": terms, "search_matched": n_matched, "search_error": res.get("error"),
             "search_prompt_tokens": res.get("prompt_tokens"), "search_completion_tokens": res.get("completion_tokens"),
-            "search_latency_s": res.get("latency_s"),
+            "search_latency_s": res.get("latency_s"), "search_projected_from": res.get("projected_from"),
         }
         return kind, text, extra, evidence_recall(got, q.get("evidence_paragraphs", [])), words, meta
 
@@ -123,7 +130,7 @@ def run_generation(cfg) -> None:
             kind, text, extra, rec, words, meta = search_context(gen, think, q, cond)
         messages, schema = generation_messages(q, kind, text, extra)
         res = client.chat_json(gen["model"], messages, schema, think=think,
-                               num_predict=gen_cfg["think_num_predict"] if think else gen_cfg["num_predict"])
+                               num_predict=think_np if think else gen_cfg["num_predict"])
         out = res.get("output") or {}
         answer = (out.get("answer") or "").strip()
         row = {
@@ -131,9 +138,11 @@ def run_generation(cfg) -> None:
             "think": think, "answer": answer, "abstained": is_abstention(answer),
             "context_words": words, "evidence_recall": rec,
             **{k: res.get(k) for k in ("prompt_tokens", "completion_tokens", "thinking_words", "latency_s",
-                                       "truncated", "done_reason", "error")},
+                                       "truncated", "done_reason", "error", "projected_from")},
             **meta,
         }
+        if budget is not None:
+            row["budget"] = budget
         if q["dataset"] == "quality":
             choice = out.get("choice")
             row["choice"] = choice
@@ -142,8 +151,8 @@ def run_generation(cfg) -> None:
 
     # passada sem raciocínio para todos; depois, com raciocínio, nos modelos que o suportam
     # (restritos a `think_models` e às condições de `think_conditions`, se definidos)
-    runs = [(g, False) for g in cfg["generators"]]
-    if gen_cfg.get("think_pass"):
+    runs = [] if budget is not None else [(g, False) for g in cfg["generators"]]
+    if gen_cfg.get("think_pass") or budget is not None:
         allowed = gen_cfg.get("think_models")
         runs += [(g, True) for g in cfg["generators"] if "thinking" in client.capabilities(g["model"])
                  and (allowed is None or g["model"] in allowed)]
@@ -160,8 +169,13 @@ def run_generation(cfg) -> None:
                 rows.append(f.result())
         # checkpoint por (modelo, raciocínio) em arquivo à parte: leitores de generations.jsonl
         # (análise intermediária em paralelo) nunca veem uma geração pela metade
-        write_jsonl(results / "generations.partial.jsonl", rows)
-    write_jsonl(results / "generations.jsonl", rows)
-    (results / "generations.partial.jsonl").unlink(missing_ok=True)
+        write_jsonl(results / partial, rows)
+    if client.dry_run:
+        log.info("dry-run (teto %s): %d chamadas iriam ao servidor", budget, client.dry_run_calls)
+        (results / partial).unlink(missing_ok=True)
+        return
+    out_name = "generations.jsonl" if budget is None else f"generations_b{budget}.jsonl"
+    write_jsonl(results / out_name, rows)
+    (results / partial).unlink(missing_ok=True)
     n_err = sum(1 for r in rows if r.get("error"))
-    log.info("geração concluída: %d respostas, %d falhas (formato ou teto de tokens)", len(rows), n_err)
+    log.info("geração concluída (%s): %d respostas, %d falhas (formato ou teto de tokens)", out_name, len(rows), n_err)

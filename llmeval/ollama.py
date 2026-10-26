@@ -149,6 +149,32 @@ class OllamaClient:
         self.incidents = IncidentLog(os.environ.get("OLLAMA_INCIDENT_LOG", self.opts.get("incident_log")),
                                      self.opts.get("experiment", "llm-eval"), self.url)
         self.emb_cache = SQLiteCache(cache_dir / "embeddings.sqlite")
+        # varredura de orçamento (RQ6): orçamentos cujas respostas em cache servem para projetar as de outro
+        self.budgets = sorted(cfg.get("generation", {}).get("think_budgets") or [])
+        self.dry_run, self.dry_run_calls = False, 0
+
+    def _project(self, payload: dict, num_predict: int) -> dict | None:
+        """Resultado de uma chamada com raciocínio no orçamento `num_predict`, deduzido do cache de outro orçamento.
+
+        Com temperatura 0 e semente fixa a geração não depende do teto: uma resposta que terminou com t tokens
+        é idêntica em qualquer teto >= t e é cortada em qualquer teto < t; uma cortada no teto b' também é
+        cortada em qualquer teto <= b'. Fora desses casos (só cortada num teto menor), devolve None.
+        """
+        for b in self.budgets:
+            if b == num_predict:
+                continue
+            alt = {**payload, "options": {**payload["options"], "num_predict": b}}
+            r = self.chat_cache.get(_hash(alt))
+            if r is None or (r.get("output") is None and r.get("done_reason") != "length"):
+                continue
+            t = r.get("completion_tokens") or 0
+            if r.get("done_reason") != "length" and t <= num_predict:
+                return {**r, "projected_from": b}
+            if t > num_predict or (r.get("done_reason") == "length" and num_predict <= b):
+                return {"output": None, "error": f"num_predict={num_predict} esgotado", "done_reason": "length",
+                        "prompt_tokens": r.get("prompt_tokens"), "completion_tokens": num_predict,
+                        "latency_s": None, "parse_attempts": 0, "projected_from": b}
+        return None
 
     def _note(self, ok: bool) -> None:
         with self._breaker_lock:
@@ -232,8 +258,14 @@ class OllamaClient:
             payload["think"] = think
         key = _hash(payload)
         cached = self.chat_cache.get(key)
+        if cached is None and think:
+            cached = self._project(payload, num_predict)
         if cached is not None:
             return cached
+        if self.dry_run:  # só conta as chamadas que iriam ao servidor
+            with self._breaker_lock:
+                self.dry_run_calls += 1
+            return {"output": None, "error": "dry-run", "done_reason": None}
 
         last_err = None
         for attempt in range(self.opts["max_parse_retries"]):

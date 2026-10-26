@@ -37,7 +37,9 @@ def rule_verdict(row: dict, refs: list[str]) -> str | None:
 def run_judging(cfg) -> None:
     sample, results = cfg.path("sample"), cfg.path("results")
     questions = {q["qid"]: q for q in read_jsonl(sample / "questions.jsonl")}
-    gens = read_jsonl(results / "generations.jsonl")
+    budget = cfg["generation"].get("budget_run")  # varredura de orçamento: julga generations_b<B>.jsonl
+    suffix = "" if budget is None else f"_b{budget}"
+    gens = read_jsonl(results / f"generations{suffix}.jsonl")
     client = OllamaClient(cfg, cfg.path("cache"))
     judges = cfg["jury"]["judges"]
     quality_conds = set(cfg["jury"]["quality_conditions"])
@@ -95,5 +97,5 @@ def run_judging(cfg) -> None:
     missing = sum(1 for v in verdicts.values() for j in judges if v.get(j["model"]) is None)
     if missing:
         log.warning("%d votos ausentes (falha de formato ou de servidor); reexecute `judge` para refazê-los", missing)
-    write_jsonl(results / "judgments.jsonl", rows)
+    write_jsonl(results / f"judgments{suffix}.jsonl", rows)
     log.info("julgamento concluído: %d itens, %d chamadas únicas por juiz", len(rows), len(todo))

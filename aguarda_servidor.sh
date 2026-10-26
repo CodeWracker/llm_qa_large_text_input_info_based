@@ -4,11 +4,12 @@
 # em /api/ps ou só modelos alheios ociosos (expires_at parado = nenhuma requisição; o Ollama descarrega
 # um modelo ocioso quando outro é pedido). Modelo alheio com keep_alive infinito conta sempre como ocupado:
 # seu expires_at não muda com o uso. Se a cadeia pausar (código 75), volta a vigiar;
-# termina quando a cadeia conclui. Uso: [IGNORAR_ALHEIOS=1] setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 &
+# termina quando a cadeia conclui. Uso: [IGNORAR_ALHEIOS=1] [CHAIN=./run_budget.sh] setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 &
 set -uo pipefail
 cd "$(dirname "$0")"
 source /etc/profile.d/99-persist-env.sh
 INTERVALO=${INTERVALO:-60}
+CHAIN=${CHAIN:-./run_chain.sh}
 LIVRE_N=${LIVRE_N:-3}
 LOG=results/logs/pipeline.log
 echo $$ > results/logs/aguarda.pid
@@ -48,10 +49,10 @@ while true; do
     [ "$livres" -lt "$LIVRE_N" ] && sleep "$INTERVALO"
   done
   echo "$(date -Is) vigia: servidor livre, relançando a cadeia" >> "$LOG"
-  ./run_chain.sh
+  $CHAIN
   code=$?
-  if [ "$code" -eq 0 ]; then
-    echo "$(date -Is) vigia: cadeia concluída, encerrando" >> "$LOG"; break
+  if [ "$code" -ne 75 ]; then  # 0 = concluída; outro código = parada que exige revisão
+    echo "$(date -Is) vigia: cadeia $CHAIN saiu com código $code, encerrando" >> "$LOG"; break
   fi
   echo "$(date -Is) vigia: cadeia saiu com código $code, voltando a vigiar" >> "$LOG"
   sleep 600

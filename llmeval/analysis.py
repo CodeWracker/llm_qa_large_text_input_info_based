@@ -1144,6 +1144,105 @@ def fig_reasoning(cfg, res: pd.DataFrame, out: Path) -> None:
     plt.close(fig)
 
 
+def rq6_budget(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame | None:
+    """Varredura de orçamento: acurácia com raciocínio por teto B (generations_b<B>.jsonl), pareada com as
+    mesmas perguntas sem raciocínio; parcela de respostas perdidas por esgotar o teto; tokens gerados."""
+    results = cfg.path("results")
+    keys = ["qid", "model", "condition"]
+    off = full_df[~full_df.think].set_index(keys)[["y"]].rename(columns={"y": "y_off"})
+    frames = []
+    for b in cfg["generation"].get("think_budgets") or []:
+        gens, judg = read_jsonl(results / f"generations_b{b}.jsonl"), read_jsonl(results / f"judgments_b{b}.jsonl")
+        if not gens or not judg:
+            continue
+        g = pd.DataFrame(gens).merge(pd.DataFrame(judg)[keys + ["correct"]].rename(columns={"correct": "y_jury"}),
+                                     on=keys, how="left")
+        g["y"] = np.where(g.dataset == "quality", g.get("correct"), g.y_jury).astype(float)
+        g["lost"] = (g.done_reason == "length") | g.answer.fillna("").eq("")
+        g.loc[g.lost, "y"] = 0.0
+        search_tokens = g["search_completion_tokens"] if "search_completion_tokens" in g else 0
+        g["tokens"] = g.completion_tokens.fillna(0) + pd.Series(search_tokens, index=g.index).fillna(0)
+        g["budget"] = b
+        frames.append(g.join(off, on=keys, how="inner").dropna(subset=["y", "y_off"]))
+    if not frames:
+        return None
+    d = pd.concat(frames, ignore_index=True)
+    d.to_csv(results / "analysis" / "budget_items.csv", index=False,
+             columns=["budget", "dataset", "model", "condition", "qid", "y", "y_off", "lost", "tokens"])
+
+    def summary(g):
+        ok = g[~g.lost]
+        return pd.Series({"acc_on": g.y.mean(), "acc_off": g.y_off.mean(), "lost": g.lost.mean(),
+                          "acc_on_ok": ok.y.mean(), "acc_off_ok": ok.y_off.mean(), "n": len(g), "n_ok": len(ok),
+                          "tokens": g.tokens.median(), "p": mcnemar_exact(g.y_off.values, g.y.values)})
+
+    pooled = d.groupby(["budget", "dataset", "model"]).apply(summary, include_groups=False).reset_index()
+    by_cond = d.groupby(["budget", "dataset", "model", "condition"]).apply(summary, include_groups=False).reset_index()
+    pooled.to_csv(results / "analysis" / "budget.csv", index=False)
+    by_cond.to_csv(results / "analysis" / "budget_by_condition.csv", index=False)
+
+    budgets = sorted(pooled.budget.unique())
+    gens = [g for g in cfg["generators"] if g["model"] in set(pooled.model)]
+    lines = []
+    for ds, name in (("qasper", "QASPER"), ("quality", "QuALITY")):
+        lines.append(rf"\multicolumn{{{len(budgets) + 2}}}{{l}}{{\emph{{{name}}}}} \\")
+        for g in gens:
+            sub = pooled[(pooled.dataset == ds) & (pooled.model == g["model"])].set_index("budget")
+            cells = [pct(sub.acc_off.iloc[0])]
+            cells += [f"{pct(sub.acc_on[b])} ({100 * sub.lost[b]:.0f})" if b in sub.index else r"\pending"
+                      for b in budgets]
+            lines.append(f"{g['label']} & " + " & ".join(cells) + r" \\")
+    write(out / "tables" / "budget.tex", rf"""% Gerado por `python -m llmeval analyze` (rq6_budget). Não editar à mão.
+\begin{{table}}[t]
+\centering
+\caption{{Accuracy (\%) with reasoning for each generation budget $B$ (tokens), pooled over the five conditions run with reasoning, and without reasoning on the same questions. In parentheses: share of answers lost because reasoning exhausted the budget (\%), counted as incorrect.}}
+\label{{tab:budget}}
+\footnotesize
+\setlength{{\tabcolsep}}{{3pt}}
+\begin{{tabular}}{{l{"r" * (len(budgets) + 1)}}}
+\toprule
+ & & \multicolumn{{{len(budgets)}}}{{c}}{{With reasoning, budget $B$}} \\
+\cmidrule(lr){{3-{len(budgets) + 2}}}
+Model & No reas. & {" & ".join(f"{b:,}" for b in budgets)} \\
+\midrule
+{chr(10).join(lines)}
+\bottomrule
+\end{{tabular}}
+\end{{table}}
+""")
+    fig_budget(cfg, pooled, out)
+    return pooled
+
+
+def fig_budget(cfg, pooled: pd.DataFrame, out: Path) -> None:
+    gens = [g for g in cfg["generators"] if g["model"] in set(pooled.model)]
+    colors = {g["model"]: c for g, c in zip(gens, (SERIES[0], SERIES[1], SERIES[2]))}
+    fig, axes = plt.subplots(2, 2, figsize=(PAGE_W, 3.6), sharex=True, gridspec_kw={"height_ratios": [2, 1]})
+    for col, (ds, title) in enumerate((("qasper", "(a) QASPER (jury)"), ("quality", "(b) QuALITY (answer key)"))):
+        top, bottom = axes[0, col], axes[1, col]
+        for g in gens:
+            sub = pooled[(pooled.dataset == ds) & (pooled.model == g["model"])].sort_values("budget")
+            if sub.empty:
+                continue
+            c = colors[g["model"]]
+            top.plot(sub.budget, 100 * sub.acc_on, marker="o", color=c, ms=4, mec="white", mew=0.5,
+                     label=f"{g['label']}, with reasoning")
+            top.axhline(100 * sub.acc_off.iloc[-1], color=c, ls="--", lw=0.9, label=f"{g['label']}, without")
+            bottom.plot(sub.budget, 100 * sub.lost, marker="o", color=c, ms=4, mec="white", mew=0.5)
+        top.set_title(title, loc="left")
+        top.set_ylabel("Accuracy (%)" if col == 0 else "")
+        bottom.set_ylabel("Lost to budget (%)" if col == 0 else "")
+        bottom.set_xlabel("Generation budget $B$ (tokens)")
+        bottom.set_xscale("log", base=2)
+        bottom.set_xticks(sorted(pooled.budget.unique()), [f"{b:,}" for b in sorted(pooled.budget.unique())])
+        bottom.set_ylim(0, 100)
+    h, l = axes[0, 0].get_legend_handles_labels()
+    fig.legend(h, l, ncol=4, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.01))
+    fig.subplots_adjust(wspace=0.18, hspace=0.12)
+    fig.savefig(out / "figures" / "budget.pdf")
+    plt.close(fig)
+
+
 def placeholder_figures(cfg, out: Path, only_missing: bool = True) -> None:
     for name, spec in PLACEHOLDERS.items():
         path = out / "figures" / f"{name}.pdf"
@@ -1220,3 +1319,4 @@ def run_analysis(cfg) -> None:
         fig_roc(cfg, df, out)
     rq2_plausible(cfg, df, out, instruments)
     rq6_reasoning(cfg, full_df, out)
+    rq6_budget(cfg, full_df, out)

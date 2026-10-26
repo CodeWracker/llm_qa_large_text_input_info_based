@@ -1,4 +1,4 @@
-"""CLI: python -m llmeval {sample,generate,judge,metrics,analyze,all} [--config ...] [--no-think]"""
+"""CLI: python -m llmeval {sample,generate,judge,metrics,analyze,all} [--config ...] [--no-think] [--budget B] [--dry-run]"""
 from __future__ import annotations
 
 import argparse
@@ -15,6 +15,9 @@ def main() -> None:
     ap.add_argument("stage", choices=STAGES + ("all",))
     ap.add_argument("--config", default=None)
     ap.add_argument("--no-think", action="store_true", help="geração sem a passada com raciocínio (RQ6)")
+    ap.add_argument("--budget", type=int, default=None,
+                    help="generate/judge: só a passada com raciocínio, com este teto (varredura de orçamento, RQ6)")
+    ap.add_argument("--dry-run", action="store_true", help="generate: só conta as chamadas que iriam ao servidor")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     for noisy in ("httpx", "urllib3", "sentence_transformers"):
@@ -22,6 +25,8 @@ def main() -> None:
     cfg = load_config(args.config)
     if args.no_think:
         cfg["generation"]["think_pass"] = False
+    cfg["generation"]["budget_run"] = args.budget
+    cfg["generation"]["dry_run"] = args.dry_run
     from .ollama import ServerUnavailable
 
     try:
