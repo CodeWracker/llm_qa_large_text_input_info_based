@@ -35,6 +35,7 @@ source /etc/profile.d/99-persist-env.sh      # OLLAMA_URL
 # se o git acusar "dubious ownership": sudo chown -R jovyan:users /home/jovyan/compartilhado/ralph/llm-eval
 # (~/.netrc = auth do Ollama; ~/.gitconfig = credencial do Overleaf; ~/.ssh = chave do GitHub, conta CodeWracker)
 cd llm_qa_large_text_input_info_based
+# o .venv aponta para /root/anaconda3 (criado como root); rodando como jovyan, recriar com o uv abaixo
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt
 uv pip install --python .venv/bin/python torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
 # LaTeX local: /home/jovyan/privado/.persist/bin/tectonic -X compile main.tex
