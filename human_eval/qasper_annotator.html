@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anotação QASPER</title>
+<!-- Gerado por scripts/build_human_eval_html.py a partir de scripts/human_eval_template.html. Amostra 079f1aacc433. -->
+<style>
+:root {
+  --bg: #f6f7f9; --card: #ffffff; --text: #1d2330; --muted: #5d6677; --border: #d9dde5;
+  --accent: #2f5fd0; --accent-soft: #e6edfb;
+  --ok: #1f7a43; --ok-soft: #e3f3e9; --part: #9a6400; --part-soft: #fbf0d9; --bad: #b3261e; --bad-soft: #fbe5e3;
+  --ref: #f1f3f7; --cand: #fff9e8; --cand-border: #e8d38f;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171d; --card: #1d212a; --text: #e5e8ee; --muted: #9aa3b4; --border: #333a47;
+    --accent: #7ea2ff; --accent-soft: #233057;
+    --ok: #6fd39a; --ok-soft: #173525; --part: #f0bf5a; --part-soft: #3a2d10; --bad: #ff8a80; --bad-soft: #3f1d1b;
+    --ref: #252a35; --cand: #2c2716; --cand-border: #6b5a22;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 920px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 1.25rem; margin: 0; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.spacer { flex: 1; }
+.muted { color: var(--muted); font-size: .9rem; }
+button, select, .filebtn { font: inherit; border: 1px solid var(--border); background: var(--card); color: var(--text);
+  border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+button:hover, .filebtn:hover { border-color: var(--accent); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.annot button.on { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.progress { height: 10px; background: var(--ref); border-radius: 5px; overflow: hidden; flex: 1; min-width: 160px; }
+.progress > div { height: 100%; background: var(--accent); width: 0; transition: width .2s; }
+details > summary { cursor: pointer; font-weight: 600; }
+.rubric dt { font-weight: 700; margin-top: 10px; }
+.rubric dd { margin: 2px 0 0 0; }
+kbd { border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font: .85rem ui-monospace, monospace; background: var(--ref); }
+.badge { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: .85rem; font-weight: 600; background: var(--accent-soft); color: var(--accent); }
+.label { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 0 4px; }
+.question { font-size: 1.1rem; font-weight: 600; }
+.refs { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.refs li { background: var(--ref); border-radius: 8px; padding: 8px 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cand { background: var(--cand); border: 1px solid var(--cand-border); border-radius: 8px; padding: 10px 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.verdicts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+.verdicts button { padding: 12px 8px; font-weight: 700; border-width: 2px; }
+.v-correct { color: var(--ok); } .v-partial { color: var(--part); } .v-incorrect { color: var(--bad); }
+.v-correct.sel { background: var(--ok-soft); border-color: var(--ok); }
+.v-partial.sel { background: var(--part-soft); border-color: var(--part); }
+.v-incorrect.sel { background: var(--bad-soft); border-color: var(--bad); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 4px; margin-top: 8px; }
+.grid button { padding: 4px 0; font-size: .75rem; border-radius: 5px; }
+.grid button.correct { background: var(--ok-soft); border-color: var(--ok); }
+.grid button.partial { background: var(--part-soft); border-color: var(--part); }
+.grid button.incorrect { background: var(--bad-soft); border-color: var(--bad); }
+.grid button.cur { outline: 2px solid var(--accent); outline-offset: 1px; }
+.notice { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 8px 12px; border-radius: 6px; margin-top: 10px; }
+.warn { border-left-color: var(--bad); background: var(--bad-soft); }
+.hidden { display: none !important; }
+input[type=file] { display: none; }
+@media (max-width: 560px) { .verdicts { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <div class="row">
+      <h1>Validação humana do júri: QASPER</h1>
+      <span class="spacer"></span>
+      <label class="muted" for="who">Anotador</label>
+      <select id="who">
+        <option value="">— escolha —</option>
+        <option>Rodrigo Ferraz</option>
+        <option>Rodrigo Guedes</option>
+      </select>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+      <span id="count" class="muted">0 / 0 anotadas</span>
+    </div>
+    <div class="row annot" style="margin-top:12px">
+      <button id="download" class="primary">Baixar CSV de Resultados</button>
+      <label class="filebtn" for="import">Importar CSV parcial</label>
+      <input id="import" type="file" accept=".csv,text/csv">
+      <button id="nextpending">Próxima pendente</button>
+      <span class="spacer"></span>
+      <span class="muted">Amostra 079f1aacc433</span>
+    </div>
+    <div id="msg" class="notice hidden"></div>
+  </div>
+
+  <details class="card rubric" id="rubric" open>
+    <summary>Instruções e rubrica (a mesma dada ao júri de LLMs)</summary>
+    <p>Para cada item você vê a <b>pergunta</b> sobre um artigo científico, as <b>respostas de referência</b> escritas
+    por especialistas que leram o artigo e uma <b>resposta candidata</b> gerada por um modelo. Decida se a candidata está
+    correta <b>usando só as referências como verdade</b>: não consulte o artigo nem seu conhecimento, e não julgue se as
+    referências estão certas. Avalie o significado, não a redação nem o tamanho. Você não sabe qual modelo gerou a
+    resposta nem o que o júri decidiu.</p>
+    <dl>
+      <dt class="v-correct"><kbd>1</kbd> CORRECT</dt>
+      <dd>A candidata transmite a informação-chave de <b>pelo menos uma</b> das referências. Paráfrases, sinônimos,
+      abreviações, outros formatos numéricos e detalhes extras que não contradizem a referência são aceitos.</dd>
+      <dt class="v-partial"><kbd>2</kbd> PARTIAL</dt>
+      <dd>Capta parte da informação-chave de uma referência, mas falta um elemento essencial, ou mistura uma afirmação
+      correta com outra que conflita com as referências.</dd>
+      <dt class="v-incorrect"><kbd>3</kbd> INCORRECT</dt>
+      <dd>Contradiz as referências, responde outra pergunta, é irrelevante, inventa dados, ou diz que a informação não
+      está disponível quando uma referência a fornece.</dd>
+    </dl>
+    <p class="muted">Se as referências divergirem entre si, basta concordar com uma delas. Uma referência que diz que o
+    documento não traz a informação conta como uma referência como as outras.</p>
+    <p class="muted">Atalhos: <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> votam, salvam e avançam para o próximo item pendente;
+    <kbd>←</kbd> <kbd>→</kbd> navegam. Cada voto fica salvo neste navegador, separado por anotador. Para continuar em outro
+    computador, baixe o CSV e importe-o lá.</p>
+    <details>
+      <summary class="muted">Texto original da rubrica do júri (inglês)</summary>
+      <p class="muted">"correct": the candidate conveys the key information of at least one reference. Paraphrases,
+      synonyms, abbreviations, different number formats and extra details that do not contradict the reference are
+      acceptable.<br>"partially_correct": the candidate captures part of the key information of a reference but omits an
+      essential element, or mixes correct information with a claim that conflicts with the references.<br>"incorrect":
+      the candidate contradicts the references, answers a different question, is irrelevant, or says the information is
+      unavailable although a reference provides it.<br>Judge meaning, not wording or length.</p>
+    </details>
+  </details>
+
+  <div class="card" id="itemcard">
+    <div class="row">
+      <span class="badge" id="itype"></span>
+      <b id="iid"></b>
+      <span class="spacer"></span>
+      <span id="ipos" class="muted"></span>
+    </div>
+    <div class="label">Pergunta</div>
+    <div class="question" id="iq"></div>
+    <div class="label">Respostas de referência</div>
+    <ul class="refs" id="irefs"></ul>
+    <div class="label">Resposta candidata</div>
+    <div class="cand" id="icand"></div>
+    <div class="verdicts annot">
+      <button class="v-correct" data-v="correct">[1] CORRECT</button>
+      <button class="v-partial" data-v="partial">[2] PARTIAL</button>
+      <button class="v-incorrect" data-v="incorrect">[3] INCORRECT</button>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button id="prev">← Anterior</button>
+      <span class="spacer"></span>
+      <span id="ivote" class="muted"></span>
+      <span class="spacer"></span>
+      <button id="next">Próximo →</button>
+    </div>
+  </div>
+
+  <details class="card">
+    <summary>Todos os itens</summary>
+    <div class="grid" id="grid"></div>
+  </details>
+</main>
+
+<script>
+"use strict";
+const SAMPLE_ID = "079f1aacc433";
+const ITEMS = [{"id": "Q001", "type": "Abstractive", "question": "How big are OSA and PD corporas used for testing?", "references": ["For Portuguese PD have  for patient 1.24h and for control 1.07 h.\nFor Portuguese OSA have  for patient 1.10h and for control 1.05 h.\nFor Spanish PD have for patient 0.49h  and for control 0.50h.", "15 percent of the corpora is used for testing. OSA contains 60 speakers, 3495 segments and PD 140 speakers and 3365 segments."], "candidate": "The sizes of the OSA and PD corpora used for testing are not explicitly stated in the document."}, {"id": "Q002", "type": "Extractive", "question": "What languages does the new dataset contain?", "references": ["English, French, Arabic", "English, French, and Arabic"], "candidate": "The new dataset comprises English, French, and Arabic tweets."}, {"id": "Q003", "type": "Abstractive", "question": "Do they evaluate their model on datasets other than RACE?", "references": ["Yes, they also evaluate on the ROCStories\n(Spring 2016) dataset which collects 50k five sentence commonsense stories.", "No"], "candidate": "Yes"}, {"id": "Q004", "type": "Yes/No", "question": "did they experiment with other languages?", "references": ["No"], "candidate": "No"}, {"id": "Q005", "type": "Abstractive", "question": "How is intent annotated?", "references": ["using a role-playing task on the Amazon Mechanical Turk platform and collecting typed conversations", "Separate on-task and off task intents and annotate on task for data set specific intents, while annotating  off task intents with a fixed set of general intents.", "On-task dialog are annotated as on-task intents , the other dialog are annotated as pre-defined off-task intents.", "separate on-task and off-task intents, on-task intents are key actions that can vary among different tasks, we need to specifically define on-task intents for each task, off-task content is too general to design task-specific intents, we choose common dialog acts as the categories", "we design a hierarchical intent annotation scheme for non-collaborative tasks. We first separate on-task and off-task intents. As on-task intents are key actions that can vary among different tasks, we need to specifically define on-task intents for each task. On the other hand, since off-task content is too general to design task-specific intents, we choose common dialog acts as the categories., In the intent annotation scheme shown in Table TABREF2, we list the designed intent annotation scheme for the newly collected AntiScam dataset and the PersuasionForGood dataset. We first define on-task intents for the datasets, which are key actions in the task. Since our AntiScam focuses on understanding and reacting towards elicitations, we define elicitation, providing_information and refusal as on-task intents. In the PersuasionForGood dataset, we define nine on-task intents in Table TABREF2 based on the original PersuasionForGood dialog act annotation scheme, For specific tasks, we also design a semantic slot annotation scheme for annotating sentences based on their semantic content. We identify 13 main semantic slots in the anti-scam task, for example, credit card numbers. We present a detailed semantic slot annotation in Table TABREF3. Following BIBREF1, we segment each conversation turn into single sentences and then annotate each sentence rather than turns.", "using a hierarchical scheme where on-task intents uses task-related intents for representation and off-task intents chooses dialog acts that convey the syntax information"], "candidate": "Intent is annotated using a hierarchical scheme that separates on-task intents (key actions like elicitation, providing_information, refusal) from off-task intents (general and social intents)."}, {"id": "Q006", "type": "Yes/No", "question": "Does the paper report F1-scores with and without post-processing for the second task?", "references": ["Yes", "With post-processing"], "candidate": "No"}, {"id": "Q007", "type": "Yes/No", "question": "Is the distribution of the edits uniform across all languages?", "references": ["Yes", "No"], "candidate": "No"}, {"id": "Q008", "type": "Abstractive", "question": "What human evaluation metrics do they look at?", "references": ["human preference", "triple pairing task, hierarchical generation", "Accuracy at pairing stories with the prompts used to generate them; accuracy of prompt ranking"], "candidate": "They use a triple pairing task where judges select correct prompt-story pairings, and a blind test comparing hierarchical generation with non-hierarchical generation."}, {"id": "Q009", "type": "Yes/No", "question": "Do they compare to previous work?", "references": ["Yes", "The document does not provide this information (the question is unanswerable)."], "candidate": "Yes"}, {"id": "Q010", "type": "Yes/No", "question": "Do the authors offer a hypothesis as to why the system performs better on short descriptions than longer ones?", "references": ["No"], "candidate": "Yes, they suggest that very long descriptions (class 5) represent a negligible percentage of the whole set, and thus the decrease in performance is not significant."}, {"id": "Q011", "type": "Extractive", "question": "what are the state of the art methods they compare with?", "references": ["ECNU, HCTI", "HCTI BIBREF5, InferSent BIBREF23", "ECNU BIBREF6, HCTI BIBREF5"], "candidate": "BIBREF24, BIBREF6, MVCNN, MGNC-CNN, Word Average, Project Average, LSTM, Max-CNN, InferSent"}, {"id": "Q012", "type": "Abstractive", "question": "How much better is performance of SEPT compared to previous state-of-the-art?", "references": ["SEPT have improvement for Recall  3.9%  and F1 1.3%  over the best performing baseline (SCIIE(SciBERT))", "In ELMo model, SCIIE achieves almost 3.0% F1 higher than BiLSTM, in SciBERT, the performance becomes similar, which is only a 0.5% gap"], "candidate": "SEPT achieves a new state of the art result compared to existing transformer-based systems."}, {"id": "Q013", "type": "Yes/No", "question": "Does this paper discuss the potential these techniques have for invading user privacy?", "references": ["Yes"], "candidate": "Yes"}, {"id": "Q014", "type": "Abstractive", "question": "How is the selected sharing layer trained?", "references": ["The selected sharing layer is trained jointly on the tasks of stance detection and fake news detection", "By jointly training the tasks of stance and fake news detection."], "candidate": "BIBREF34"}, {"id": "Q015", "type": "Yes/No", "question": "Did they try Roberta?", "references": ["The document does not provide this information (the question is unanswerable).", "No"], "candidate": "No"}, {"id": "Q016", "type": "Yes/No", "question": "Does regularization of the fine-tuning process hurt performance in the target domain?", "references": ["No"], "candidate": "No"}, {"id": "Q017", "type": "Extractive", "question": "What types of commonsense knowledge are they talking about?", "references": ["hypernym relations", "the collection of information that an ordinary person would have", "Hypernymy or is-a relations between words or phrases", "Knowledge than an ordinary person would have such as transitive entailment relation, complex ordering, compositionality, multi-word entities"], "candidate": "Is-A relations"}, {"id": "Q018", "type": "Extractive", "question": "What text preprocessing tasks do they focus on?", "references": ["normalize unreadable numbers, symbols or characters", "The document does not provide this information (the question is unanswerable)."], "candidate": "Text normalization (TN)"}, {"id": "Q019", "type": "Extractive", "question": "what eeg features were used?", "references": ["We extracted five statistical features for EEG, namely root mean square, zero crossing rate,moving window average,kurtosis and power spectral entropy BIBREF0, So in total we extracted 31(channels) X 5 or 155 features for EEG signals.The EEG features were extracted at a sampling frequency of 100Hz for each EEG channel, We extracted Mel-frequency cepstrum (MFCC) as features for speech signal. We first extracted MFCC 13 features and then computed first and second order differentials (delta and delta-delta) thus having total MFCC 39 features.", "root mean square, zero crossing rate,moving window average,kurtosis and power spectral entropy", "root mean square, zero crossing rate, moving window average, kurtosis, power spectral entropy", "root mean square, zero crossing rate, moving window average, kurtosis, power spectral entropy, extracted 31(channels) X 5 or 155 features"], "candidate": "root mean square, zero crossing rate, moving window average, kurtosis, and power spectral entropy"}, {"id": "Q020", "type": "Abstractive", "question": "How much faster are pairwise annotations than other annotations?", "references": ["by 5 times", "The document does not provide this information (the question is unanswerable)."], "candidate": "Yes, pairwise annotations are significantly faster than other annotations."}, {"id": "Q021", "type": "Abstractive", "question": "what was their system's f1 score?", "references": ["0.6955", "69.55"], "candidate": "0.5597"}, {"id": "Q022", "type": "Abstractive", "question": "What is the architecture of the encoder?", "references": ["M blocks, each consisting of self-attention module and a two-layer feed-forward network.", "encoder block consists of a self-attention module and a two-layer feed-forward network"], "candidate": "A self-attention module and a two-layer feed-forward network."}, {"id": "Q023", "type": "Yes/No", "question": "Do they try to use other models aside from Maximum Entropy?", "references": ["No"], "candidate": "Yes"}, {"id": "Q024", "type": "Extractive", "question": "what dataset was used?", "references": ["SNAP Amazon Dataset, Bing Liu's dataset", "Bing Liu's dataset", "SNAP Amazon Dataset BIBREF19, Bing Liu's dataset BIBREF20"], "candidate": "Bing Liu's dataset"}, {"id": "Q025", "type": "Yes/No", "question": "Do the authors offer any potential reasons why cross-validation variants tend to overestimate the performance, while the sequential methods tend to underestimate it?", "references": ["No", "Yes"], "candidate": "No"}, {"id": "Q026", "type": "Yes/No", "question": "Were any datasets other than WMT used to test the model?", "references": ["Yes"], "candidate": "Yes"}, {"id": "Q027", "type": "Extractive", "question": "what other representations do they compare with?", "references": ["word2vec averaging, Paragraph Vector", "Paragraph Vector, word2vec averagings", "Word2vec averaging (public release 300d), word2vec averaging (academic corpus), Paragraph Vector"], "candidate": "word2vec averaging and Paragraph Vector"}, {"id": "Q028", "type": "Abstractive", "question": "Which websites were used in the web crawl?", "references": ["81.5 billion web pages covered in Common Crawl dataset", "web-crawled data from the Common Crawl"], "candidate": "The Common Crawl and Twitter"}, {"id": "Q029", "type": "Abstractive", "question": "What social-network features are used?", "references": ["Relative positions of the author and target accounts in the directed following network by\ncomputing modified versions of Jaccard’s similarity index, friends count, followers count, verified status, number of tweets posted within 6 months.", "Downward overlap, upward overlap, inward overlap, outward overlap, bidirectional overlap, count of friends of each user, count of followers of each user, users verified status, number of tweets posted within six-month snapshots", "Neighborhood Overlap, count the friends and followers of each user, their verified status, and the number of tweets posted within six-month snapshots of their timelines"], "candidate": "Downward overlap measures the number of two-hop paths from the author to the target along following relationships; upward overlap measures two-hop paths in the opposite direction. Inward overlap measures the similarity between the two users' follower sets, and outward overlap measures the similarity between their sets of friends. Bidirectional overlap then is a more generalized measure of social network similarity."}, {"id": "Q030", "type": "Extractive", "question": "How do the authors measure the extent to which LGI has learned the task?", "references": ["precision, accuracy", "classify figures in various morphology with correct identity (accuracy = 72.7%), demonstrates that LGI can understand the verbs and nouns"], "candidate": "By measuring classification accuracy (e.g., 72.7%) and evaluating the ability to correctly predict text symbols and image manipulations with correct morphology, position, and direction."}, {"id": "Q031", "type": "Abstractive", "question": "what kind of conversations are in the douban conversation corpus?", "references": ["Conversations that are typical for a social networking service.", "Conversations from popular social networking service in China"], "candidate": "conversations from Douban group, a popular social networking service in China"}, {"id": "Q032", "type": "Extractive", "question": "How did they annotate the corpus?", "references": ["The corpus is jointly annotated by three native Mandarin Chinese speakers, all of whom have received advanced training in theoretical and computational linguistics. Supersense labeling was performed cooperatively by 3 annotators for 25% (235/933) of the adposition targets, and for the remainder, independently by the 3 annotators, followed by cooperative adjudication. Annotation was conducted in two phases, and therefore we present two inter-annotator agreement studies to demonstrate the reproducibility of SNACS and the reliability of the adapted scheme for Chinese.", "Tokenization, Adposition Targets, Data Format, Reliability of Annotation", "The corpus is jointly annotated by three native Mandarin Chinese speakers, Supersense labeling was performed cooperatively by 3 annotators for 25% (235/933) of the adposition targets, and for the remainder, independently by the 3 annotators, followed by cooperative adjudication, Annotation was conducted in two phases"], "candidate": "They annotated the corpus using the Semantic Network of Adposition and Case Supersenses (SNACS) annotation scheme, which was adapted to Chinese. They also developed new guidelines for syntactic phenomena in Chinese. The annotation process involved preprocessing steps such as tokenization and manual corrections."}, {"id": "Q033", "type": "Abstractive", "question": "How did they define standard language?", "references": ["Use of both French negative particles and spelling out plural ending on adjectives and nouns", "Standard usage of negation, Standard usage of plural ending of written words, lexical diversity"], "candidate": "Standard language was defined by the rate of usage of correct negation (featuring both negative particles) and the rate of standard plural agreement."}, {"id": "Q034", "type": "Extractive", "question": "What dataset did they use?", "references": ["Workshop on Statistical Machine Translation (WMT) data, script of the drama, “Friends,\", English bible data", "WMT'14, English bible corpus, Drama corpus, and main character corpora"], "candidate": "The datasets used include WMT data, movie script data, the drama corpus of \"Friends\", the English bible data, and corpora of main characters such as Chandler and Rachel."}, {"id": "Q035", "type": "Yes/No", "question": "Is this model trained in unsuperized manner?", "references": ["No"], "candidate": "No"}, {"id": "Q036", "type": "Extractive", "question": "what rule based models were evaluated?", "references": ["Rashel et al. BIBREF14", "rule-based tagger designed by Rashel et al. BIBREF14"], "candidate": "A rule-based tagger designed by Rashel et al. that tags named entities and multi-word expressions based on a dictionary, uses MorphInd for the rest, and employs 15 hand-crafted rules."}, {"id": "Q037", "type": "Abstractive", "question": "how does end of utterance and token tags affect the performance", "references": ["Performance degrades if the tags are not used.", "The performance is significantly degraded without two special tags (0,025 in MRR)"], "candidate": "The presence of __eou__ and __eot__ tags significantly improves model performance, while their absence causes a significant degradation in results."}, {"id": "Q038", "type": "Abstractive", "question": "How long is the dataset?", "references": ["Answer with content missing: (Table 2) Dataset contains 19062 reviews from 3 tv series.", "The document does not provide this information (the question is unanswerable)."], "candidate": "The dataset has 5000 reviews for each TV series that match the selection criteria."}, {"id": "Q039", "type": "Yes/No", "question": "Do the character-level models perform better than models with access to morphological analyses only?", "references": ["No"], "candidate": "No"}, {"id": "Q040", "type": "Yes/No", "question": "Are experiments conducted on multiple datasets?", "references": ["No"], "candidate": "Yes"}, {"id": "Q041", "type": "Yes/No", "question": "Do they experiment with fine-tuning their embeddings?", "references": ["No"], "candidate": "No"}, {"id": "Q042", "type": "Extractive", "question": "What full English language based sentiment analysis models are tried?", "references": ["the original VADER English lexicon.", "The document does not provide this information (the question is unanswerable)."], "candidate": "VADER (Valence Aware Dictionary and sEntiment Reasoner) is tried."}, {"id": "Q043", "type": "Yes/No", "question": "Is model compared to some baseline?", "references": ["Yes"], "candidate": "Yes"}, {"id": "Q044", "type": "Yes/No", "question": "Do they compare their approach to data-driven only methods?", "references": ["Yes", "No"], "candidate": "Yes"}, {"id": "Q045", "type": "Abstractive", "question": "by how much did their approach outperform previous work?", "references": ["By 0,008 F1,  0, 02 Recall and 0,02 Precision.", "New best result is F1 score of 0.752 compared to 0.744 of the best previous work.", "by 0.008 in terms of F1 score,  and 0.02 in terms of recall and precision"], "candidate": "14%"}, {"id": "Q046", "type": "Extractive", "question": "Which domains do they explore?", "references": ["economic, political", "news articles related to Islam and articles discussing Islam basics"], "candidate": "Islam Internet-site"}, {"id": "Q047", "type": "Yes/No", "question": "Is some baseline method trained on new dataset?", "references": ["Yes", "No"], "candidate": "Yes"}, {"id": "Q048", "type": "Extractive", "question": "How is the model evaluated against the original recursive training algorithm?", "references": ["The ability of the training algorithm to find parameters minimizing the Morfessor cost is evaluated by using the trained model to segment the training data, and loading the resulting segmentation as if it was a Morfessor Baseline model. We observe both unweighted prior and likelihood, and their $\\alpha $-weighted sum.\n\nThe closeness to linguistic segmentation is evaluated by comparison with annotated morph boundaries using boundary precision, boundary recall, and boundary $F_{1}$-score BIBREF21.", "We perform an error analysis, with the purpose of gaining more insight into the ability of the methods to model particular aspects of morphology.", "boundary precision, boundary recall, boundary $F_{1}$-score", "Morfessor EM+Prune configuration significantly outperforms Morfessor Baseline w.r.t. the F-score for all languages except North Sámi. Morfessor EM+Prune is less responsive to tuning than Morfessor Baseline."], "candidate": "No"}, {"id": "Q049", "type": "Yes/No", "question": "did they crowdsource annotations?", "references": ["Yes"], "candidate": "Yes"}, {"id": "Q050", "type": "Abstractive", "question": "What datasets are used?", "references": ["They create their own datasets from online text.", "To construct a database for information retrieval, we collected human-human utterances from massive online forums, microblogs, and question-answering communities, the database contains 7 million query-reply pairs for retrieval, For the generation part, we constructed another dataset from various resources in public websites comprising 1,606,741 query-reply pairs"], "candidate": "The retrieval database contains 7 million query-reply pairs collected from online forums, microblogs, and question-answering communities (Sina Weibo, Baidu Zhidao, and Baidu Tieba), while the generation dataset comprises 1,606,741 query-reply pairs from public websites."}, {"id": "Q051", "type": "Abstractive", "question": "Which languages do they explore?", "references": ["Irish, Tibetian, Spanish, Hindi, Marathi, Gujarati, Telugu, Tamil, Hinglish, Bengali,Arabic, French, German, Odia", "Irish, Tibetan, Spanish, Hindi, Marathi, Gujarati, Telugu, Tamil", "Irish, Gujarati, Hindi, Arabic, English, Spanish, French, German, Tamil, Bengali, Odia, Marathi, Telugu, Hinglish"], "candidate": "Indigenous languages, code mix languages (e.g., Hinglish), and specific examples include Hindi, Marathi, Gujarati, Telugu, Tamil, Irish, Tibetan, Spanish, Bengali, Odia, and English."}, {"id": "Q052", "type": "Abstractive", "question": "Where does their information come from?", "references": ["From conversions between users and customer support agents through their partners, and professional annotators creating data.", "Information  from users and information  from database of approximately 100,000 cities and 300,000 hotels, populated using data from their partners."], "candidate": "The information comes from conversations between users and customer support agents, professional annotators using a custom-built interface, and data from partners."}, {"id": "Q053", "type": "Yes/No", "question": "Do they assume binary gender?", "references": ["No"], "candidate": "Yes"}, {"id": "Q054", "type": "Extractive", "question": "How is the text segmented?", "references": ["dividing documents into chunks before processing", "The document does not provide this information (the question is unanswerable).", "They simply split document in chunks, get embedding for each chunk and train BiLSTM models with embeddings."], "candidate": "The text is segmented by dividing documents into multiple chunks before processing them with Doc2Vec."}, {"id": "Q055", "type": "Yes/No", "question": "Are the stories in the dataset fictional stories?", "references": ["No", "Yes"], "candidate": "No"}, {"id": "Q056", "type": "Yes/No", "question": "Are there any other standard linguistic features used, other than ngrams?", "references": ["No"], "candidate": "No"}, {"id": "Q057", "type": "Extractive", "question": "What models are able to be fooled for AG's news corpus news categorization task by this approach?", "references": ["character-based convolutional model (CNN-Char)", "A word-based convolutional model (CNN-Word) and a character-based convolutional model (CNN-Char)"], "candidate": "A character-based convolutional model (CNN-Char)."}, {"id": "Q058", "type": "Extractive", "question": "How long is their dataset?", "references": ["670", "670 publications"], "candidate": "The dataset consists of 624 full text documents."}, {"id": "Q059", "type": "Extractive", "question": "What three languages are used in the translation experiments?", "references": ["German, Spanish, Hebrew"], "candidate": "German, Spanish, and Hebrew"}, {"id": "Q060", "type": "Extractive", "question": "what evaluation metrics were used?", "references": ["Accuracy, MAE: Mean Absolute Error", "MAE: Mean Absolute Error, Accuracy$\\pm k$"], "candidate": "MAE (Mean Absolute Error) and Accuracy±k (percentage of cases where predicted price lies within k percent of ground-truth)."}, {"id": "Q061", "type": "Abstractive", "question": "What is the proposed algorithm or model architecture?", "references": ["They combine content- and graph-based methods in new ways.", "Hybrid Fusion, Late Fusion, Early Fusion"], "candidate": "A Support Vector Machine (SVM) classifier trained on fused content- and graph-based features."}, {"id": "Q062", "type": "Extractive", "question": "What are the baselines this paper uses?", "references": ["cascade of two SVM classifiers (one for detection and one for classification) based on rich linguistic features", "FBK-HLT - a cascade of two SVM classifiers (one for detection and one for classification)", "FBK-HLT BIBREF23", "The document does not provide this information (the question is unanswerable)."], "candidate": "A state-of-the-art discrete classifier."}, {"id": "Q063", "type": "Extractive", "question": "What sized character n-grams do they use?", "references": ["cahr3-MS-vec, char4-MS-vec, char2-MS-vec", "2, 3 and 4", "char3"], "candidate": "2 to 4"}, {"id": "Q064", "type": "Extractive", "question": "What language is used for the experiments?", "references": ["English"], "candidate": "English"}, {"id": "Q065", "type": "Abstractive", "question": "How is cyberbullying defined?", "references": ["They define cyberbullying as aggressive language, repetition, harmful intent, visibility among peers, and power imbalance", "cyberbullying is a complex social phenomenon, different from the simpler notion of cyberaggression", "A public display of intention to “inflict injury or discomfort” upon a weaker victim through repeated acts of aggression."], "candidate": "The authors define cyberbullying through five criteria: aggression (aggr), repetition (rep), harmful intent (harm), visibility among peers (peer), and power imbalance (power)."}, {"id": "Q066", "type": "Yes/No", "question": "did they collect their own contrastive test set?", "references": ["No", "Yes", "It is automatically created from the OpenSubtitles corpus."], "candidate": "No"}, {"id": "Q067", "type": "Extractive", "question": "What language(s) does the system answer questions in?", "references": ["French"], "candidate": "French"}, {"id": "Q068", "type": "Abstractive", "question": "What logic rules can be learned using ELMo?", "references": ["1).But   2).Eng  3). A-But-B", "A-but-B and negation"], "candidate": "logic rules for sentiment classification of complex sentences like A-but-B sentences"}, {"id": "Q069", "type": "Extractive", "question": "What metric did they use for qualitative evaluation?", "references": ["Sample model output", "length and style of sample output"], "candidate": "The cross entropy metric"}, {"id": "Q070", "type": "Extractive", "question": "What translation models are explored?", "references": ["NMT architecture BIBREF10", "architecture BIBREF10 based on LSTMs (long short-term memory cells) and implementing the attention mechanism", "LSTM with attention"], "candidate": "Neural machine translation (NMT) models"}, {"id": "Q071", "type": "Abstractive", "question": "How do they incorporate direction and relative distance in attention?", "references": ["by using an relative sinusodial positional embedding and unscaled attention", "Yes", "calculate the attention scores  which can  distinguish different directions and distances", "Self-attention mechanism is changed to allow for direction-aware calculations"], "candidate": "They incorporate direction and relative distance by calculating attention scores using a revised relative positional encoding ($R_{t-j}$) that includes learnable bias terms to distinguish different directions and distances."}, {"id": "Q072", "type": "Extractive", "question": "How large is their tweets dataset?", "references": ["3,685,984 unique tweets"], "candidate": "3,685,984 unique tweets"}, {"id": "Q073", "type": "Abstractive", "question": "Where do the supportive tweets about women come from? Are they automatically or manually generated?", "references": ["Manualy (volunteers composed them)", "Volunteers submitted many of these positivitweets through an online form"], "candidate": "Manually generated by volunteers"}, {"id": "Q074", "type": "Abstractive", "question": "How are the results evaluated?", "references": ["The captions are ranked by humans in order of \"funniness\".", "a questionnaire", "With a questionnaire asking subjects to rank methods according to its \"funniness\". Also, by posting the captions to Bokete to evaluate them by received stars"], "candidate": "The results are evaluated by users assigning stars to the captions on the Bokete website, with human-generated captions ranked 'funniest' 67.99% of the time, followed by the NJM at 22.59%."}, {"id": "Q075", "type": "Yes/No", "question": "Do they evaluate which compression method yields the most gains?", "references": ["Yes", "No"], "candidate": "Yes"}, {"id": "Q076", "type": "Yes/No", "question": "Do the authors report only on English", "references": ["Yes"], "candidate": "Yes"}, {"id": "Q077", "type": "Yes/No", "question": "Is this an English language corpus?", "references": ["No", "Yes"], "candidate": "No, the dataset contains over 7 million geo-tagged tweets, of which approximately 90% are written in English."}, {"id": "Q078", "type": "Yes/No", "question": "Did they represent tie strength only as number of social ties in a networks?", "references": ["Yes", "Yes, a normalized mutual friends metric", "No"], "candidate": "No"}, {"id": "Q079", "type": "Extractive", "question": "Which widely used dataset did the authors use?", "references": ["Convote dataset BIBREF3"], "candidate": "The Convote dataset"}, {"id": "Q080", "type": "Abstractive", "question": "How large is the dataset?", "references": ["70287", "English corpus has a dictionary of length 106.848, German version has a dictionary of length 163.788"], "candidate": "The English corpus has a dictionary of length 106,848 and the German version has a dictionary of length 163,788."}, {"id": "Q081", "type": "Yes/No", "question": "Do they use machine learning?", "references": ["No", "The document does not provide this information (the question is unanswerable)."], "candidate": "No"}, {"id": "Q082", "type": "Abstractive", "question": "What data is used in this work?", "references": ["Post-match interviews for tennis singles matches from ASAP Sport's website with match information from a dataset provided by Tennis-Data", "post-game interviews from ASAP Sport's website", "tennis post-match interview transcripts, live text play-by-play commentaries"], "candidate": "Tennis post-match interview transcripts, match information from Tennis-Data, and live text play-by-play commentaries from Sports Mole."}, {"id": "Q083", "type": "Extractive", "question": "What did the human annotations consist of?", "references": ["Is the question grammatically correct?, Is the spelling correct?, Is the question an explicit question, annotators were asked to annotate each aspect with a binary (0/1) answer", "annotate each aspect with a binary (0/1) answer. Examples of questions provided to the annotators are in Table TABREF13"], "candidate": "The human annotations consisted of three aspects: Is the question grammatically correct? Is the spelling correct? Misuse of third person singular or past tense in verbs are considered grammatical errors instead of spelling errors. Missing question mark in the end of a question is also considered as spelling errors. Is the question an explicit question, rather than a search query, a command, or a statement?"}, {"id": "Q084", "type": "Extractive", "question": "How long is the training dataset?", "references": ["3,492 documents", "3492"], "candidate": "7 days"}, {"id": "Q085", "type": "Yes/No", "question": "Do they compare against state-of-the-art summarization approaches?", "references": ["Yes", "No"], "candidate": "No"}, {"id": "Q086", "type": "Abstractive", "question": "How do they incorporate expert knowledge into their topic model?", "references": ["The experts define anchors and the model learns correlations between the anchors and latent topics.", "anchors are specified manually and more loosely defined as words having high mutual information with one or more latent factors", "They use an anchored information theoretic topic modeling using Correlation Explanation and  information bottleneck."], "candidate": "They incorporate expert knowledge by allowing users to manually specify disease-specific anchor terms (words with high mutual information with one or more latent factors) to guide the discovery of latent topics."}, {"id": "Q087", "type": "Abstractive", "question": "What contribute to improve the accuracy on legal question answering task?", "references": ["Adding more features to the traditional sets such as TF-IDF, BM25 and PL2F as well as using voting in a ranking system help to improve accuracy on a legal question answering task", "two additional statistic features: TF-IDF and LSI"], "candidate": "Adding auxiliary features to the CNN model"}, {"id": "Q088", "type": "Yes/No", "question": "Does each image have one caption?", "references": ["Yes"], "candidate": "No"}, {"id": "Q089", "type": "Extractive", "question": "Which tasks quantify embedding quality?", "references": ["word similarity, sentiment classification", "word similarity, sentiment classification, understanding of gender using non-biased analogies"], "candidate": "Word similarity and sentiment classification"}, {"id": "Q090", "type": "Yes/No", "question": "Do they analyze the produced binary codes?", "references": ["Yes", "No"], "candidate": "Yes"}, {"id": "Q091", "type": "Abstractive", "question": "What is their model's performance on RACE?", "references": ["Model's performance ranges from 67.0% to 82.8%.", "67% using BERT_base, 74.1% using BERT_large, 75.8% using BERT_large, Passage, and Answer, and 82.8% using XLNET_large with Passage and Answer features"], "candidate": "The model outperforms the previous state-of-the-art by 2.2% on the RACE full dataset."}, {"id": "Q092", "type": "Yes/No", "question": "Do they compare against state-of-the-art?", "references": ["Yes"], "candidate": "Yes"}, {"id": "Q093", "type": "Yes/No", "question": "Did they use crowdsourcing for the annotations?", "references": ["No", "Yes"], "candidate": "Yes"}, {"id": "Q094", "type": "Yes/No", "question": "do language share categories?", "references": ["Yes"], "candidate": "Yes, the document suggests that categories are shaped by the language through which they are communicated, and that categories differ across communities and cultures."}, {"id": "Q095", "type": "Abstractive", "question": "What are the performances associated to different attribute placing?", "references": ["Best accuracy is for proposed CHIM methods (~56% IMDB, ~68.5 YELP datasets), most common bias attention (~53%IMDB, ~65%YELP), and oll others are worse than proposed method.", "Sentiment classification (datasets IMDB, Yelp 2013, Yelp 2014): \nembedding 56.4% accuracy, 1.161 RMSE, 67.8% accuracy, 0.646 RMSE, 69.2% accuracy, 0.629 RMSE;\nencoder 55.9% accuracy, 1.234 RMSE, 67.0% accuracy, 0.659 RMSE, 68.4% accuracy, 0.631 RMSE;\nattention 54.4% accuracy, 1.219 RMSE, 66.5% accuracy, 0.664 RMSE, 68.5% accuracy, 0.634 RMSE;\nclassifier 55.5% accuracy, 1.219 RMSE, 67.5% accuracy, 0.641 RMSE, 68.9% accuracy, 0.622 RMSE.\n\nProduct category classification and review headline generation:\nembedding 62.26 ± 0.22% accuracy, 42.71 perplexity;\nencoder 64.62 ± 0.34% accuracy, 42.65 perplexity;\nattention 60.95 ± 0.15% accuracy, 42.78 perplexity;\nclassifier 61.83 ± 0.43% accuracy, 42.69 perplexity."], "candidate": "Bias-based representation in the attention mechanism performs poorly, while matrix-based representations perform worse when injected into embeddings and encoders but improve when injected into attention and classifiers; CHIM-based representations generally outperform others, with CHIM-embedding achieving the highest accuracy and CHIM-classifier the best RMSE, though CHIM-attention consistently performs the worst across all methods."}, {"id": "Q096", "type": "Extractive", "question": "What patterns were extracted which were correlated with factual arguments?", "references": ["patterns associated with factual arguments often include topic-specific terminology, explanatory language, and argument phrases", "Examples of extracted patters with high probability that correlate with factual argument are: RESULT OF, ORIGIN OF, THEORY OF, EVIDENCE OF, PARTS OF, EVOLUTION OF, PERCENT OF, THOUSANDS OF, EXAMPLE OF, LAW OF"], "candidate": "Patterns associated with factual arguments often include topic-specific terminology, explanatory language, argument phrases, prepositional phrases (especially NP Prep), and passive voice verb phrases."}, {"id": "Q097", "type": "Extractive", "question": "What similarity metrics have been tried?", "references": ["LM1: Significant Words Overlap, LM2: Symmetric KL-Divergence (SKLD), LM3: Chameleon Words Similarity, LM4: Entropy Change, ULM1: Word2Vec, ULM2: Doc2Vec, ULM3: GloVe, ULM4 and ULM5: FastText, ULM6: ELMo, ULM7: Universal Sentence Encoder", "LM1: Significant Words Overlap, LM2: Symmetric KL-Divergence (SKLD), LM3: Chameleon Words Similarity, LM4: Entropy Change, ULM1: Word2Vec, ULM2: Doc2Vec, ULM3: GloVe, ULM4 and ULM5: FastText, ULM6: ELMo"], "candidate": "The tried similarity metrics include Significant Words Overlap, Symmetric KL-Divergence, Chameleon Words Similarity, Entropy Change, Word2Vec, Doc2Vec, GloVe, FastText (word and sentence embeddings), ELMo, and Universal Sentence Encoder."}, {"id": "Q098", "type": "Yes/No", "question": "Do they compare their proposed domain adaptation methods to some existing methods?", "references": ["No", "Yes"], "candidate": "Yes"}, {"id": "Q099", "type": "Extractive", "question": "How much time takes the training of DistilBERT?", "references": ["on 8 16GB V100 GPUs for approximately 90 hours", "90 hours", "The document does not provide this information (the question is unanswerable)."], "candidate": "Approximately 90 hours"}, {"id": "Q100", "type": "Yes/No", "question": "Does proposed approach use neural networks?", "references": ["Yes"], "candidate": "Yes"}, {"id": "Q101", "type": "Abstractive", "question": "what is the average number of speakers in the dataset?", "references": ["26.8"], "candidate": "The average number of speakers in the dataset is not directly provided in the excerpts. However, it can be inferred that the dataset consists of multiple speakers as it is a multiparty conversation corpus."}, {"id": "Q102", "type": "Extractive", "question": "What are remaining challenges in VQA?", "references": ["develop better deep learning models, more challenging datasets for VQA", "object level details, segmentation masks, and sentiment of the question"], "candidate": "Developing better deep learning models and more challenging datasets for VQA, such as incorporating object level details, segmentation masks, deeper models, sentiment of the question, etc."}, {"id": "Q103", "type": "Abstractive", "question": "By how much did the new model outperform multilingual BERT?", "references": ["For POS,  improvements for cased BERT are 1.26 2.52  0.5 for TDT,  FTB and PUD datasets respectively.\nFor NER in-domain test set, improvement is  2.11 F1 and for NER out-of-domain test set, improvement is  5.32 F1.\nFor Dependency parsing, improvements are in range from 3.35 to 6.64 LAS for cased BERT.", "absolute improvements for FinBERT cased ranging between 0.4 and 1.7% points, LAS results are 2.3–3.6% points above the previous state of the art, absolute advantage for FinBERT models ranging from 3% points for 1K examples to just over 1% point for 100K examples"], "candidate": "By over 20% points for online discussion with the smallest training data, and by 3% to just over 1% points for news depending on training data size."}, {"id": "Q104", "type": "Abstractive", "question": "what datasets did they use?", "references": ["Bengali-English and Hindi-English", "HI-EN, BN-EN"], "candidate": "HI-EN and BN-EN code-mixed datasets"}, {"id": "Q105", "type": "Abstractive", "question": "what was the size of the datasets?", "references": ["10822, 4845", "training set containing 10,822 tweets and a development set containing 4,845 tweets, test set of 9,961 tweets was provided without labels, training set containing 8,000 tweets and a development set containing 2,260 tweets, test set of 7,513 tweets"], "candidate": "For Task 1, the training set contained 10,822 tweets, the development set 4,845 tweets, and the test set 9,961 tweets; for Task 2, the training set contained 8,000 tweets, the development set 2,260 tweets, and the test set 7,513 tweets."}, {"id": "Q106", "type": "Extractive", "question": "how was the experiment evaluated?", "references": ["the average number of times the correct selection appears in the top k predictions", "Hits@k for hotel context prediction, Comparison using cosine similarity, Average intra/inter market embedding similarities, Visualization of embeddings, Most similar hotels, Algebraic operations on hotel embeddings"], "candidate": "The experiments were evaluated using hits@k metrics for hotel context prediction, cosine similarity rankings, and intra/inter market embedding similarities."}, {"id": "Q107", "type": "Abstractive", "question": "How do they determine demographics on an image?", "references": ["using model driven face detection, apparent age annotation and gender annotation", "a model-driven demographic annotation pipeline for apparent age and gender, analysis of said annotation models and the presentation of annotations for each image in the training set of the ILSVRC 2012 subset of ImageNet"], "candidate": "They use a model-driven annotation pipeline employing supervised learning models, specifically the Deep EXpectation (DEX) model for apparent age and a gender model."}, {"id": "Q108", "type": "Yes/No", "question": "Do they compare to previous work?", "references": ["Yes"], "candidate": "Yes"}, {"id": "Q109", "type": "Abstractive", "question": "what evaluation metrics are used?", "references": ["coverage and precision", "INLINEFORM0, INLINEFORM1"], "candidate": "Two evaluation metrics are used: (1) how much of the verb phrases in natural language our solution can find corresponding patterns, (2) how much of the phrases and their corresponding patterns are correctly matched?"}, {"id": "Q110", "type": "Abstractive", "question": "What additional evidence they use?", "references": ["Wikipedia sentences that validate or support KB facts", "by applying an answer refinement model which takes the Wikipedia page of the topic entity into consideration to filter out the wrong answers and pick the correct ones"], "candidate": "They use a combination of structured and unstructured data, including Freebase and Wikipedia, to answer natural language questions."}, {"id": "Q111", "type": "Extractive", "question": "Which metrics do they use to evaluate results?", "references": ["BLEU BIBREF35 , METEOR BIBREF36 and chrF BIBREF37 metrics, precision, recall and F-measure", "BLEU, METEOR, chrF", "BLEU BIBREF35, METEOR BIBREF36, chrF BIBREF37, precision, recall, F-measure"], "candidate": "BLEU, METEOR, chrF, precision, recall, F-measure"}, {"id": "Q112", "type": "Yes/No", "question": "Do they report results only on English data?", "references": ["The document does not provide this information (the question is unanswerable).", "No", "Yes"], "candidate": "No"}, {"id": "Q113", "type": "Abstractive", "question": "What fusion methods are applied?", "references": ["Early fusion, late fusion, hybrid fusion.", "Early Fusion, Late Fusion, Hybrid Fusion"], "candidate": "Early Fusion, Late Fusion, and Hybrid Fusion"}, {"id": "Q114", "type": "Yes/No", "question": "do they focus on english verbs?", "references": ["Yes"], "candidate": "Yes"}, {"id": "Q115", "type": "Yes/No", "question": "Is mBERT fine-tuned for each language?", "references": ["No", "Yes"], "candidate": "No"}, {"id": "Q116", "type": "Abstractive", "question": "how many sentiment labels do they explore?", "references": ["3"], "candidate": "three"}, {"id": "Q117", "type": "Extractive", "question": "Which baselines were they used for evaluation?", "references": ["aggregation of multilingual word embeddings, multilingual sentence representations", "we use MultiCCA word embeddings published by BIBREF3, joint multilingual sentence representations"], "candidate": "Multilingual word embeddings and multilingual sentence representations."}, {"id": "Q118", "type": "Extractive", "question": "What is the training objective in the method introduced in this paper?", "references": ["we explore strategies to reduce forgetting for comprehension systems during domain adaption. Our goal is to preserve the source domain's performance as much as possible, while keeping target domain's performance optimal and assuming no access to the source data.", "elastic weight consolidation, L2, cosine distance"], "candidate": "The training objective in the method introduced in this paper is to minimize the cross-entropy loss, with additional auxiliary penalty terms to regularise the fine-tuning process and reduce forgetting of source domain knowledge."}, {"id": "Q119", "type": "Extractive", "question": "On which corpora do they evaluate on?", "references": ["20 Newsgroups, i2b2 2008 Obesity Challenge BIBREF22 data set", "20 Newsgroups, i2b2 2008 Obesity Challenge", "i2b2 2008 Obesity Challenge BIBREF22, 20 Newsgroups"], "candidate": "20 Newsgroups and the i2b2 2008 Obesity Challenge data set"}, {"id": "Q120", "type": "Extractive", "question": "how many classes are they classifying?", "references": ["18", "19"], "candidate": "19"}];
+const VERDICTS = ["correct", "partial", "incorrect"];
+const $ = (id) => document.getElementById(id);
+let who = "", votes = {}, cur = 0, storageOk = true;
+
+function storeKey(name) { return `qasper_annot:${SAMPLE_ID}:${name}`; }
+function load(name) {
+  try { return JSON.parse(localStorage.getItem(storeKey(name)) || "{}"); }
+  catch (e) { storageOk = false; return {}; }
+}
+function save() {
+  try { localStorage.setItem(storeKey(who), JSON.stringify(votes)); }
+  catch (e) { storageOk = false; say("Não foi possível salvar no navegador: baixe o CSV para não perder o trabalho.", true); }
+}
+function say(text, warn) {
+  const m = $("msg"); m.textContent = text; m.classList.toggle("warn", !!warn); m.classList.remove("hidden");
+}
+function slug(name) { return name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "_"); }
+function done() { return ITEMS.filter((it) => votes[it.id]).length; }
+function nextPending(from) {
+  for (let k = 1; k <= ITEMS.length; k++) {
+    const i = (from + k) % ITEMS.length;
+    if (!votes[ITEMS[i].id]) return i;
+  }
+  return -1;
+}
+
+function render() {
+  const it = ITEMS[cur], v = votes[it.id];
+  $("itype").textContent = it.type;
+  $("iid").textContent = it.id;
+  $("ipos").textContent = `item ${cur + 1} de ${ITEMS.length}`;
+  $("iq").textContent = it.question;
+  const ul = $("irefs"); ul.replaceChildren();
+  it.references.forEach((r) => { const li = document.createElement("li"); li.textContent = r; ul.appendChild(li); });
+  $("icand").textContent = it.candidate;
+  document.querySelectorAll(".verdicts button").forEach((b) => b.classList.toggle("sel", v && b.dataset.v === v.verdict));
+  $("ivote").textContent = v ? `seu voto: ${v.verdict.toUpperCase()}` : "pendente";
+  const n = done();
+  $("count").textContent = `${n} / ${ITEMS.length} anotadas`;
+  $("bar").style.width = `${(100 * n) / ITEMS.length}%`;
+  $("prev").disabled = cur === 0; $("next").disabled = cur === ITEMS.length - 1;
+  document.querySelectorAll(".annot button, .verdicts button").forEach((b) => { if (b.id !== "download") b.disabled = !who; });
+  $("download").disabled = !who || n === 0;
+  $("grid").querySelectorAll("button").forEach((b, i) => {
+    const vv = votes[ITEMS[i].id];
+    b.className = (vv ? vv.verdict : "") + (i === cur ? " cur" : "");
+  });
+}
+
+function vote(verdict) {
+  if (!who) { say("Escolha o anotador antes de votar.", true); return; }
+  votes[ITEMS[cur].id] = { verdict, timestamp: new Date().toISOString() };
+  save();
+  const nxt = nextPending(cur);
+  if (nxt === -1) say("Todos os itens foram anotados. Baixe o CSV de resultados.");
+  else cur = nxt;
+  render();
+}
+
+function go(i) { cur = Math.max(0, Math.min(ITEMS.length - 1, i)); render(); }
+
+function setWho(name) {
+  who = name; votes = name ? load(name) : {};
+  try { localStorage.setItem("qasper_annot:last", name); } catch (e) { /* sem armazenamento */ }
+  $("who").value = name;
+  if (name) {
+    const nxt = votes[ITEMS[0].id] ? nextPending(0) : 0;
+    cur = nxt === -1 ? 0 : nxt;
+    say(storageOk ? `Anotando como ${name}. Os votos são salvos automaticamente neste navegador.`
+                  : "O navegador bloqueou o armazenamento local: baixe o CSV antes de fechar a página.", !storageOk);
+  }
+  render();
+}
+
+function csvEscape(s) { s = String(s); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }
+function download() {
+  const lines = ["item_id,annotator,verdict,timestamp"];
+  ITEMS.forEach((it) => { const v = votes[it.id]; if (v) lines.push([it.id, who, v.verdict, v.timestamp].map(csvEscape).join(",")); });
+  const blob = new Blob([lines.join("\n") + "\n"], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = `annotations_${slug(who)}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function parseCsv(text) {
+  const rows = []; let row = [], field = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else q = false; } else field += c; }
+    else if (c === '"') q = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && text[i + 1] === "\n") i++; row.push(field); rows.push(row); row = []; field = ""; }
+    else field += c;
+  }
+  if (field || row.length) { row.push(field); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x.trim()));
+}
+
+function importCsv(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const rows = parseCsv(String(reader.result).replace(/^﻿/, ""));
+    const head = rows.shift() || [];
+    const col = (n) => head.findIndex((h) => h.trim() === n);
+    const ci = col("item_id"), ca = col("annotator"), cv = col("verdict"), ct = col("timestamp");
+    if (ci < 0 || cv < 0) { say("CSV inválido: faltam as colunas item_id e verdict.", true); return; }
+    const names = [...new Set(rows.map((r) => (ca >= 0 ? r[ca] : "").trim()).filter(Boolean))];
+    if (names.length > 1) { say("O CSV tem mais de um anotador; importe um arquivo por anotador.", true); return; }
+    const owner = names[0] || who;
+    if (!owner) { say("Escolha o anotador antes de importar.", true); return; }
+    if (owner !== who && !confirm(`O CSV é de "${owner}". Trocar para esse anotador e importar?`)) return;
+    if (owner !== who) setWho(owner);
+    const ids = new Set(ITEMS.map((it) => it.id));
+    let n = 0, skipped = 0;
+    rows.forEach((r) => {
+      const id = (r[ci] || "").trim(), v = (r[cv] || "").trim().toLowerCase();
+      if (!ids.has(id) || !VERDICTS.includes(v)) { skipped++; return; }
+      const ts = ct >= 0 && r[ct] ? r[ct].trim() : new Date().toISOString();
+      if (!votes[id] || votes[id].timestamp < ts) { votes[id] = { verdict: v, timestamp: ts }; n++; }
+    });
+    save();
+    const nxt = nextPending(-1);
+    if (nxt !== -1) cur = nxt;
+    say(`Importados ${n} votos de ${owner}` + (skipped ? ` (${skipped} linhas ignoradas: item ou veredito desconhecido).` : "."));
+    render();
+  };
+  reader.readAsText(file);
+}
+
+// grade de itens
+ITEMS.forEach((it, i) => {
+  const b = document.createElement("button"); b.textContent = it.id.replace(/^Q0*/, ""); b.title = it.id;
+  b.addEventListener("click", () => go(i)); $("grid").appendChild(b);
+});
+document.querySelectorAll(".verdicts button").forEach((b) => b.addEventListener("click", () => vote(b.dataset.v)));
+$("prev").addEventListener("click", () => go(cur - 1));
+$("next").addEventListener("click", () => go(cur + 1));
+$("nextpending").addEventListener("click", () => { const n = nextPending(cur); if (n === -1) say("Não há itens pendentes."); else go(n); });
+$("who").addEventListener("change", (e) => { setWho(e.target.value); e.target.blur(); });
+$("download").addEventListener("click", download);
+$("import").addEventListener("change", (e) => { if (e.target.files[0]) importCsv(e.target.files[0]); e.target.value = ""; });
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey || ["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+  if (e.key === "1" || e.key === "2" || e.key === "3") { vote(VERDICTS[+e.key - 1]); e.preventDefault(); }
+  else if (e.key === "ArrowLeft") { go(cur - 1); e.preventDefault(); }
+  else if (e.key === "ArrowRight") { go(cur + 1); e.preventDefault(); }
+});
+
+let last = "";
+try { last = localStorage.getItem("qasper_annot:last") || ""; } catch (e) { storageOk = false; }
+setWho([...$("who").options].some((o) => o.value === last && last) ? last : "");
+if (!who) say("Escolha o anotador no topo para começar.");
+</script>
+</body>
+</html>

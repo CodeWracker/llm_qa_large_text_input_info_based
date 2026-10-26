@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anotação QASPER</title>
+<!-- Gerado por scripts/build_human_eval_html.py a partir de scripts/human_eval_template.html. Amostra __SAMPLE_ID__. -->
+<style>
+:root {
+  --bg: #f6f7f9; --card: #ffffff; --text: #1d2330; --muted: #5d6677; --border: #d9dde5;
+  --accent: #2f5fd0; --accent-soft: #e6edfb;
+  --ok: #1f7a43; --ok-soft: #e3f3e9; --part: #9a6400; --part-soft: #fbf0d9; --bad: #b3261e; --bad-soft: #fbe5e3;
+  --ref: #f1f3f7; --cand: #fff9e8; --cand-border: #e8d38f;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171d; --card: #1d212a; --text: #e5e8ee; --muted: #9aa3b4; --border: #333a47;
+    --accent: #7ea2ff; --accent-soft: #233057;
+    --ok: #6fd39a; --ok-soft: #173525; --part: #f0bf5a; --part-soft: #3a2d10; --bad: #ff8a80; --bad-soft: #3f1d1b;
+    --ref: #252a35; --cand: #2c2716; --cand-border: #6b5a22;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 920px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 1.25rem; margin: 0; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.spacer { flex: 1; }
+.muted { color: var(--muted); font-size: .9rem; }
+button, select, .filebtn { font: inherit; border: 1px solid var(--border); background: var(--card); color: var(--text);
+  border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+button:hover, .filebtn:hover { border-color: var(--accent); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.annot button.on { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.progress { height: 10px; background: var(--ref); border-radius: 5px; overflow: hidden; flex: 1; min-width: 160px; }
+.progress > div { height: 100%; background: var(--accent); width: 0; transition: width .2s; }
+details > summary { cursor: pointer; font-weight: 600; }
+.rubric dt { font-weight: 700; margin-top: 10px; }
+.rubric dd { margin: 2px 0 0 0; }
+kbd { border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font: .85rem ui-monospace, monospace; background: var(--ref); }
+.badge { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: .85rem; font-weight: 600; background: var(--accent-soft); color: var(--accent); }
+.label { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 0 4px; }
+.question { font-size: 1.1rem; font-weight: 600; }
+.refs { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.refs li { background: var(--ref); border-radius: 8px; padding: 8px 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cand { background: var(--cand); border: 1px solid var(--cand-border); border-radius: 8px; padding: 10px 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.verdicts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+.verdicts button { padding: 12px 8px; font-weight: 700; border-width: 2px; }
+.v-correct { color: var(--ok); } .v-partial { color: var(--part); } .v-incorrect { color: var(--bad); }
+.v-correct.sel { background: var(--ok-soft); border-color: var(--ok); }
+.v-partial.sel { background: var(--part-soft); border-color: var(--part); }
+.v-incorrect.sel { background: var(--bad-soft); border-color: var(--bad); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 4px; margin-top: 8px; }
+.grid button { padding: 4px 0; font-size: .75rem; border-radius: 5px; }
+.grid button.correct { background: var(--ok-soft); border-color: var(--ok); }
+.grid button.partial { background: var(--part-soft); border-color: var(--part); }
+.grid button.incorrect { background: var(--bad-soft); border-color: var(--bad); }
+.grid button.cur { outline: 2px solid var(--accent); outline-offset: 1px; }
+.notice { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 8px 12px; border-radius: 6px; margin-top: 10px; }
+.warn { border-left-color: var(--bad); background: var(--bad-soft); }
+.hidden { display: none !important; }
+input[type=file] { display: none; }
+@media (max-width: 560px) { .verdicts { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <div class="row">
+      <h1>Validação humana do júri: QASPER</h1>
+      <span class="spacer"></span>
+      <label class="muted" for="who">Anotador</label>
+      <select id="who">
+        <option value="">— escolha —</option>
+        <option>Rodrigo Ferraz</option>
+        <option>Rodrigo Guedes</option>
+      </select>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+      <span id="count" class="muted">0 / 0 anotadas</span>
+    </div>
+    <div class="row annot" style="margin-top:12px">
+      <button id="download" class="primary">Baixar CSV de Resultados</button>
+      <label class="filebtn" for="import">Importar CSV parcial</label>
+      <input id="import" type="file" accept=".csv,text/csv">
+      <button id="nextpending">Próxima pendente</button>
+      <span class="spacer"></span>
+      <span class="muted">Amostra __SAMPLE_ID__</span>
+    </div>
+    <div id="msg" class="notice hidden"></div>
+  </div>
+
+  <details class="card rubric" id="rubric" open>
+    <summary>Instruções e rubrica (a mesma dada ao júri de LLMs)</summary>
+    <p>Para cada item você vê a <b>pergunta</b> sobre um artigo científico, as <b>respostas de referência</b> escritas
+    por especialistas que leram o artigo e uma <b>resposta candidata</b> gerada por um modelo. Decida se a candidata está
+    correta <b>usando só as referências como verdade</b>: não consulte o artigo nem seu conhecimento, e não julgue se as
+    referências estão certas. Avalie o significado, não a redação nem o tamanho. Você não sabe qual modelo gerou a
+    resposta nem o que o júri decidiu.</p>
+    <dl>
+      <dt class="v-correct"><kbd>1</kbd> CORRECT</dt>
+      <dd>A candidata transmite a informação-chave de <b>pelo menos uma</b> das referências. Paráfrases, sinônimos,
+      abreviações, outros formatos numéricos e detalhes extras que não contradizem a referência são aceitos.</dd>
+      <dt class="v-partial"><kbd>2</kbd> PARTIAL</dt>
+      <dd>Capta parte da informação-chave de uma referência, mas falta um elemento essencial, ou mistura uma afirmação
+      correta com outra que conflita com as referências.</dd>
+      <dt class="v-incorrect"><kbd>3</kbd> INCORRECT</dt>
+      <dd>Contradiz as referências, responde outra pergunta, é irrelevante, inventa dados, ou diz que a informação não
+      está disponível quando uma referência a fornece.</dd>
+    </dl>
+    <p class="muted">Se as referências divergirem entre si, basta concordar com uma delas. Uma referência que diz que o
+    documento não traz a informação conta como uma referência como as outras.</p>
+    <p class="muted">Atalhos: <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> votam, salvam e avançam para o próximo item pendente;
+    <kbd>←</kbd> <kbd>→</kbd> navegam. Cada voto fica salvo neste navegador, separado por anotador. Para continuar em outro
+    computador, baixe o CSV e importe-o lá.</p>
+    <details>
+      <summary class="muted">Texto original da rubrica do júri (inglês)</summary>
+      <p class="muted">"correct": the candidate conveys the key information of at least one reference. Paraphrases,
+      synonyms, abbreviations, different number formats and extra details that do not contradict the reference are
+      acceptable.<br>"partially_correct": the candidate captures part of the key information of a reference but omits an
+      essential element, or mixes correct information with a claim that conflicts with the references.<br>"incorrect":
+      the candidate contradicts the references, answers a different question, is irrelevant, or says the information is
+      unavailable although a reference provides it.<br>Judge meaning, not wording or length.</p>
+    </details>
+  </details>
+
+  <div class="card" id="itemcard">
+    <div class="row">
+      <span class="badge" id="itype"></span>
+      <b id="iid"></b>
+      <span class="spacer"></span>
+      <span id="ipos" class="muted"></span>
+    </div>
+    <div class="label">Pergunta</div>
+    <div class="question" id="iq"></div>
+    <div class="label">Respostas de referência</div>
+    <ul class="refs" id="irefs"></ul>
+    <div class="label">Resposta candidata</div>
+    <div class="cand" id="icand"></div>
+    <div class="verdicts annot">
+      <button class="v-correct" data-v="correct">[1] CORRECT</button>
+      <button class="v-partial" data-v="partial">[2] PARTIAL</button>
+      <button class="v-incorrect" data-v="incorrect">[3] INCORRECT</button>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button id="prev">← Anterior</button>
+      <span class="spacer"></span>
+      <span id="ivote" class="muted"></span>
+      <span class="spacer"></span>
+      <button id="next">Próximo →</button>
+    </div>
+  </div>
+
+  <details class="card">
+    <summary>Todos os itens</summary>
+    <div class="grid" id="grid"></div>
+  </details>
+</main>
+
+<script>
+"use strict";
+const SAMPLE_ID = "__SAMPLE_ID__";
+const ITEMS = __ITEMS__;
+const VERDICTS = ["correct", "partial", "incorrect"];
+const $ = (id) => document.getElementById(id);
+let who = "", votes = {}, cur = 0, storageOk = true;
+
+function storeKey(name) { return `qasper_annot:${SAMPLE_ID}:${name}`; }
+function load(name) {
+  try { return JSON.parse(localStorage.getItem(storeKey(name)) || "{}"); }
+  catch (e) { storageOk = false; return {}; }
+}
+function save() {
+  try { localStorage.setItem(storeKey(who), JSON.stringify(votes)); }
+  catch (e) { storageOk = false; say("Não foi possível salvar no navegador: baixe o CSV para não perder o trabalho.", true); }
+}
+function say(text, warn) {
+  const m = $("msg"); m.textContent = text; m.classList.toggle("warn", !!warn); m.classList.remove("hidden");
+}
+function slug(name) { return name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "_"); }
+function done() { return ITEMS.filter((it) => votes[it.id]).length; }
+function nextPending(from) {
+  for (let k = 1; k <= ITEMS.length; k++) {
+    const i = (from + k) % ITEMS.length;
+    if (!votes[ITEMS[i].id]) return i;
+  }
+  return -1;
+}
+
+function render() {
+  const it = ITEMS[cur], v = votes[it.id];
+  $("itype").textContent = it.type;
+  $("iid").textContent = it.id;
+  $("ipos").textContent = `item ${cur + 1} de ${ITEMS.length}`;
+  $("iq").textContent = it.question;
+  const ul = $("irefs"); ul.replaceChildren();
+  it.references.forEach((r) => { const li = document.createElement("li"); li.textContent = r; ul.appendChild(li); });
+  $("icand").textContent = it.candidate;
+  document.querySelectorAll(".verdicts button").forEach((b) => b.classList.toggle("sel", v && b.dataset.v === v.verdict));
+  $("ivote").textContent = v ? `seu voto: ${v.verdict.toUpperCase()}` : "pendente";
+  const n = done();
+  $("count").textContent = `${n} / ${ITEMS.length} anotadas`;
+  $("bar").style.width = `${(100 * n) / ITEMS.length}%`;
+  $("prev").disabled = cur === 0; $("next").disabled = cur === ITEMS.length - 1;
+  document.querySelectorAll(".annot button, .verdicts button").forEach((b) => { if (b.id !== "download") b.disabled = !who; });
+  $("download").disabled = !who || n === 0;
+  $("grid").querySelectorAll("button").forEach((b, i) => {
+    const vv = votes[ITEMS[i].id];
+    b.className = (vv ? vv.verdict : "") + (i === cur ? " cur" : "");
+  });
+}
+
+function vote(verdict) {
+  if (!who) { say("Escolha o anotador antes de votar.", true); return; }
+  votes[ITEMS[cur].id] = { verdict, timestamp: new Date().toISOString() };
+  save();
+  const nxt = nextPending(cur);
+  if (nxt === -1) say("Todos os itens foram anotados. Baixe o CSV de resultados.");
+  else cur = nxt;
+  render();
+}
+
+function go(i) { cur = Math.max(0, Math.min(ITEMS.length - 1, i)); render(); }
+
+function setWho(name) {
+  who = name; votes = name ? load(name) : {};
+  try { localStorage.setItem("qasper_annot:last", name); } catch (e) { /* sem armazenamento */ }
+  $("who").value = name;
+  if (name) {
+    const nxt = votes[ITEMS[0].id] ? nextPending(0) : 0;
+    cur = nxt === -1 ? 0 : nxt;
+    say(storageOk ? `Anotando como ${name}. Os votos são salvos automaticamente neste navegador.`
+                  : "O navegador bloqueou o armazenamento local: baixe o CSV antes de fechar a página.", !storageOk);
+  }
+  render();
+}
+
+function csvEscape(s) { s = String(s); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }
+function download() {
+  const lines = ["item_id,annotator,verdict,timestamp"];
+  ITEMS.forEach((it) => { const v = votes[it.id]; if (v) lines.push([it.id, who, v.verdict, v.timestamp].map(csvEscape).join(",")); });
+  const blob = new Blob([lines.join("\n") + "\n"], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = `annotations_${slug(who)}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function parseCsv(text) {
+  const rows = []; let row = [], field = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else q = false; } else field += c; }
+    else if (c === '"') q = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && text[i + 1] === "\n") i++; row.push(field); rows.push(row); row = []; field = ""; }
+    else field += c;
+  }
+  if (field || row.length) { row.push(field); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x.trim()));
+}
+
+function importCsv(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const rows = parseCsv(String(reader.result).replace(/^﻿/, ""));
+    const head = rows.shift() || [];
+    const col = (n) => head.findIndex((h) => h.trim() === n);
+    const ci = col("item_id"), ca = col("annotator"), cv = col("verdict"), ct = col("timestamp");
+    if (ci < 0 || cv < 0) { say("CSV inválido: faltam as colunas item_id e verdict.", true); return; }
+    const names = [...new Set(rows.map((r) => (ca >= 0 ? r[ca] : "").trim()).filter(Boolean))];
+    if (names.length > 1) { say("O CSV tem mais de um anotador; importe um arquivo por anotador.", true); return; }
+    const owner = names[0] || who;
+    if (!owner) { say("Escolha o anotador antes de importar.", true); return; }
+    if (owner !== who && !confirm(`O CSV é de "${owner}". Trocar para esse anotador e importar?`)) return;
+    if (owner !== who) setWho(owner);
+    const ids = new Set(ITEMS.map((it) => it.id));
+    let n = 0, skipped = 0;
+    rows.forEach((r) => {
+      const id = (r[ci] || "").trim(), v = (r[cv] || "").trim().toLowerCase();
+      if (!ids.has(id) || !VERDICTS.includes(v)) { skipped++; return; }
+      const ts = ct >= 0 && r[ct] ? r[ct].trim() : new Date().toISOString();
+      if (!votes[id] || votes[id].timestamp < ts) { votes[id] = { verdict: v, timestamp: ts }; n++; }
+    });
+    save();
+    const nxt = nextPending(-1);
+    if (nxt !== -1) cur = nxt;
+    say(`Importados ${n} votos de ${owner}` + (skipped ? ` (${skipped} linhas ignoradas: item ou veredito desconhecido).` : "."));
+    render();
+  };
+  reader.readAsText(file);
+}
+
+// grade de itens
+ITEMS.forEach((it, i) => {
+  const b = document.createElement("button"); b.textContent = it.id.replace(/^Q0*/, ""); b.title = it.id;
+  b.addEventListener("click", () => go(i)); $("grid").appendChild(b);
+});
+document.querySelectorAll(".verdicts button").forEach((b) => b.addEventListener("click", () => vote(b.dataset.v)));
+$("prev").addEventListener("click", () => go(cur - 1));
+$("next").addEventListener("click", () => go(cur + 1));
+$("nextpending").addEventListener("click", () => { const n = nextPending(cur); if (n === -1) say("Não há itens pendentes."); else go(n); });
+$("who").addEventListener("change", (e) => { setWho(e.target.value); e.target.blur(); });
+$("download").addEventListener("click", download);
+$("import").addEventListener("change", (e) => { if (e.target.files[0]) importCsv(e.target.files[0]); e.target.value = ""; });
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey || ["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+  if (e.key === "1" || e.key === "2" || e.key === "3") { vote(VERDICTS[+e.key - 1]); e.preventDefault(); }
+  else if (e.key === "ArrowLeft") { go(cur - 1); e.preventDefault(); }
+  else if (e.key === "ArrowRight") { go(cur + 1); e.preventDefault(); }
+});
+
+let last = "";
+try { last = localStorage.getItem("qasper_annot:last") || ""; } catch (e) { storageOk = false; }
+setWho([...$("who").options].some((o) => o.value === last && last) ? last : "");
+if (!who) say("Escolha o anotador no topo para começar.");
+</script>
+</body>
+</html>
