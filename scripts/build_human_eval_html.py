@@ -123,7 +123,7 @@ def main() -> None:
     with open(OUT / "sample_key.json", "w", encoding="utf-8") as f:
         json.dump({"meta": meta, "items": key}, f, ensure_ascii=False, indent=1)
 
-    # "</" não pode aparecer cru dentro de <script>
+    # "</" não pode aparecer cru dentro de <script> (JSON.parse aceita "<\/")
     html = TEMPLATE.read_text(encoding="utf-8")
     html = html.replace("__SAMPLE_ID__", sample_id).replace("__ITEMS__", payload.replace("</", "<\\/"))
     (OUT / "qasper_annotator.html").write_text(html, encoding="utf-8")

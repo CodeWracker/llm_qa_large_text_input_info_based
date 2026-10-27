@@ -161,10 +161,18 @@ input[type=file] { display: none; }
   </details>
 </main>
 
+<script type="application/json" id="items">__ITEMS__</script>
 <script>
 "use strict";
 const SAMPLE_ID = "__SAMPLE_ID__";
-const ITEMS = __ITEMS__;
+let ITEMS;
+try { ITEMS = JSON.parse(document.getElementById("items").textContent); }
+catch (e) {
+  // aberto o modelo em scripts/ em vez da página gerada em human_eval/
+  document.querySelector("main").innerHTML = '<div class="card notice warn">Este arquivo é só o modelo e não tem os itens. ' +
+    'Abra <b>human_eval/qasper_annotator.html</b> (gerado por <code>python scripts/build_human_eval_html.py</code>).</div>';
+  throw e;
+}
 const VERDICTS = ["correct", "partial", "incorrect"];
 const $ = (id) => document.getElementById(id);
 let who = "", votes = {}, cur = 0, storageOk = true;
