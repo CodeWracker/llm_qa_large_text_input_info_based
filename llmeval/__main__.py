@@ -1,4 +1,4 @@
-"""CLI: python -m llmeval {sample,generate,judge,metrics,analyze,all} [--config ...] [--no-think] [--budget B] [--dry-run]"""
+"""CLI: python -m llmeval {sample,generate,judge,metrics,analyze,all,agreement} [--config ...] [--no-think] [--budget B] [--dry-run]"""
 from __future__ import annotations
 
 import argparse
@@ -12,12 +12,12 @@ STAGES = ("sample", "generate", "judge", "metrics", "analyze")
 
 def main() -> None:
     ap = argparse.ArgumentParser(prog="llmeval")
-    ap.add_argument("stage", choices=STAGES + ("all",))
+    ap.add_argument("stage", choices=STAGES + ("all", "agreement"))
     ap.add_argument("--config", default=None)
     ap.add_argument("--no-think", action="store_true", help="geração sem a passada com raciocínio (RQ6)")
     ap.add_argument("--budget", type=int, default=None,
                     help="generate/judge: só a passada com raciocínio, com este teto (varredura de orçamento, RQ6)")
-    ap.add_argument("--dry-run", action="store_true", help="generate: só conta as chamadas que iriam ao servidor")
+    ap.add_argument("--dry-run", action="store_true", help="generate/agreement: só conta as chamadas que iriam ao servidor")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     for noisy in ("httpx", "urllib3", "sentence_transformers"):
@@ -50,6 +50,9 @@ def run_stages(cfg, stage_arg: str) -> None:
         elif stage == "metrics":
             from .metrics import run_metrics
             run_metrics(cfg)
+        elif stage == "agreement":  # concordância com humanos no QASPER (fora de "all")
+            from .agreement import run_agreement
+            run_agreement(cfg)
         elif stage == "analyze":
             from .analysis import run_analysis
             run_analysis(cfg)

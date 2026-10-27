@@ -1243,6 +1243,108 @@ def fig_budget(cfg, pooled: pd.DataFrame, out: Path) -> None:
     plt.close(fig)
 
 
+# ===================================================================== régua humana (QASPER)
+def _cluster_ci(per_q: pd.Series, n_boot: int = 2000, seed: int = 42) -> tuple[float, float, float]:
+    """Média sobre perguntas e IC de 95% por bootstrap das perguntas."""
+    v = per_q.to_numpy(float)
+    rng = np.random.default_rng(seed)
+    boots = v[rng.integers(0, len(v), (n_boot, len(v)))].mean(1)
+    return v.mean(), np.quantile(boots, 0.025), np.quantile(boots, 0.975)
+
+
+def human_ceiling(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame | None:
+    """Concordância humano × humano e modelo × humano no QASPER, deixando um anotador de fora de cada vez.
+
+    Três medidas: "tem resposta?" (todas as perguntas), sim/não (perguntas em que todos responderam sim ou não),
+    ambas sem LLM; e texto livre (perguntas extractive/abstractive), julgado pelo júri (results/agreement.jsonl).
+    Humanos: todas as perguntas de teste com >= 2 anotações; modelos: só a amostra (documento completo)."""
+    import re
+
+    from .agreement import _annotations
+
+    ann = _annotations(cfg)
+    sample_q = set(full_df[full_df.dataset == "qasper"].qid)
+    gens = full_df[(full_df.dataset == "qasper") & (full_df.condition == "full")]
+    yn = lambda s: (m.group(1).lower() if (m := re.match(r"\s*(yes|no)\b", s or "", re.I)) else "ans")  # noqa: E731
+    model_lab = {(r.qid, r.model): "unans" if r.abstained else yn(r.answer) for r in gens.itertuples()}
+    models = [g["model"] for g in cfg["generators"]]
+
+    rows = []  # (tarefa, conjunto, candidato, pergunta, concordância média com os demais)
+    for q in ann:
+        lab = ["unans" if t == "unanswerable" else (r.lower() if t == "yes_no" else "ans") for t, r in q["annotations"]]
+        tasks = {"answerable": [x != "unans" for x in lab]}
+        if all(x in ("yes", "no") for x in lab):
+            tasks["yesno"] = lab
+        for task, L in tasks.items():
+            for k in range(len(L)):
+                rest = L[:k] + L[k + 1:]
+                cands = {"human": L[k]}
+                if q["qid"] in sample_q:
+                    for m in models:
+                        v = model_lab.get((q["qid"], m))
+                        if v is not None:
+                            cands[m] = (v != "unans") if task == "answerable" else v
+                for who, v in cands.items():
+                    for scope in (("test", "sample") if q["qid"] in sample_q else ("test",)):
+                        if who != "human" and scope == "test":
+                            continue
+                        rows.append({"task": task, "scope": scope, "who": who, "qid": q["qid"],
+                                     "agree": np.mean([v == r for r in rest])})
+    agr_path = cfg.path("results") / "agreement.jsonl"
+    if agr_path.exists():
+        a = pd.DataFrame(read_jsonl(agr_path))
+        a = a[a.stratum.isin(["extractive", "abstractive"])]
+        for r in a.itertuples():
+            for scope in (("test", "sample") if r.in_sample else ("test",)):
+                if r.candidate != "human" and scope == "test":
+                    continue
+                rows.append({"task": "freetext", "scope": scope, "who": r.candidate, "qid": r.qid,
+                             "agree": float(r.correct)})
+    d = pd.DataFrame(rows)
+    res = []
+    for (task, scope, who), g in d.groupby(["task", "scope", "who"]):
+        mean, lo, hi = _cluster_ci(g.groupby("qid").agree.mean())
+        res.append({"task": task, "scope": scope, "who": who, "agree": mean, "lo": lo, "hi": hi,
+                    "n_questions": g.qid.nunique()})
+    res = pd.DataFrame(res)
+    res.to_csv(cfg.path("results") / "analysis" / "human_ceiling.csv", index=False)
+
+    tasks = [("answerable", "Has an answer?"), ("yesno", "Yes/no"), ("freetext", "Free text (jury)")]
+    labels = {g["model"]: g["label"] for g in cfg["generators"]}
+
+    def cell(task, scope, who):
+        r = res[(res.task == task) & (res.scope == scope) & (res.who == who)]
+        return r"\pending" if r.empty else pct(r.agree.iloc[0])
+
+    def n_q(task, scope, who):
+        r = res[(res.task == task) & (res.scope == scope) & (res.who == who)]
+        return "--" if r.empty else str(int(r.n_questions.iloc[0]))
+
+    lines = [r"Human, all test questions & " + " & ".join(cell(t, "test", "human") for t, _ in tasks) + r" \\",
+             r"\quad questions & " + " & ".join(n_q(t, "test", "human") for t, _ in tasks) + r" \\",
+             r"\midrule",
+             r"Human, sample & " + " & ".join(cell(t, "sample", "human") for t, _ in tasks) + r" \\"]
+    lines += [f"{labels[m]} & " + " & ".join(cell(t, "sample", m) for t, _ in tasks) + r" \\" for m in models]
+    lines += [r"\quad questions & " + " & ".join(n_q(t, "sample", "human") for t, _ in tasks) + r" \\"]
+    write(out / "tables" / "human_ceiling.tex", rf"""% Gerado por `python -m llmeval analyze` (human_ceiling). Não editar à mão.
+\begin{{table}}[t]
+\centering
+\caption{{Agreement with the QASPER annotators (\%). Each annotator is left out in turn and compared with the others; a model is compared with the same annotators. ``Has an answer?'' and ``Yes/no'' are the share of matching labels, without any grader; ``Free text'' is the share of answers that the jury accepts against the other annotators' answers, on extractive and abstractive questions. Models answer with the full document and without reasoning. 95\% intervals by bootstrap over questions are in the supplementary CSV.}}
+\label{{tab:human}}
+\footnotesize
+\setlength{{\tabcolsep}}{{4pt}}
+\begin{{tabular}}{{lrrr}}
+\toprule
+Candidate & {" & ".join(n for _, n in tasks)} \\
+\midrule
+{chr(10).join(lines)}
+\bottomrule
+\end{{tabular}}
+\end{{table}}
+""")
+    return res
+
+
 def placeholder_figures(cfg, out: Path, only_missing: bool = True) -> None:
     for name, spec in PLACEHOLDERS.items():
         path = out / "figures" / f"{name}.pdf"
@@ -1320,3 +1422,4 @@ def run_analysis(cfg) -> None:
     rq2_plausible(cfg, df, out, instruments)
     rq6_reasoning(cfg, full_df, out)
     rq6_budget(cfg, full_df, out)
+    human_ceiling(cfg, df, out)

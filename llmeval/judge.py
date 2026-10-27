@@ -34,6 +34,38 @@ def rule_verdict(row: dict, refs: list[str]) -> str | None:
     return None  # inclusive quando todas as referências são UNANSWERABLE: o júri decide
 
 
+def ask_jury(cfg, client: OllamaClient, keys) -> dict[tuple, dict[str, dict]]:
+    """Votos de cada juiz para cada chave (pergunta, referências, candidata); um juiz por vez, chamadas em paralelo."""
+    verdicts: dict[tuple, dict[str, dict]] = {k: {} for k in keys}
+    for judge in cfg["jury"]["judges"]:
+        def call(key, judge=judge):
+            question, refs, answer = key
+            messages = judge_messages(question, list(refs), answer)
+            res = client.chat_json(judge["model"], messages, JUDGE_SCHEMA,
+                                   think=judge.get("think", False), num_predict=2048)
+            if res.get("output") is None:  # raciocínio longo esgotou o teto: uma segunda chance maior
+                res = client.chat_json(judge["model"], messages, JUDGE_SCHEMA,
+                                       think=judge.get("think", False), num_predict=8192)
+            return key, res.get("output")
+        with ThreadPoolExecutor(cfg["ollama"]["concurrency"]) as ex:
+            futures = [ex.submit(call, k) for k in verdicts]
+            for f in tqdm(as_completed(futures), total=len(futures), desc=judge["label"]):
+                key, out = f.result()
+                verdicts[key][judge["model"]] = out
+    return verdicts
+
+
+def aggregate(votes_raw: dict[str, dict]) -> dict:
+    """Maioria estrita de "correct" e nota graduada a partir das saídas dos juízes."""
+    votes = {j: (v or {}).get("verdict") for j, v in votes_raw.items()}
+    valid = [v for v in votes.values() if v in VERDICT_SCORE]
+    n_correct = sum(v == "correct" for v in valid)
+    return {"source": "jury", "votes": votes,
+            "justifications": {j: (v or {}).get("justification") for j, v in votes_raw.items()},
+            "correct": bool(valid) and n_correct > len(valid) / 2,
+            "score": sum(VERDICT_SCORE[v] for v in valid) / len(valid) if valid else None}
+
+
 def run_judging(cfg) -> None:
     sample, results = cfg.path("sample"), cfg.path("results")
     questions = {q["qid"]: q for q in read_jsonl(sample / "questions.jsonl")}
@@ -59,22 +91,7 @@ def run_judging(cfg) -> None:
         items.append((row, rule, key))
 
     # 2) consulta cada juiz (um modelo por vez, chamadas em paralelo)
-    verdicts: dict[tuple, dict[str, dict]] = {k: {} for k in todo}
-    for judge in judges:
-        def call(key, judge=judge):
-            question, refs, answer = key
-            messages = judge_messages(question, list(refs), answer)
-            res = client.chat_json(judge["model"], messages, JUDGE_SCHEMA,
-                                   think=judge.get("think", False), num_predict=2048)
-            if res.get("output") is None:  # raciocínio longo esgotou o teto: uma segunda chance maior
-                res = client.chat_json(judge["model"], messages, JUDGE_SCHEMA,
-                                       think=judge.get("think", False), num_predict=8192)
-            return key, res.get("output")
-        with ThreadPoolExecutor(cfg["ollama"]["concurrency"]) as ex:
-            futures = [ex.submit(call, k) for k in todo]
-            for f in tqdm(as_completed(futures), total=len(futures), desc=judge["label"]):
-                key, out = f.result()
-                verdicts[key][judge["model"]] = out
+    verdicts = ask_jury(cfg, client, todo)
 
     # 3) agrega
     rows = []
@@ -83,16 +100,7 @@ def run_judging(cfg) -> None:
         if rule is not None:
             out.update(source="rule", verdict=rule, correct=rule == "correct", score=VERDICT_SCORE[rule])
         else:
-            votes = {j: (v or {}).get("verdict") for j, v in verdicts[key].items()}
-            valid = [v for v in votes.values() if v in VERDICT_SCORE]
-            n_correct = sum(v == "correct" for v in valid)
-            out.update(
-                source="jury",
-                votes=votes,
-                justifications={j: (v or {}).get("justification") for j, v in verdicts[key].items()},
-                correct=bool(valid) and n_correct > len(valid) / 2,
-                score=sum(VERDICT_SCORE[v] for v in valid) / len(valid) if valid else None,
-            )
+            out.update(aggregate(verdicts[key]))
         rows.append(out)
     missing = sum(1 for v in verdicts.values() for j in judges if v.get(j["model"]) is None)
     if missing:

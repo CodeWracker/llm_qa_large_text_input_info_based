@@ -7,11 +7,11 @@ Só o que vale hoje. `[~]` em andamento, `[ ]` pendente. Histórico: `git log`. 
   deduzido do cache de 4096) e 8192 (Qwen3.5-4B refeito por inteiro, ~3.500 chamadas; 9B só os cortados), júri, análise
   (`tables/budget.tex`, `figures/budget.pdf`). Teste de determinismo (27/10): 9B 20/20 iguais, 4B 10/20 → 4B em
   `nondeterministic_models` (só se projeta para tetos menores). Estimativa ~35–45 h com o servidor livre.
-- [ ] **Concordância humano × humano e modelo × humano no QASPER** (`run_agreement.sh`, roda depois da varredura;
-  ainda não escrito): o júri julga cada anotação humana contra as demais (deixa um de fora) nas 200 perguntas da
+- [ ] **Concordância humano × humano e modelo × humano no QASPER** (`run_agreement.sh` → `python -m llmeval agreement`,
+  roda depois da varredura; 6.464 itens, 4.088 chamadas únicas por juiz): o júri julga cada anotação humana contra as demais (deixa um de fora) nas 200 perguntas da
   amostra e nas 1.427 do test com ≥2 anotações; os 6 modelos (documento completo, sem raciocínio) são julgados contra
   os mesmos conjuntos, só nas 200. Mais a parte objetiva sem LLM (sim/não e "tem resposta?") já calculada à parte
-  (`scratchpad/human_ceiling2.py`, levar para `analysis.py` com IC por bootstrap). ~9 h de júri.
+  (`human_ceiling` em `analysis.py`, IC por bootstrap, `tables/human_ceiling.tex`). ~6 h de júri.
 
 ## Artigo (`../latex-llmeval`), quando os dados chegarem
 - [ ] RQ6: tabela/figura de orçamento e texto (III-C, V-F, VI-A, conclusão, resumo)
