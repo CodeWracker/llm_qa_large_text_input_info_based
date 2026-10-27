@@ -50,6 +50,9 @@ generation:
   # varredura de orçamento (RQ6): `generate --budget B` para cada B; respostas de um orçamento são
   # deduzidas do cache dos outros quando o desfecho já se sabe (temperatura 0), o resto vai ao servidor
   think_budgets: [512, 1024, 2048, 4096, 8192]
+  # temperatura 0 não reproduz a saída destes modelos (teste de determinismo, 27/10: 10/20 respostas iguais);
+  # nos tetos acima de 4096 eles são refeitos por inteiro, não estendidos a partir do cache
+  nondeterministic_models: ["qwen3.5:4b"]
 
 # Busca por termos (Ctrl+F): o gerador escolhe os termos, uma função busca no documento
 search:

@@ -20,7 +20,8 @@ run() {  # run <log> <args...>; código 75 = servidor indisponível: pausa a cad
     exit 75
   fi
 }
-if ! grep -q "orçamento: determinismo ok" $LOG; then
+# 27/10: o teste deu 9B 20/20 e 4B 10/20; o 4B entrou em nondeterministic_models (configs) e a cadeia segue
+if ! grep -qE "orçamento: determinismo (ok|tratado)" $LOG; then
   .venv/bin/python scripts/check_budget_determinism.py 40 > results/logs/budget_determinism.log 2>&1
   same=$(grep -oP "respostas idênticas: \K[0-9]+" results/logs/budget_determinism.log)
   if [ "${same:-0}" -lt 36 ]; then

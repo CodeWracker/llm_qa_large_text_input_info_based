@@ -25,7 +25,7 @@ com júri de 3 LLMs validado contra gabarito. Artigo IEEE em `../latex-llmeval`.
   `scripts/evaluate_human_results.py`; ver `human_eval/README.md`).
 - Citar só datasets, técnicas, métodos computacionais/estatísticos. Não buscar
   nem inventar referências de apoio a afirmações; no máximo `\todo{buscar referência para isso}`.
-- Decisões já tomadas com o usuário: ver o fim do `TODO.md`.
+- Decisões em vigor: ver o fim do `TODO.md`.
 - Arquivos de handoff curtos; se precisar de mais, use `handoffs/` com arquivos pequenos.
 
 ## Ambiente (recriar se o container foi resetado)
@@ -36,34 +36,33 @@ source /etc/profile.d/99-persist-env.sh      # OLLAMA_URL
 # se o git acusar "dubious ownership": sudo chown -R jovyan:users /home/jovyan/compartilhado/ralph/llm-eval
 # (~/.netrc = auth do Ollama; ~/.gitconfig = credencial do Overleaf; ~/.ssh = chave do GitHub, conta CodeWracker)
 cd llm_qa_large_text_input_info_based
-# o .venv aponta para /root/anaconda3 (criado como root); rodando como jovyan, recriar com o uv abaixo
+# o .venv foi recriado como jovyan (27/10); se sumir ou quebrar, recriar:
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt
 uv pip install --python .venv/bin/python torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
 # LaTeX local: /home/jovyan/privado/.persist/bin/tectonic -X compile main.tex
 ```
-O servidor Ollama mantém 1 modelo carregado por vez e é compartilhado com outros projetos: no máximo
-8 requisições simultâneas somando todos os processos (`max_inflight`, travas em `data/cache/slots`). Processe um
-modelo por vez. Os embeddings rodam localmente na GPU (`CUDA_VISIBLE_DEVICES=1`).
+O servidor Ollama é compartilhado com outros projetos: `max_inflight` (configs) limita as requisições simultâneas
+somando todos os processos (travas em `data/cache/slots`); 16 com o servidor cedido, 8 se compartilhado. Um modelo por vez. Os embeddings rodam localmente na GPU (`CUDA_VISIBLE_DEVICES=1`).
 
 ## Pipeline
 `python -m llmeval {sample,generate,judge,metrics,analyze}`. Tudo fica em cache em
 `data/cache/*.sqlite`, então reexecutar é barato. A análise escreve `tables/*.tex` e
-`figures/*.pdf` direto em `../latex-llmeval`. `run_chain.sh` roda a cadeia em duas fases: desenho principal (geração `--no-think` → júri →
-métricas → análise) e depois a RQ6 (geração com raciocínio → júri → métricas → análise); marcos em `results/logs/pipeline.log`. Se cair, basta relançar: o cache preserva tudo.
+`figures/*.pdf` direto em `../latex-llmeval`. Marcos em `results/logs/pipeline.log`; se cair, basta relançar.
+- `run_chain.sh`: desenho principal e RQ6 (concluídos).
+- `run_extra.sh`: `run_budget.sh` (varredura de orçamento, `generate/judge --budget B`, `--dry-run` só conta chamadas)
+  e depois `run_agreement.sh` (concordância com humanos). O cliente deduz do cache de outro teto as respostas cujo
+  desfecho já se sabe (`OllamaClient._project`); modelos em `nondeterministic_models` só são projetados para tetos menores.
 
 ## Incidentes do servidor e loop
 - Toda falha do Ollama (HTTP, timeout, conexão) e a recuperação vão automaticamente para
   `/home/jovyan/privado/setic_infra_audit/incidentes_ollama/eventos.jsonl` (o usuário relata à SeTIC).
   `relatorio.py` na mesma pasta gera `RELATORIO_INCIDENTES_OLLAMA.md`.
-- Disjuntor: 16 falhas seguidas do servidor encerram o estágio com código 75 e `run_chain.sh` pausa
-  ("cadeia pausada" no pipeline.log). Típico quando outro projeto mantém outro modelo carregado.
-- `aguarda_servidor.sh` (vigia, PID em `results/logs/aguarda.pid`) espera 3 min sem modelo alheio carregado
-  ou só com modelo alheio ocioso (`expires_at` parado; com keep_alive infinito, como o qwen2.5:32b do ClinicalSimilarity,
-  conta como ocupado), roda `run_chain.sh` (que pula a fase 1 já concluída) e volta a vigiar se ela pausar. Lançar com
-  `setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 < /dev/null &`.
+- Disjuntor: `circuit_breaker` falhas seguidas do servidor encerram o estágio com código 75 e a cadeia pausa.
+- `aguarda_servidor.sh` (vigia, PID em `results/logs/aguarda.pid`) espera 3 min sem modelo alheio em uso
+  (`expires_at` parado; keep_alive infinito conta como ocupado), roda `$CHAIN` e volta a vigiar se ela pausar (75);
+  qualquer outro código encerra. Variáveis: `CHAIN` (padrão `./run_chain.sh`), `IGNORAR_MODELOS="m1 m2"`
+  (modelos alheios liberados pelo usuário, ex. o qwen2.5:32b do ClinicalSimilarity), `IGNORAR_ALHEIOS=1`
+  (servidor todo cedido). Comando atual: ver "Se o container cair" no `TODO.md`.
 - Um loop (CronCreate, de hora em hora, expira em 7 dias, morre com a sessão) confere cadeia e vigia e
   relança o vigia se ele morreu. Se a sessão morreu, recrie o loop. Encerrar processos só por PID (nunca `pkill -f`).
-- `IGNORAR_ALHEIOS=1` no vigia: servidor cedido pelo usuário (outros modelos carregados não bloqueiam).
-- `CHAIN=./run_budget.sh` no vigia roda a varredura de orçamento da RQ6 (`generate/judge --budget B`); com
-  `--dry-run` o gerador só conta as chamadas que iriam ao servidor. Código 2 = teste de determinismo falhou.
 - Após reboot da máquina: `OLLAMA_URL` e `~/.netrc` somem até o usuário rodar `/home/jovyan/privado/.persist/return_by_death.sh`.

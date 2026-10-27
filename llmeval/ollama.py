@@ -151,6 +151,8 @@ class OllamaClient:
         self.emb_cache = SQLiteCache(cache_dir / "embeddings.sqlite")
         # varredura de orçamento (RQ6): orçamentos cujas respostas em cache servem para projetar as de outro
         self.budgets = sorted(cfg.get("generation", {}).get("think_budgets") or [])
+        # modelos cuja saída muda entre execuções mesmo com temperatura 0 (ver scripts/check_budget_determinism.py)
+        self.nondeterministic = set(cfg.get("generation", {}).get("nondeterministic_models") or [])
         self.dry_run, self.dry_run_calls = False, 0
 
     def _project(self, payload: dict, num_predict: int) -> dict | None:
@@ -159,9 +161,12 @@ class OllamaClient:
         Com temperatura 0 e semente fixa a geração não depende do teto: uma resposta que terminou com t tokens
         é idêntica em qualquer teto >= t e é cortada em qualquer teto < t; uma cortada no teto b' também é
         cortada em qualquer teto <= b'. Fora desses casos (só cortada num teto menor), devolve None.
+        Para modelos não determinísticos só vale cortar um traço já gerado num teto maior (o teto não muda a
+        geração, só onde ela para); estender a um teto maior exigiria o mesmo traço, então vai ao servidor.
         """
+        nondet = payload["model"] in self.nondeterministic
         for b in self.budgets:
-            if b == num_predict:
+            if b == num_predict or (nondet and b < num_predict):
                 continue
             alt = {**payload, "options": {**payload["options"], "num_predict": b}}
             r = self.chat_cache.get(_hash(alt))

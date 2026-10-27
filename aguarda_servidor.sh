@@ -4,7 +4,7 @@
 # em /api/ps ou só modelos alheios ociosos (expires_at parado = nenhuma requisição; o Ollama descarrega
 # um modelo ocioso quando outro é pedido). Modelo alheio com keep_alive infinito conta sempre como ocupado:
 # seu expires_at não muda com o uso. Se a cadeia pausar (código 75), volta a vigiar;
-# termina quando a cadeia conclui. Uso: [IGNORAR_ALHEIOS=1] [CHAIN=./run_budget.sh] setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 &
+# termina quando a cadeia conclui. Uso: [IGNORAR_ALHEIOS=1] [IGNORAR_MODELOS="m1 m2"] [CHAIN=./run_extra.sh] setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 &
 set -uo pipefail
 cd "$(dirname "$0")"
 source /etc/profile.d/99-persist-env.sh
@@ -22,6 +22,8 @@ alheios() {
 import json, os, subprocess, time, yaml
 c = yaml.safe_load(open("configs/experiment.yaml"))
 nossos = {g["model"] for g in c["generators"]} | {j["model"] for j in c["jury"]["judges"]}
+# IGNORAR_MODELOS="a b": modelos alheios que o usuário liberou (ex.: keep_alive infinito de um projeto já encerrado)
+nossos |= set(os.environ.get("IGNORAR_MODELOS", "").split())
 r = subprocess.run(["curl", "-s", "-m", "30", "--netrc", os.environ["OLLAMA_URL"].rstrip("/") + "/api/ps"],
                    capture_output=True, text=True)
 def marca(m):
