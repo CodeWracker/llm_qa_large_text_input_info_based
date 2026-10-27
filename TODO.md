@@ -13,17 +13,15 @@ Só o que vale hoje. `[~]` em andamento, `[ ]` pendente. Histórico: `git log`. 
   os mesmos conjuntos, só nas 200. Mais a parte objetiva sem LLM (sim/não e "tem resposta?") já calculada à parte
   (`human_ceiling` em `analysis.py`, IC por bootstrap, `tables/human_ceiling.tex`). ~6 h de júri.
 
-## Artigo (`../latex-llmeval`), quando os dados chegarem
-- [ ] RQ6: tabela/figura de orçamento e texto (III-C, V-F, VI-A, conclusão, resumo)
-- [ ] RQ3 (sim/não) e RQ5 ("tem resposta?"): parágrafo e tabela pequena de concordância com humanos; texto livre
-- [ ] Ameaças: 51 de 200 perguntas do QASPER com referências contraditórias (16 sim×não, 35 sem resposta×resposta);
-  sem elas a acurácia cai 2–5 pontos e nenhuma ordenação muda (análise de sensibilidade)
-- [ ] Setup: trocar "answers are reproducible" — o 4B não reproduz com temperatura 0; reproduzível é o cache
+## Artigo (`../latex-llmeval`): lugares prontos, em vermelho até os dados chegarem
+- [ ] RQ6 (V-F): valores e discussão da varredura; `tables/budget.tex` e `figures/budget.pdf` saem do `analyze`;
+  rever a frase do resumo, a conclusão da RQ6 e a ameaça "Models and serving"
+- [ ] RQ3: coluna "Free text (jury)" de `tables/human_ceiling.tex` e discussão; frase na conclusão
 - [ ] Revisar floats; conferir metadados do `.bib`; Trabalhos Correlatos é do usuário
 
 ## Pendências do usuário
-- [ ] Anotar as 120 respostas (Rodrigo Ferraz; Rodrigo Guedes ainda a definir: todas ou um subconjunto), CSVs em
-  `human_eval/results/`, rodar `scripts/evaluate_human_results.py` (há um `\todo` na RQ1)
+- [ ] Segundo anotador (Rodrigo Guedes), se ele fizer: CSV em `human_eval/results/`, rodar
+  `scripts/evaluate_human_results.py`; recolocar no artigo a linha "annotator 1 vs. 2" e a concordância entre humanos
 - [ ] Avisar o dono/administrador da chave exposta em `/home/jovyan/compartilhado/.ssh/` (não usar: não é do usuário)
 
 ## Se o container cair
@@ -37,5 +35,6 @@ Só o que vale hoje. `[~]` em andamento, `[ ]` pendente. Histórico: `git log`. 
 - Artigo: extração de dados de revisões sistemáticas; QASPER é o alvo e QuALITY o controle; sem RQ7; IEEE conferência.
 - Amostra de 400 perguntas; júri de 3 LLMs; raciocínio só em Qwen3.5-4B e 9B, 5 condições.
 - Ordem no servidor (27/10): varredura de orçamento antes da concordância com o júri.
-- Validação humana: 120 respostas; a régua do modelo é a concordância entre humanos, não 100%.
+- Validação humana: 120 respostas, um anotador (Rodrigo Ferraz, 27/10: júri 85,0%, kappa 0,65); a régua do modelo é a
+  concordância entre humanos, não 100%.
 - Citar só datasets/métodos, mais Liu 2024, Schick 2023 e Souza & Panisson 2026 (pedidos pelo usuário).
