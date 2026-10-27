@@ -26,6 +26,7 @@ Só o que vale hoje. `[~]` em andamento, `[ ]` pendente. Histórico: `git log`. 
 
 ## Se o container cair
 1. `/home/jovyan/privado/.persist/return_by_death.sh` (usuário) e `source /etc/profile.d/99-persist-env.sh`.
+   Se `.venv/bin/python` não existir, recriar como no HANDOFF (Python em `/home/jovyan/privado/.persist/uv-python`).
 2. `tail results/logs/pipeline.log`: se não há "varredura de orçamento concluída", relançar
    `IGNORAR_MODELOS=qwen2.5:32b CHAIN=./run_extra.sh setsid nohup ./aguarda_servidor.sh > results/logs/aguarda_extra.log 2>&1 < /dev/null &`
    (o cache retoma de onde parou).
