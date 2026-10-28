@@ -206,10 +206,12 @@ class OllamaClient:
         try:
             with self.slots.hold():
                 t0 = time.time()  # o tempo na fila local não conta como latência do servidor
+                stream = bool(payload.get("stream"))
                 r = self.session.post(
-                    f"{self.url}{endpoint}", json=payload, auth=self.auth, timeout=self.opts["timeout_s"]
+                    f"{self.url}{endpoint}", json=payload, auth=self.auth, timeout=self.opts["timeout_s"], stream=stream
                 )
-        except requests.RequestException as exc:  # rede, timeout
+                body = self._read_stream(r) if stream and r.status_code < 400 else None
+        except requests.RequestException as exc:  # rede, timeout, stream interrompido
             tipo = "timeout" if isinstance(exc, requests.Timeout) else "conexao"
             self.incidents.failure(endpoint, model, tipo, None, f"{type(exc).__name__}: {str(exc)[:160]}", time.time() - t0)
             self._note(False)
@@ -224,7 +226,26 @@ class OllamaClient:
         r.raise_for_status()
         self._note(True)
         self.incidents.success(endpoint, model)
-        return r.json()
+        return body if body is not None else r.json()
+
+    @staticmethod
+    def _read_stream(r) -> dict:
+        """Junta as partes de uma resposta em streaming no mesmo formato da resposta sem streaming."""
+        content, thinking, last = [], [], None
+        for line in r.iter_lines():
+            if not line:
+                continue
+            chunk = json.loads(line)
+            if chunk.get("error"):
+                raise requests.RequestException(f"erro no stream: {chunk['error']}")
+            msg = chunk.get("message") or {}
+            content.append(msg.get("content") or "")
+            thinking.append(msg.get("thinking") or "")
+            if chunk.get("done"):
+                last = chunk
+        if last is None:
+            raise requests.RequestException("stream terminou sem a parte final")
+        return {**last, "message": {"role": "assistant", "content": "".join(content), "thinking": "".join(thinking)}}
 
     @lru_cache(maxsize=None)
     def capabilities(self, model: str) -> tuple[str, ...]:
@@ -282,7 +303,9 @@ class OllamaClient:
                 payload["options"] = {**options, "seed": options["seed"] + attempt}
             t0 = time.time()
             try:
-                resp = self._post("/api/chat", payload)
+                # gerações longas em streaming: o gateway da UFSC corta com 504 respostas paradas por 600 s;
+                # a chave do cache continua sendo a do payload sem streaming
+                resp = self._post("/api/chat", {**payload, "stream": True} if num_predict > 4096 else payload)
             except TransientError as exc:
                 # servidor fora do ar além da janela de retentativas: a chamada falha sozinha, sem
                 # derrubar o estágio e sem ir para o cache (uma nova execução a refaz)
