@@ -13,9 +13,9 @@ ollama:
   temperature: 0.0
   seed: 42
   keep_alive: 10m       # modelos rodam em sequência; libera o servidor compartilhado logo após o uso
-  concurrency: 8        # threads por processo (8 com o servidor dividido: gerações de 8192 tokens passam de 600 s com 16 e o gateway dá 504)
+  concurrency: 4        # threads por processo (4 com o servidor dividido: com mais, pedidos de 8192 tokens esperam na fila do Ollama além dos 600 s do gateway e voltam 504)
   circuit_breaker: 40    # falhas de servidor seguidas que interrompem o estágio (código 75); > concorrência: a troca de modelo dá uma leva de 504
-  max_inflight: 8       # teto GLOBAL de requisições simultâneas (todos os processos; servidor compartilhado)
+  max_inflight: 4       # teto GLOBAL de requisições simultâneas (todos os processos; servidor compartilhado)
   timeout_s: 1800       # gerações de até 8192 tokens na varredura de orçamento
   max_parse_retries: 3
   experiment: llm-eval   # nome no registro de incidentes
