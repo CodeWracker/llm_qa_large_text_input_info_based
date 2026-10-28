@@ -84,8 +84,12 @@ class IncidentLog:
             return
         row = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "experimento": self.experiment,
                "servico": self.host, "cliente": self.client, "fonte": "automatico", **event}
-        with self._lock, open(self.path, "a", encoding="utf-8") as f:
-            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        try:
+            with self._lock, open(self.path, "a", encoding="utf-8") as f:
+                f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        except OSError as exc:  # o registro é auxiliar: nunca derruba o experimento
+            log.warning("registro de incidentes desativado (%s): %s", self.path, exc)
+            self.path = None
 
     def failure(self, endpoint: str, model: str | None, tipo: str, status: int | None, detalhe: str, dur: float):
         self._failing = True

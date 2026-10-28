@@ -16,6 +16,10 @@ run() {
     echo "$(date -Is) cadeia pausada: servidor indisponível" >> $LOG
     exit 75
   fi
+  if [ "$code" -ne 0 ]; then  # qualquer outra falha para a cadeia: seguir adiante marcaria etapas incompletas como prontas
+    echo "$(date -Is) cadeia parada: $* falhou com código $code (ver results/logs/$name.log)" >> $LOG
+    exit "$code"
+  fi
 }
 run agreement agreement
 run agreement_retry agreement

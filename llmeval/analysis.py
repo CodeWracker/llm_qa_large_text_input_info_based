@@ -176,6 +176,12 @@ def table_models(cfg, out: Path, client=None) -> None:
             except Exception as exc:  # servidor indisponível: tabela sai sem essas colunas
                 log.warning("api/show %s: %s", m, exc)
 
+    missing = [m for m in [g["model"] for g in cfg["generators"]] + [j["model"] for j in cfg["jury"]["judges"]]
+               if m not in info]
+    if missing and (out / "tables" / "models.tex").exists():
+        log.warning("api/show falhou para %s: mantendo a tabela de modelos existente", ", ".join(missing))
+        return
+
     def row(entry):
         q, ctx = info.get(entry["model"], ("--", None))
         ctxs = f"{ctx // 1024}k" if ctx else "--"

@@ -19,6 +19,10 @@ run() {  # run <log> <args...>; código 75 = servidor indisponível: pausa a cad
     echo "$(date -Is) cadeia pausada: servidor indisponível" >> $LOG
     exit 75
   fi
+  if [ "$code" -ne 0 ]; then  # qualquer outra falha para a cadeia: seguir adiante marcaria etapas incompletas como prontas
+    echo "$(date -Is) cadeia parada: $* falhou com código $code (ver results/logs/$name.log)" >> $LOG
+    exit "$code"
+  fi
 }
 # 27/10: o teste deu 9B 20/20 e 4B 10/20; o 4B entrou em nondeterministic_models (configs) e a cadeia segue
 if ! grep -qE "orçamento: determinismo (ok|tratado)" $LOG; then
