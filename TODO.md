@@ -3,10 +3,8 @@
 Só o que vale hoje. `[~]` em andamento, `[ ]` pendente. Histórico: `git log`. Retomar após queda: ver "Se o container cair".
 
 ## Em andamento (servidor)
-- [~] **Varredura de orçamento da RQ6** (`run_budget.sh`, via `run_extra.sh`): tetos 512, 1024, 2048 (quase tudo
-  deduzido do cache de 4096) e 8192 (Qwen3.5-4B refeito por inteiro, ~3.500 chamadas; 9B só os cortados), júri, análise
-  (`tables/budget.tex`, `figures/budget.pdf`). Teste de determinismo (27/10): 9B 20/20 iguais, 4B 10/20 → 4B em
-  `nondeterministic_models` (só se projeta para tetos menores). Estimativa ~35–45 h com o servidor livre.
+- [x] Varredura de orçamento da RQ6 (29/10): resultados em `results/analysis/budget*.csv`, artigo atualizado.
+  Concorrência baixada para 4 e streaming acima de 4096 tokens (504 do gateway em 600 s com o servidor dividido).
 - [ ] **Concordância humano × humano e modelo × humano no QASPER** (`run_agreement.sh` → `python -m llmeval agreement`,
   roda depois da varredura; 6.464 itens, 4.088 chamadas únicas por juiz): o júri julga cada anotação humana contra as demais (deixa um de fora) nas 200 perguntas da
   amostra e nas 1.427 do test com ≥2 anotações; os 6 modelos (documento completo, sem raciocínio) são julgados contra
@@ -14,8 +12,6 @@ Só o que vale hoje. `[~]` em andamento, `[ ]` pendente. Histórico: `git log`. 
   (`human_ceiling` em `analysis.py`, IC por bootstrap, `tables/human_ceiling.tex`). ~6 h de júri.
 
 ## Artigo (`../latex-llmeval`): lugares prontos, em vermelho até os dados chegarem
-- [ ] RQ6 (V-F): valores e discussão da varredura; `tables/budget.tex` e `figures/budget.pdf` saem do `analyze`;
-  rever a frase do resumo, a conclusão da RQ6 e a ameaça "Models and serving"
 - [ ] RQ3: coluna "Free text (jury)" de `tables/human_ceiling.tex` e discussão; frase na conclusão
 - [ ] Revisar floats; conferir metadados do `.bib`; Trabalhos Correlatos é do usuário
 
