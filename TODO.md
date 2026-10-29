@@ -2,18 +2,14 @@
 
 Só o que vale hoje. `[~]` em andamento, `[ ]` pendente. Histórico: `git log`. Retomar após queda: ver "Se o container cair".
 
-## Em andamento (servidor)
-- [x] Varredura de orçamento da RQ6 (29/10): resultados em `results/analysis/budget*.csv`, artigo atualizado.
-  Concorrência baixada para 4 e streaming acima de 4096 tokens (504 do gateway em 600 s com o servidor dividido).
-- [ ] **Concordância humano × humano e modelo × humano no QASPER** (`run_agreement.sh` → `python -m llmeval agreement`,
-  roda depois da varredura; 6.464 itens, 4.088 chamadas únicas por juiz): o júri julga cada anotação humana contra as demais (deixa um de fora) nas 200 perguntas da
-  amostra e nas 1.427 do test com ≥2 anotações; os 6 modelos (documento completo, sem raciocínio) são julgados contra
-  os mesmos conjuntos, só nas 200. Mais a parte objetiva sem LLM (sim/não e "tem resposta?") já calculada à parte
-  (`human_ceiling` em `analysis.py`, IC por bootstrap, `tables/human_ceiling.tex`). ~6 h de júri.
+## Experimentos
+- [x] Varredura de orçamento da RQ6 e concordância com humanos no QASPER concluídas (29/10); artigo atualizado.
+  Nada rodando no servidor. `configs/experiment.yaml` está com concorrência 4 (servidor dividido); com o servidor
+  livre, 16 é mais rápido para gerações curtas.
 
-## Artigo (`../latex-llmeval`): lugares prontos, em vermelho até os dados chegarem
-- [ ] RQ3: coluna "Free text (jury)" de `tables/human_ceiling.tex` e discussão; frase na conclusão
-- [ ] Revisar floats; conferir metadados do `.bib`; Trabalhos Correlatos é do usuário
+## Artigo (`../latex-llmeval`)
+- [ ] Revisar floats (a tabela/figura de orçamento flutuam para as ameaças); conferir metadados do `.bib`
+- [ ] Trabalhos Correlatos é do usuário
 
 ## Pendências do usuário
 - [ ] Segundo anotador (Rodrigo Guedes), se ele fizer: CSV em `human_eval/results/`, rodar
