@@ -1203,12 +1203,12 @@ def rq6_budget(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame | None:
 \caption{{Accuracy (\%) with reasoning for each generation budget $B$ (tokens), pooled over the five conditions run with reasoning, and without reasoning on the same questions. In parentheses: share of answers lost because reasoning exhausted the budget (\%), counted as incorrect.}}
 \label{{tab:budget}}
 \footnotesize
-\setlength{{\tabcolsep}}{{3pt}}
+\setlength{{\tabcolsep}}{{2.2pt}}
 \begin{{tabular}}{{l{"r" * (len(budgets) + 1)}}}
 \toprule
  & & \multicolumn{{{len(budgets)}}}{{c}}{{With reasoning, budget $B$}} \\
 \cmidrule(lr){{3-{len(budgets) + 2}}}
-Model & No reas. & {" & ".join(f"{b:,}" for b in budgets)} \\
+Model & No reas. & {" & ".join(str(b) for b in budgets)} \\
 \midrule
 {chr(10).join(lines)}
 \bottomrule
