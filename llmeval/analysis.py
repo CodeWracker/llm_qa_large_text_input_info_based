@@ -1350,6 +1350,133 @@ Candidate & {" & ".join(n for _, n in tasks)} \\
     return res
 
 
+CONSENSUS_CATS = [("all", "Matches every annotator"), ("some", "Matches only some annotators"),
+                  ("none", "Matches no annotator")]
+
+
+def consensus(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame | None:
+    """Onde os modelos discordam dos anotadores do QASPER: quando eles concordam entre si ou quando divergem?
+
+    Para cada pergunta e modelo (documento completo): concorda com todos os anotadores, só com alguns, ou com
+    nenhum. Texto livre: pelo júri, a partir dos conjuntos "deixa um de fora" (results/agreement.jsonl); a
+    situação dos anotadores vem do mesmo arquivo (cada anotador aceito contra os demais: todos, alguns, nenhum).
+    "Tem resposta?" e sim/não: comparação direta dos rótulos."""
+    import re
+
+    from .agreement import _annotations
+
+    agr_path = cfg.path("results") / "agreement.jsonl"
+    if not agr_path.exists():
+        return None
+    models = [g["model"] for g in cfg["generators"]]
+    labels = {g["model"]: g["label"] for g in cfg["generators"]}
+    state_name = {"all": "agree", "some": "partly agree", "none": "all differ"}
+
+    def cat(lo, hi):  # aceito contra todos os conjuntos / nenhum / alguns
+        return "all" if lo == 1 else ("none" if hi == 0 else "some")
+
+    a = pd.DataFrame(read_jsonl(agr_path))
+    a = a[a.in_sample & a.stratum.isin(["extractive", "abstractive"])]
+    hum = a[a.candidate == "human"].groupby("qid").correct.agg(["min", "max"])
+    hstate = {q: state_name[cat(r["min"], r["max"])] for q, r in hum.iterrows()}
+    m = a[a.candidate != "human"].groupby(["qid", "candidate"]).correct.agg(["min", "max"]).reset_index()
+    rows = [{"task": "freetext", "qid": r.qid, "model": r.candidate, "humans": hstate[r.qid],
+             "cat": cat(r["min"], r["max"])} for _, r in m.iterrows()]
+
+    ann = {q["qid"]: q for q in _annotations(cfg)}
+    gens = full_df[(full_df.dataset == "qasper") & (full_df.condition == "full")]
+    for r in gens.itertuples():
+        q = ann.get(r.qid)
+        if q is None:
+            continue
+        yn = re.match(r"\s*(yes|no)\b", r.answer or "", re.I)
+        lab = "unans" if r.abstained else (yn.group(1).lower() if yn else "ans")
+        H = ["unans" if t == "unanswerable" else (x.lower() if t == "yes_no" else "ans") for t, x in q["annotations"]]
+        tasks = {"answerable": ([h != "unans" for h in H], lab != "unans")}
+        if all(h in ("yes", "no") for h in H):
+            tasks["yesno"] = (H, lab)
+        for task, (T, v) in tasks.items():
+            rows.append({"task": task, "qid": r.qid, "model": r.model,
+                         "humans": "agree" if len(set(T)) == 1 else "disagree",
+                         "cat": "all" if all(v == t for t in T) else ("none" if v not in T else "some")})
+    d = pd.DataFrame(rows)
+    d.to_csv(cfg.path("results") / "analysis" / "consensus_items.csv", index=False)
+    res = (d.groupby(["task", "humans", "model"]).cat.value_counts(normalize=True).unstack(fill_value=0)
+           .reindex(columns=[c for c, _ in CONSENSUS_CATS], fill_value=0).reset_index())
+    nq = d.groupby(["task", "humans"]).qid.nunique().rename("n_questions").reset_index()
+    res = res.merge(nq, on=["task", "humans"])
+    res.to_csv(cfg.path("results") / "analysis" / "consensus.csv", index=False)
+
+    # tabela: erro próprio do modelo = não concorda com nenhum anotador quando todos concordam entre si
+    def cell(task, model):
+        r = res[(res.task == task) & (res.humans == "agree") & (res.model == model)]
+        return r"\pending" if r.empty else pct(r["none"].iloc[0])
+
+    def nqa(task, humans="agree"):
+        r = nq[(nq.task == task) & (nq.humans == humans)]
+        return "--" if r.empty else str(int(r.n_questions.iloc[0]))
+
+    tasks = [("answerable", "Has an answer?"), ("yesno", "Yes/no"), ("freetext", "Free text (jury)")]
+    lines = [f"{labels[mo]} & " + " & ".join(cell(t, mo) for t, _ in tasks) + r" \\" for mo in models]
+    lines += [r"\midrule", r"Questions with a consensus & " + " & ".join(nqa(t) for t, _ in tasks) + r" \\"]
+    write(out / "tables" / "consensus.tex", rf"""% Gerado por `python -m llmeval analyze` (consensus). Não editar à mão.
+\begin{{table}}[t]
+\centering
+\caption{{How often each model departs from a consensus of the QASPER annotators, answering with the full document. Each column is a different decision and set of questions: whether the paper answers the question at all (all questions), yes or no (questions that every annotator answered with yes or no), and free text (extractive and abstractive questions, matched by the jury). For each, the share of the questions on which all annotators agree with each other but the model's answer matches none of them (\%); the last row gives the number of such questions. A departure is an error of the model, since these questions have a single accepted answer. Mistral-7B often does not answer yes/no questions with yes or no, which counts as a departure.}}
+\label{{tab:consensus}}
+\footnotesize
+\setlength{{\tabcolsep}}{{4pt}}
+\begin{{tabular}}{{lrrr}}
+\toprule
+Model & {" & ".join(n for _, n in tasks)} \\
+\midrule
+{chr(10).join(lines)}
+\bottomrule
+\end{{tabular}}
+\end{{table}}
+""")
+    fig_consensus(cfg, res, out)
+    return res
+
+
+def fig_consensus(cfg, res: pd.DataFrame, out: Path) -> None:
+    """Texto livre: para cada situação dos anotadores, parcela das respostas de cada modelo por categoria."""
+    sub = res[res.task == "freetext"]
+    if sub.empty:
+        return
+    models = [g["model"] for g in cfg["generators"] if g["model"] in set(sub.model)]
+    labels = {g["model"]: g["label"] for g in cfg["generators"]}
+    colors = {"all": SERIES[0], "some": "#b9b8b3", "none": SERIES[7]}
+    states = [("agree", "(a) All annotators match"), ("partly agree", "(b) Some annotators match"),
+              ("all differ", "(c) No two annotators match")]
+    fig, axes = plt.subplots(1, 3, figsize=(PAGE_W, 0.28 * len(models) + 1.0), sharey=True)
+    for ax, (st, title) in zip(axes, states):
+        s = sub[sub.humans == st].set_index("model")
+        n = int(s.n_questions.iloc[0]) if not s.empty else 0
+        for yi, mo in enumerate(models):
+            left = 0.0
+            for c, _ in CONSENSUS_CATS:
+                v = 100 * (s.loc[mo, c] if mo in s.index else 0)
+                ax.barh(yi, v, left=left, color=colors[c], height=0.7, edgecolor="white", linewidth=0.6)
+                if v >= 6:
+                    ax.text(left + v / 2, yi, f"{v:.0f}", ha="center", va="center", fontsize=6.5,
+                            color="white" if c != "some" else INK)
+                left += v
+        ax.set_title(f"{title}\n{n} questions", loc="left")
+        ax.set_xlim(0, 100)
+        ax.set_xticks([0, 25, 50, 75, 100])
+        ax.set_xlabel("Share of the model's answers (%)")
+        ax.grid(axis="y", visible=False)
+    axes[0].set_yticks(range(len(models)), [labels[m] for m in models])
+    axes[0].invert_yaxis()
+    handles = [plt.Rectangle((0, 0), 1, 1, color=colors[c]) for c, _ in CONSENSUS_CATS]
+    fig.legend(handles, [n for _, n in CONSENSUS_CATS], ncol=3, frameon=False, loc="upper center",
+               bbox_to_anchor=(0.5, -0.02))
+    fig.subplots_adjust(wspace=0.14)
+    fig.savefig(out / "figures" / "consensus.pdf")
+    plt.close(fig)
+
+
 def placeholder_figures(cfg, out: Path, only_missing: bool = True) -> None:
     for name, spec in PLACEHOLDERS.items():
         path = out / "figures" / f"{name}.pdf"
@@ -1428,3 +1555,4 @@ def run_analysis(cfg) -> None:
     rq6_reasoning(cfg, full_df, out)
     rq6_budget(cfg, full_df, out)
     human_ceiling(cfg, df, out)
+    consensus(cfg, df, out)

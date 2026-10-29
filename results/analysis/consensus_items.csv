@@ -1,0 +1,2011 @@
+task,qid,model,humans,cat
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,gemma4:31b,partly agree,all
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,llama3.2:3b,partly agree,none
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,mistral:7b-instruct,partly agree,none
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:122b,partly agree,all
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:4b,partly agree,none
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:9b,partly agree,some
+freetext,027814f3a879a6c7852e033f9d99519b8729e444,gemma4:31b,agree,none
+freetext,027814f3a879a6c7852e033f9d99519b8729e444,llama3.2:3b,agree,none
+freetext,027814f3a879a6c7852e033f9d99519b8729e444,mistral:7b-instruct,agree,none
+freetext,027814f3a879a6c7852e033f9d99519b8729e444,qwen3.5:122b,agree,none
+freetext,027814f3a879a6c7852e033f9d99519b8729e444,qwen3.5:4b,agree,none
+freetext,027814f3a879a6c7852e033f9d99519b8729e444,qwen3.5:9b,agree,none
+freetext,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,gemma4:31b,partly agree,all
+freetext,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,llama3.2:3b,partly agree,some
+freetext,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,mistral:7b-instruct,partly agree,none
+freetext,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,qwen3.5:122b,partly agree,all
+freetext,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,qwen3.5:4b,partly agree,some
+freetext,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,qwen3.5:9b,partly agree,all
+freetext,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,gemma4:31b,agree,all
+freetext,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,llama3.2:3b,agree,all
+freetext,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,mistral:7b-instruct,agree,all
+freetext,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,qwen3.5:122b,agree,all
+freetext,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,qwen3.5:4b,agree,all
+freetext,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,qwen3.5:9b,agree,all
+freetext,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,gemma4:31b,all differ,some
+freetext,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,llama3.2:3b,all differ,some
+freetext,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,mistral:7b-instruct,all differ,none
+freetext,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,qwen3.5:122b,all differ,some
+freetext,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,qwen3.5:4b,all differ,some
+freetext,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,qwen3.5:9b,all differ,some
+freetext,0a736e0e3305a50d771dfc059c7d94b8bd27032e,gemma4:31b,all differ,none
+freetext,0a736e0e3305a50d771dfc059c7d94b8bd27032e,llama3.2:3b,all differ,none
+freetext,0a736e0e3305a50d771dfc059c7d94b8bd27032e,mistral:7b-instruct,all differ,some
+freetext,0a736e0e3305a50d771dfc059c7d94b8bd27032e,qwen3.5:122b,all differ,none
+freetext,0a736e0e3305a50d771dfc059c7d94b8bd27032e,qwen3.5:4b,all differ,none
+freetext,0a736e0e3305a50d771dfc059c7d94b8bd27032e,qwen3.5:9b,all differ,none
+freetext,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,gemma4:31b,agree,all
+freetext,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,llama3.2:3b,agree,none
+freetext,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,mistral:7b-instruct,agree,none
+freetext,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,qwen3.5:122b,agree,none
+freetext,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,qwen3.5:4b,agree,none
+freetext,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,qwen3.5:9b,agree,none
+freetext,16b816925567deb734049416c149747118e13963,gemma4:31b,all differ,none
+freetext,16b816925567deb734049416c149747118e13963,llama3.2:3b,all differ,none
+freetext,16b816925567deb734049416c149747118e13963,mistral:7b-instruct,all differ,none
+freetext,16b816925567deb734049416c149747118e13963,qwen3.5:122b,all differ,none
+freetext,16b816925567deb734049416c149747118e13963,qwen3.5:4b,all differ,none
+freetext,16b816925567deb734049416c149747118e13963,qwen3.5:9b,all differ,none
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,gemma4:31b,agree,all
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,llama3.2:3b,agree,none
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,mistral:7b-instruct,agree,all
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:122b,agree,all
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:4b,agree,none
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:9b,agree,none
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,gemma4:31b,partly agree,none
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,llama3.2:3b,partly agree,some
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,mistral:7b-instruct,partly agree,none
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:122b,partly agree,some
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:4b,partly agree,none
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:9b,partly agree,some
+freetext,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,gemma4:31b,all differ,none
+freetext,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,llama3.2:3b,all differ,none
+freetext,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,mistral:7b-instruct,all differ,none
+freetext,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,qwen3.5:122b,all differ,none
+freetext,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,qwen3.5:4b,all differ,none
+freetext,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,qwen3.5:9b,all differ,none
+freetext,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,gemma4:31b,partly agree,all
+freetext,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,llama3.2:3b,partly agree,none
+freetext,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,mistral:7b-instruct,partly agree,all
+freetext,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,qwen3.5:122b,partly agree,all
+freetext,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,qwen3.5:4b,partly agree,all
+freetext,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,qwen3.5:9b,partly agree,all
+freetext,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,gemma4:31b,all differ,none
+freetext,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,llama3.2:3b,all differ,some
+freetext,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,mistral:7b-instruct,all differ,none
+freetext,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,qwen3.5:122b,all differ,some
+freetext,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,qwen3.5:4b,all differ,none
+freetext,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,qwen3.5:9b,all differ,none
+freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,gemma4:31b,agree,none
+freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,llama3.2:3b,agree,none
+freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,mistral:7b-instruct,agree,none
+freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,qwen3.5:122b,agree,none
+freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,qwen3.5:4b,agree,none
+freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,qwen3.5:9b,agree,none
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,gemma4:31b,partly agree,all
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,llama3.2:3b,partly agree,all
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,mistral:7b-instruct,partly agree,all
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:122b,partly agree,all
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:4b,partly agree,all
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:9b,partly agree,all
+freetext,240058371e91c6b9509c0398cbe900855b46c328,gemma4:31b,agree,none
+freetext,240058371e91c6b9509c0398cbe900855b46c328,llama3.2:3b,agree,none
+freetext,240058371e91c6b9509c0398cbe900855b46c328,mistral:7b-instruct,agree,none
+freetext,240058371e91c6b9509c0398cbe900855b46c328,qwen3.5:122b,agree,none
+freetext,240058371e91c6b9509c0398cbe900855b46c328,qwen3.5:4b,agree,none
+freetext,240058371e91c6b9509c0398cbe900855b46c328,qwen3.5:9b,agree,none
+freetext,246e924017c48fa1f069361c44133fdf4f0386e1,gemma4:31b,agree,none
+freetext,246e924017c48fa1f069361c44133fdf4f0386e1,llama3.2:3b,agree,none
+freetext,246e924017c48fa1f069361c44133fdf4f0386e1,mistral:7b-instruct,agree,none
+freetext,246e924017c48fa1f069361c44133fdf4f0386e1,qwen3.5:122b,agree,none
+freetext,246e924017c48fa1f069361c44133fdf4f0386e1,qwen3.5:4b,agree,none
+freetext,246e924017c48fa1f069361c44133fdf4f0386e1,qwen3.5:9b,agree,none
+freetext,2abf916bc03222d3b2a3d66851d87921ff35c0d2,gemma4:31b,agree,all
+freetext,2abf916bc03222d3b2a3d66851d87921ff35c0d2,llama3.2:3b,agree,all
+freetext,2abf916bc03222d3b2a3d66851d87921ff35c0d2,mistral:7b-instruct,agree,all
+freetext,2abf916bc03222d3b2a3d66851d87921ff35c0d2,qwen3.5:122b,agree,all
+freetext,2abf916bc03222d3b2a3d66851d87921ff35c0d2,qwen3.5:4b,agree,all
+freetext,2abf916bc03222d3b2a3d66851d87921ff35c0d2,qwen3.5:9b,agree,all
+freetext,2d91554c3f320a4bcfeb00aa466309074a206712,gemma4:31b,partly agree,some
+freetext,2d91554c3f320a4bcfeb00aa466309074a206712,llama3.2:3b,partly agree,some
+freetext,2d91554c3f320a4bcfeb00aa466309074a206712,mistral:7b-instruct,partly agree,some
+freetext,2d91554c3f320a4bcfeb00aa466309074a206712,qwen3.5:122b,partly agree,some
+freetext,2d91554c3f320a4bcfeb00aa466309074a206712,qwen3.5:4b,partly agree,some
+freetext,2d91554c3f320a4bcfeb00aa466309074a206712,qwen3.5:9b,partly agree,some
+freetext,2e4688205c8e344cded7a053b6014cce04ef1bd5,gemma4:31b,agree,none
+freetext,2e4688205c8e344cded7a053b6014cce04ef1bd5,llama3.2:3b,agree,all
+freetext,2e4688205c8e344cded7a053b6014cce04ef1bd5,mistral:7b-instruct,agree,all
+freetext,2e4688205c8e344cded7a053b6014cce04ef1bd5,qwen3.5:122b,agree,none
+freetext,2e4688205c8e344cded7a053b6014cce04ef1bd5,qwen3.5:4b,agree,none
+freetext,2e4688205c8e344cded7a053b6014cce04ef1bd5,qwen3.5:9b,agree,none
+freetext,31236a876277c6e1c80891a3293c105a1b1be008,gemma4:31b,all differ,some
+freetext,31236a876277c6e1c80891a3293c105a1b1be008,llama3.2:3b,all differ,some
+freetext,31236a876277c6e1c80891a3293c105a1b1be008,mistral:7b-instruct,all differ,some
+freetext,31236a876277c6e1c80891a3293c105a1b1be008,qwen3.5:122b,all differ,some
+freetext,31236a876277c6e1c80891a3293c105a1b1be008,qwen3.5:4b,all differ,none
+freetext,31236a876277c6e1c80891a3293c105a1b1be008,qwen3.5:9b,all differ,some
+freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,gemma4:31b,all differ,some
+freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,llama3.2:3b,all differ,none
+freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,mistral:7b-instruct,all differ,none
+freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,qwen3.5:122b,all differ,some
+freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,qwen3.5:4b,all differ,none
+freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,qwen3.5:9b,all differ,none
+freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,gemma4:31b,agree,all
+freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,llama3.2:3b,agree,all
+freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,mistral:7b-instruct,agree,all
+freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:122b,agree,all
+freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:4b,agree,all
+freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:9b,agree,all
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,gemma4:31b,agree,all
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,llama3.2:3b,agree,some
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,mistral:7b-instruct,agree,some
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:122b,agree,all
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:4b,agree,all
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:9b,agree,all
+freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,gemma4:31b,agree,all
+freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,llama3.2:3b,agree,some
+freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,mistral:7b-instruct,agree,all
+freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,qwen3.5:122b,agree,all
+freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,qwen3.5:4b,agree,all
+freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,qwen3.5:9b,agree,all
+freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,gemma4:31b,partly agree,some
+freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,llama3.2:3b,partly agree,all
+freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,mistral:7b-instruct,partly agree,none
+freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,qwen3.5:122b,partly agree,none
+freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,qwen3.5:4b,partly agree,some
+freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,qwen3.5:9b,partly agree,some
+freetext,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,gemma4:31b,all differ,none
+freetext,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,llama3.2:3b,all differ,some
+freetext,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,mistral:7b-instruct,all differ,none
+freetext,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,qwen3.5:122b,all differ,some
+freetext,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,qwen3.5:4b,all differ,some
+freetext,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,qwen3.5:9b,all differ,some
+freetext,471683ba6251b631f38a24d42b6dba6f52dee429,gemma4:31b,agree,all
+freetext,471683ba6251b631f38a24d42b6dba6f52dee429,llama3.2:3b,agree,all
+freetext,471683ba6251b631f38a24d42b6dba6f52dee429,mistral:7b-instruct,agree,all
+freetext,471683ba6251b631f38a24d42b6dba6f52dee429,qwen3.5:122b,agree,all
+freetext,471683ba6251b631f38a24d42b6dba6f52dee429,qwen3.5:4b,agree,all
+freetext,471683ba6251b631f38a24d42b6dba6f52dee429,qwen3.5:9b,agree,all
+freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,gemma4:31b,partly agree,some
+freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,llama3.2:3b,partly agree,some
+freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,mistral:7b-instruct,partly agree,some
+freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:122b,partly agree,some
+freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:4b,partly agree,some
+freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:9b,partly agree,all
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,gemma4:31b,all differ,some
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,llama3.2:3b,all differ,all
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,mistral:7b-instruct,all differ,none
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:122b,all differ,some
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:4b,all differ,some
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:9b,all differ,some
+freetext,5181527e6a61a9a192db5f8064e56ec263c42661,gemma4:31b,agree,all
+freetext,5181527e6a61a9a192db5f8064e56ec263c42661,llama3.2:3b,agree,none
+freetext,5181527e6a61a9a192db5f8064e56ec263c42661,mistral:7b-instruct,agree,all
+freetext,5181527e6a61a9a192db5f8064e56ec263c42661,qwen3.5:122b,agree,all
+freetext,5181527e6a61a9a192db5f8064e56ec263c42661,qwen3.5:4b,agree,all
+freetext,5181527e6a61a9a192db5f8064e56ec263c42661,qwen3.5:9b,agree,all
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,gemma4:31b,all differ,none
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,llama3.2:3b,all differ,some
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,mistral:7b-instruct,all differ,some
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:122b,all differ,none
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:4b,all differ,some
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:9b,all differ,some
+freetext,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,gemma4:31b,agree,all
+freetext,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,llama3.2:3b,agree,all
+freetext,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,mistral:7b-instruct,agree,all
+freetext,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,qwen3.5:122b,agree,all
+freetext,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,qwen3.5:4b,agree,none
+freetext,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,qwen3.5:9b,agree,all
+freetext,59f41306383dd6e201bded0f1c7c959ec4f61c5a,gemma4:31b,all differ,some
+freetext,59f41306383dd6e201bded0f1c7c959ec4f61c5a,llama3.2:3b,all differ,some
+freetext,59f41306383dd6e201bded0f1c7c959ec4f61c5a,mistral:7b-instruct,all differ,all
+freetext,59f41306383dd6e201bded0f1c7c959ec4f61c5a,qwen3.5:122b,all differ,none
+freetext,59f41306383dd6e201bded0f1c7c959ec4f61c5a,qwen3.5:4b,all differ,some
+freetext,59f41306383dd6e201bded0f1c7c959ec4f61c5a,qwen3.5:9b,all differ,some
+freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,gemma4:31b,partly agree,all
+freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,llama3.2:3b,partly agree,none
+freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,mistral:7b-instruct,partly agree,none
+freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:122b,partly agree,some
+freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:4b,partly agree,none
+freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:9b,partly agree,some
+freetext,5db47bbb97282983e10414240db78154ea7ac75f,gemma4:31b,all differ,some
+freetext,5db47bbb97282983e10414240db78154ea7ac75f,llama3.2:3b,all differ,some
+freetext,5db47bbb97282983e10414240db78154ea7ac75f,mistral:7b-instruct,all differ,some
+freetext,5db47bbb97282983e10414240db78154ea7ac75f,qwen3.5:122b,all differ,some
+freetext,5db47bbb97282983e10414240db78154ea7ac75f,qwen3.5:4b,all differ,some
+freetext,5db47bbb97282983e10414240db78154ea7ac75f,qwen3.5:9b,all differ,some
+freetext,6167618e0c53964f3a706758bdf5e807bc5d7760,gemma4:31b,all differ,some
+freetext,6167618e0c53964f3a706758bdf5e807bc5d7760,llama3.2:3b,all differ,all
+freetext,6167618e0c53964f3a706758bdf5e807bc5d7760,mistral:7b-instruct,all differ,some
+freetext,6167618e0c53964f3a706758bdf5e807bc5d7760,qwen3.5:122b,all differ,some
+freetext,6167618e0c53964f3a706758bdf5e807bc5d7760,qwen3.5:4b,all differ,some
+freetext,6167618e0c53964f3a706758bdf5e807bc5d7760,qwen3.5:9b,all differ,some
+freetext,620b6c410a055295d137511d3c99207a47c03b5e,gemma4:31b,agree,all
+freetext,620b6c410a055295d137511d3c99207a47c03b5e,llama3.2:3b,agree,none
+freetext,620b6c410a055295d137511d3c99207a47c03b5e,mistral:7b-instruct,agree,none
+freetext,620b6c410a055295d137511d3c99207a47c03b5e,qwen3.5:122b,agree,all
+freetext,620b6c410a055295d137511d3c99207a47c03b5e,qwen3.5:4b,agree,all
+freetext,620b6c410a055295d137511d3c99207a47c03b5e,qwen3.5:9b,agree,all
+freetext,636ac549cf4917c5922cd09a655abf278924c930,gemma4:31b,partly agree,all
+freetext,636ac549cf4917c5922cd09a655abf278924c930,llama3.2:3b,partly agree,none
+freetext,636ac549cf4917c5922cd09a655abf278924c930,mistral:7b-instruct,partly agree,some
+freetext,636ac549cf4917c5922cd09a655abf278924c930,qwen3.5:122b,partly agree,some
+freetext,636ac549cf4917c5922cd09a655abf278924c930,qwen3.5:4b,partly agree,some
+freetext,636ac549cf4917c5922cd09a655abf278924c930,qwen3.5:9b,partly agree,none
+freetext,64632981279c7aa16ffc1a44ffc31f4520f5559e,gemma4:31b,partly agree,all
+freetext,64632981279c7aa16ffc1a44ffc31f4520f5559e,llama3.2:3b,partly agree,none
+freetext,64632981279c7aa16ffc1a44ffc31f4520f5559e,mistral:7b-instruct,partly agree,all
+freetext,64632981279c7aa16ffc1a44ffc31f4520f5559e,qwen3.5:122b,partly agree,some
+freetext,64632981279c7aa16ffc1a44ffc31f4520f5559e,qwen3.5:4b,partly agree,all
+freetext,64632981279c7aa16ffc1a44ffc31f4520f5559e,qwen3.5:9b,partly agree,all
+freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,gemma4:31b,all differ,none
+freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,llama3.2:3b,all differ,none
+freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,mistral:7b-instruct,all differ,none
+freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,qwen3.5:122b,all differ,none
+freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,qwen3.5:4b,all differ,none
+freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,qwen3.5:9b,all differ,none
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,gemma4:31b,all differ,some
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,llama3.2:3b,all differ,none
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,mistral:7b-instruct,all differ,none
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:122b,all differ,none
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:4b,all differ,some
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:9b,all differ,some
+freetext,697c5d2ba7e019ddb91a1de5031a90fe741f2468,gemma4:31b,all differ,some
+freetext,697c5d2ba7e019ddb91a1de5031a90fe741f2468,llama3.2:3b,all differ,none
+freetext,697c5d2ba7e019ddb91a1de5031a90fe741f2468,mistral:7b-instruct,all differ,none
+freetext,697c5d2ba7e019ddb91a1de5031a90fe741f2468,qwen3.5:122b,all differ,some
+freetext,697c5d2ba7e019ddb91a1de5031a90fe741f2468,qwen3.5:4b,all differ,some
+freetext,697c5d2ba7e019ddb91a1de5031a90fe741f2468,qwen3.5:9b,all differ,some
+freetext,69a46a227269c3aac9bf9d7c3d698c787642f806,gemma4:31b,agree,all
+freetext,69a46a227269c3aac9bf9d7c3d698c787642f806,llama3.2:3b,agree,all
+freetext,69a46a227269c3aac9bf9d7c3d698c787642f806,mistral:7b-instruct,agree,all
+freetext,69a46a227269c3aac9bf9d7c3d698c787642f806,qwen3.5:122b,agree,all
+freetext,69a46a227269c3aac9bf9d7c3d698c787642f806,qwen3.5:4b,agree,all
+freetext,69a46a227269c3aac9bf9d7c3d698c787642f806,qwen3.5:9b,agree,all
+freetext,6a90135bd001be69a888076aff1b149b78adf443,gemma4:31b,partly agree,none
+freetext,6a90135bd001be69a888076aff1b149b78adf443,llama3.2:3b,partly agree,none
+freetext,6a90135bd001be69a888076aff1b149b78adf443,mistral:7b-instruct,partly agree,none
+freetext,6a90135bd001be69a888076aff1b149b78adf443,qwen3.5:122b,partly agree,none
+freetext,6a90135bd001be69a888076aff1b149b78adf443,qwen3.5:4b,partly agree,none
+freetext,6a90135bd001be69a888076aff1b149b78adf443,qwen3.5:9b,partly agree,none
+freetext,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,gemma4:31b,all differ,all
+freetext,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,llama3.2:3b,all differ,all
+freetext,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,mistral:7b-instruct,all differ,some
+freetext,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,qwen3.5:122b,all differ,all
+freetext,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,qwen3.5:4b,all differ,none
+freetext,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,qwen3.5:9b,all differ,none
+freetext,71fd0efea1b441d86d9a75255815ba3efe09779b,gemma4:31b,partly agree,some
+freetext,71fd0efea1b441d86d9a75255815ba3efe09779b,llama3.2:3b,partly agree,none
+freetext,71fd0efea1b441d86d9a75255815ba3efe09779b,mistral:7b-instruct,partly agree,some
+freetext,71fd0efea1b441d86d9a75255815ba3efe09779b,qwen3.5:122b,partly agree,none
+freetext,71fd0efea1b441d86d9a75255815ba3efe09779b,qwen3.5:4b,partly agree,some
+freetext,71fd0efea1b441d86d9a75255815ba3efe09779b,qwen3.5:9b,partly agree,none
+freetext,732bd97ae34541f215c436e2a1b98db1649cba27,gemma4:31b,partly agree,all
+freetext,732bd97ae34541f215c436e2a1b98db1649cba27,llama3.2:3b,partly agree,all
+freetext,732bd97ae34541f215c436e2a1b98db1649cba27,mistral:7b-instruct,partly agree,all
+freetext,732bd97ae34541f215c436e2a1b98db1649cba27,qwen3.5:122b,partly agree,all
+freetext,732bd97ae34541f215c436e2a1b98db1649cba27,qwen3.5:4b,partly agree,all
+freetext,732bd97ae34541f215c436e2a1b98db1649cba27,qwen3.5:9b,partly agree,all
+freetext,74396ead9f88a9efc7626240ce128582ab69ef2b,gemma4:31b,partly agree,none
+freetext,74396ead9f88a9efc7626240ce128582ab69ef2b,llama3.2:3b,partly agree,none
+freetext,74396ead9f88a9efc7626240ce128582ab69ef2b,mistral:7b-instruct,partly agree,none
+freetext,74396ead9f88a9efc7626240ce128582ab69ef2b,qwen3.5:122b,partly agree,none
+freetext,74396ead9f88a9efc7626240ce128582ab69ef2b,qwen3.5:4b,partly agree,none
+freetext,74396ead9f88a9efc7626240ce128582ab69ef2b,qwen3.5:9b,partly agree,none
+freetext,7969b8d80e12aa3ebb89b5622bc564f44e98329f,gemma4:31b,all differ,some
+freetext,7969b8d80e12aa3ebb89b5622bc564f44e98329f,llama3.2:3b,all differ,some
+freetext,7969b8d80e12aa3ebb89b5622bc564f44e98329f,mistral:7b-instruct,all differ,some
+freetext,7969b8d80e12aa3ebb89b5622bc564f44e98329f,qwen3.5:122b,all differ,some
+freetext,7969b8d80e12aa3ebb89b5622bc564f44e98329f,qwen3.5:4b,all differ,some
+freetext,7969b8d80e12aa3ebb89b5622bc564f44e98329f,qwen3.5:9b,all differ,some
+freetext,7ef34b4996ada33a4965f164a8f96e20af7470c0,gemma4:31b,all differ,none
+freetext,7ef34b4996ada33a4965f164a8f96e20af7470c0,llama3.2:3b,all differ,none
+freetext,7ef34b4996ada33a4965f164a8f96e20af7470c0,mistral:7b-instruct,all differ,some
+freetext,7ef34b4996ada33a4965f164a8f96e20af7470c0,qwen3.5:122b,all differ,some
+freetext,7ef34b4996ada33a4965f164a8f96e20af7470c0,qwen3.5:4b,all differ,some
+freetext,7ef34b4996ada33a4965f164a8f96e20af7470c0,qwen3.5:9b,all differ,none
+freetext,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,gemma4:31b,all differ,none
+freetext,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,llama3.2:3b,all differ,none
+freetext,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,mistral:7b-instruct,all differ,none
+freetext,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,qwen3.5:122b,all differ,none
+freetext,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,qwen3.5:4b,all differ,none
+freetext,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,qwen3.5:9b,all differ,none
+freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,gemma4:31b,all differ,all
+freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,llama3.2:3b,all differ,none
+freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,mistral:7b-instruct,all differ,all
+freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,qwen3.5:122b,all differ,none
+freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,qwen3.5:4b,all differ,none
+freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,qwen3.5:9b,all differ,none
+freetext,84ee6180d3267115ad27852027d147fb86a33135,gemma4:31b,partly agree,all
+freetext,84ee6180d3267115ad27852027d147fb86a33135,llama3.2:3b,partly agree,all
+freetext,84ee6180d3267115ad27852027d147fb86a33135,mistral:7b-instruct,partly agree,all
+freetext,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:122b,partly agree,all
+freetext,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:4b,partly agree,all
+freetext,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:9b,partly agree,all
+freetext,8bb2280483af8013a32e0d294e97d44444f08ab0,gemma4:31b,all differ,none
+freetext,8bb2280483af8013a32e0d294e97d44444f08ab0,llama3.2:3b,all differ,none
+freetext,8bb2280483af8013a32e0d294e97d44444f08ab0,mistral:7b-instruct,all differ,none
+freetext,8bb2280483af8013a32e0d294e97d44444f08ab0,qwen3.5:122b,all differ,none
+freetext,8bb2280483af8013a32e0d294e97d44444f08ab0,qwen3.5:4b,all differ,all
+freetext,8bb2280483af8013a32e0d294e97d44444f08ab0,qwen3.5:9b,all differ,none
+freetext,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,gemma4:31b,agree,all
+freetext,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,llama3.2:3b,agree,all
+freetext,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,mistral:7b-instruct,agree,all
+freetext,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,qwen3.5:122b,agree,all
+freetext,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,qwen3.5:4b,agree,all
+freetext,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,qwen3.5:9b,agree,all
+freetext,8f00859f74fc77832fa7d38c22f23f74ba13a07e,gemma4:31b,all differ,none
+freetext,8f00859f74fc77832fa7d38c22f23f74ba13a07e,llama3.2:3b,all differ,some
+freetext,8f00859f74fc77832fa7d38c22f23f74ba13a07e,mistral:7b-instruct,all differ,none
+freetext,8f00859f74fc77832fa7d38c22f23f74ba13a07e,qwen3.5:122b,all differ,none
+freetext,8f00859f74fc77832fa7d38c22f23f74ba13a07e,qwen3.5:4b,all differ,none
+freetext,8f00859f74fc77832fa7d38c22f23f74ba13a07e,qwen3.5:9b,all differ,none
+freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,gemma4:31b,partly agree,some
+freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,llama3.2:3b,partly agree,none
+freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,mistral:7b-instruct,partly agree,all
+freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:122b,partly agree,some
+freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:4b,partly agree,some
+freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:9b,partly agree,all
+freetext,98aa86ee948096d6fe16c02c1e49920da00e32d4,gemma4:31b,agree,all
+freetext,98aa86ee948096d6fe16c02c1e49920da00e32d4,llama3.2:3b,agree,all
+freetext,98aa86ee948096d6fe16c02c1e49920da00e32d4,mistral:7b-instruct,agree,all
+freetext,98aa86ee948096d6fe16c02c1e49920da00e32d4,qwen3.5:122b,agree,all
+freetext,98aa86ee948096d6fe16c02c1e49920da00e32d4,qwen3.5:4b,agree,all
+freetext,98aa86ee948096d6fe16c02c1e49920da00e32d4,qwen3.5:9b,agree,all
+freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,gemma4:31b,all differ,some
+freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,llama3.2:3b,all differ,none
+freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,mistral:7b-instruct,all differ,none
+freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,qwen3.5:122b,all differ,none
+freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,qwen3.5:4b,all differ,none
+freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,qwen3.5:9b,all differ,some
+freetext,9c1f70affc87024b4280f0876839309b8dddd579,gemma4:31b,partly agree,all
+freetext,9c1f70affc87024b4280f0876839309b8dddd579,llama3.2:3b,partly agree,none
+freetext,9c1f70affc87024b4280f0876839309b8dddd579,mistral:7b-instruct,partly agree,all
+freetext,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:122b,partly agree,all
+freetext,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:4b,partly agree,none
+freetext,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:9b,partly agree,all
+freetext,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,gemma4:31b,partly agree,some
+freetext,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,llama3.2:3b,partly agree,some
+freetext,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,mistral:7b-instruct,partly agree,some
+freetext,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,qwen3.5:122b,partly agree,some
+freetext,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,qwen3.5:4b,partly agree,some
+freetext,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,qwen3.5:9b,partly agree,some
+freetext,9da181ac8f2600eb19364c1b1e3cdeb569811a11,gemma4:31b,all differ,none
+freetext,9da181ac8f2600eb19364c1b1e3cdeb569811a11,llama3.2:3b,all differ,none
+freetext,9da181ac8f2600eb19364c1b1e3cdeb569811a11,mistral:7b-instruct,all differ,none
+freetext,9da181ac8f2600eb19364c1b1e3cdeb569811a11,qwen3.5:122b,all differ,none
+freetext,9da181ac8f2600eb19364c1b1e3cdeb569811a11,qwen3.5:4b,all differ,some
+freetext,9da181ac8f2600eb19364c1b1e3cdeb569811a11,qwen3.5:9b,all differ,some
+freetext,9ea3669528c2b295f21770cb7f70d0c4b4389223,gemma4:31b,agree,none
+freetext,9ea3669528c2b295f21770cb7f70d0c4b4389223,llama3.2:3b,agree,none
+freetext,9ea3669528c2b295f21770cb7f70d0c4b4389223,mistral:7b-instruct,agree,none
+freetext,9ea3669528c2b295f21770cb7f70d0c4b4389223,qwen3.5:122b,agree,none
+freetext,9ea3669528c2b295f21770cb7f70d0c4b4389223,qwen3.5:4b,agree,none
+freetext,9ea3669528c2b295f21770cb7f70d0c4b4389223,qwen3.5:9b,agree,none
+freetext,a064337bafca8cf01e222950ea97ebc184c47bc0,gemma4:31b,all differ,none
+freetext,a064337bafca8cf01e222950ea97ebc184c47bc0,llama3.2:3b,all differ,some
+freetext,a064337bafca8cf01e222950ea97ebc184c47bc0,mistral:7b-instruct,all differ,none
+freetext,a064337bafca8cf01e222950ea97ebc184c47bc0,qwen3.5:122b,all differ,none
+freetext,a064337bafca8cf01e222950ea97ebc184c47bc0,qwen3.5:4b,all differ,none
+freetext,a064337bafca8cf01e222950ea97ebc184c47bc0,qwen3.5:9b,all differ,none
+freetext,a3a867f7b3557c168d05c517c468ff6c7337bff9,gemma4:31b,all differ,some
+freetext,a3a867f7b3557c168d05c517c468ff6c7337bff9,llama3.2:3b,all differ,none
+freetext,a3a867f7b3557c168d05c517c468ff6c7337bff9,mistral:7b-instruct,all differ,none
+freetext,a3a867f7b3557c168d05c517c468ff6c7337bff9,qwen3.5:122b,all differ,some
+freetext,a3a867f7b3557c168d05c517c468ff6c7337bff9,qwen3.5:4b,all differ,all
+freetext,a3a867f7b3557c168d05c517c468ff6c7337bff9,qwen3.5:9b,all differ,all
+freetext,a59e86a15405c8a11890db072b99fda3173e5ab2,gemma4:31b,agree,none
+freetext,a59e86a15405c8a11890db072b99fda3173e5ab2,llama3.2:3b,agree,none
+freetext,a59e86a15405c8a11890db072b99fda3173e5ab2,mistral:7b-instruct,agree,none
+freetext,a59e86a15405c8a11890db072b99fda3173e5ab2,qwen3.5:122b,agree,all
+freetext,a59e86a15405c8a11890db072b99fda3173e5ab2,qwen3.5:4b,agree,all
+freetext,a59e86a15405c8a11890db072b99fda3173e5ab2,qwen3.5:9b,agree,none
+freetext,a67a2d9acad1787b636ca2681330f4c29a0b0254,gemma4:31b,agree,all
+freetext,a67a2d9acad1787b636ca2681330f4c29a0b0254,llama3.2:3b,agree,all
+freetext,a67a2d9acad1787b636ca2681330f4c29a0b0254,mistral:7b-instruct,agree,all
+freetext,a67a2d9acad1787b636ca2681330f4c29a0b0254,qwen3.5:122b,agree,all
+freetext,a67a2d9acad1787b636ca2681330f4c29a0b0254,qwen3.5:4b,agree,all
+freetext,a67a2d9acad1787b636ca2681330f4c29a0b0254,qwen3.5:9b,agree,all
+freetext,a77d38427639d54461ae308f3045434f81e497d0,gemma4:31b,agree,all
+freetext,a77d38427639d54461ae308f3045434f81e497d0,llama3.2:3b,agree,all
+freetext,a77d38427639d54461ae308f3045434f81e497d0,mistral:7b-instruct,agree,all
+freetext,a77d38427639d54461ae308f3045434f81e497d0,qwen3.5:122b,agree,all
+freetext,a77d38427639d54461ae308f3045434f81e497d0,qwen3.5:4b,agree,all
+freetext,a77d38427639d54461ae308f3045434f81e497d0,qwen3.5:9b,agree,all
+freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,gemma4:31b,partly agree,none
+freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,llama3.2:3b,partly agree,some
+freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,mistral:7b-instruct,partly agree,all
+freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,qwen3.5:122b,partly agree,none
+freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,qwen3.5:4b,partly agree,all
+freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,qwen3.5:9b,partly agree,none
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,gemma4:31b,all differ,all
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,llama3.2:3b,all differ,all
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,mistral:7b-instruct,all differ,all
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:122b,all differ,all
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:4b,all differ,none
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:9b,all differ,all
+freetext,afeceee343360d3fe715f405dac7760d9a6754a7,gemma4:31b,all differ,some
+freetext,afeceee343360d3fe715f405dac7760d9a6754a7,llama3.2:3b,all differ,all
+freetext,afeceee343360d3fe715f405dac7760d9a6754a7,mistral:7b-instruct,all differ,some
+freetext,afeceee343360d3fe715f405dac7760d9a6754a7,qwen3.5:122b,all differ,some
+freetext,afeceee343360d3fe715f405dac7760d9a6754a7,qwen3.5:4b,all differ,some
+freetext,afeceee343360d3fe715f405dac7760d9a6754a7,qwen3.5:9b,all differ,some
+freetext,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,gemma4:31b,agree,all
+freetext,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,llama3.2:3b,agree,all
+freetext,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,mistral:7b-instruct,agree,all
+freetext,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,qwen3.5:122b,agree,all
+freetext,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,qwen3.5:4b,agree,all
+freetext,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,qwen3.5:9b,agree,all
+freetext,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,gemma4:31b,all differ,none
+freetext,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,llama3.2:3b,all differ,some
+freetext,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,mistral:7b-instruct,all differ,all
+freetext,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,qwen3.5:122b,all differ,none
+freetext,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,qwen3.5:4b,all differ,none
+freetext,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,qwen3.5:9b,all differ,some
+freetext,c27b885b1e38542244f52056abf288b2389b9fc6,gemma4:31b,agree,all
+freetext,c27b885b1e38542244f52056abf288b2389b9fc6,llama3.2:3b,agree,some
+freetext,c27b885b1e38542244f52056abf288b2389b9fc6,mistral:7b-instruct,agree,all
+freetext,c27b885b1e38542244f52056abf288b2389b9fc6,qwen3.5:122b,agree,all
+freetext,c27b885b1e38542244f52056abf288b2389b9fc6,qwen3.5:4b,agree,none
+freetext,c27b885b1e38542244f52056abf288b2389b9fc6,qwen3.5:9b,agree,all
+freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,gemma4:31b,partly agree,some
+freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,llama3.2:3b,partly agree,all
+freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,mistral:7b-instruct,partly agree,all
+freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,qwen3.5:122b,partly agree,some
+freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,qwen3.5:4b,partly agree,some
+freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,qwen3.5:9b,partly agree,some
+freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,gemma4:31b,partly agree,some
+freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,llama3.2:3b,partly agree,none
+freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,mistral:7b-instruct,partly agree,some
+freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:122b,partly agree,all
+freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:4b,partly agree,none
+freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:9b,partly agree,some
+freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,gemma4:31b,agree,all
+freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,llama3.2:3b,agree,all
+freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,mistral:7b-instruct,agree,all
+freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,qwen3.5:122b,agree,all
+freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,qwen3.5:4b,agree,all
+freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,qwen3.5:9b,agree,all
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,gemma4:31b,partly agree,all
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,llama3.2:3b,partly agree,all
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,mistral:7b-instruct,partly agree,all
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:122b,partly agree,all
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:4b,partly agree,all
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:9b,partly agree,all
+freetext,cdbbba22e62bc9402aea74ac5960503f59e984ff,gemma4:31b,partly agree,all
+freetext,cdbbba22e62bc9402aea74ac5960503f59e984ff,llama3.2:3b,partly agree,all
+freetext,cdbbba22e62bc9402aea74ac5960503f59e984ff,mistral:7b-instruct,partly agree,all
+freetext,cdbbba22e62bc9402aea74ac5960503f59e984ff,qwen3.5:122b,partly agree,all
+freetext,cdbbba22e62bc9402aea74ac5960503f59e984ff,qwen3.5:4b,partly agree,all
+freetext,cdbbba22e62bc9402aea74ac5960503f59e984ff,qwen3.5:9b,partly agree,all
+freetext,cfe21b979a6c851bdafb2e414622f61e62b1d98c,gemma4:31b,partly agree,all
+freetext,cfe21b979a6c851bdafb2e414622f61e62b1d98c,llama3.2:3b,partly agree,all
+freetext,cfe21b979a6c851bdafb2e414622f61e62b1d98c,mistral:7b-instruct,partly agree,all
+freetext,cfe21b979a6c851bdafb2e414622f61e62b1d98c,qwen3.5:122b,partly agree,all
+freetext,cfe21b979a6c851bdafb2e414622f61e62b1d98c,qwen3.5:4b,partly agree,all
+freetext,cfe21b979a6c851bdafb2e414622f61e62b1d98c,qwen3.5:9b,partly agree,all
+freetext,d126d5d6b7cfaacd58494f1879547be9e91d1364,gemma4:31b,all differ,some
+freetext,d126d5d6b7cfaacd58494f1879547be9e91d1364,llama3.2:3b,all differ,some
+freetext,d126d5d6b7cfaacd58494f1879547be9e91d1364,mistral:7b-instruct,all differ,none
+freetext,d126d5d6b7cfaacd58494f1879547be9e91d1364,qwen3.5:122b,all differ,some
+freetext,d126d5d6b7cfaacd58494f1879547be9e91d1364,qwen3.5:4b,all differ,some
+freetext,d126d5d6b7cfaacd58494f1879547be9e91d1364,qwen3.5:9b,all differ,some
+freetext,d14118b18ee94dafe170439291e20cb19ab7a43c,gemma4:31b,all differ,some
+freetext,d14118b18ee94dafe170439291e20cb19ab7a43c,llama3.2:3b,all differ,some
+freetext,d14118b18ee94dafe170439291e20cb19ab7a43c,mistral:7b-instruct,all differ,some
+freetext,d14118b18ee94dafe170439291e20cb19ab7a43c,qwen3.5:122b,all differ,some
+freetext,d14118b18ee94dafe170439291e20cb19ab7a43c,qwen3.5:4b,all differ,some
+freetext,d14118b18ee94dafe170439291e20cb19ab7a43c,qwen3.5:9b,all differ,some
+freetext,d207f78beb6cd754268881bf575c8f98000667ea,gemma4:31b,agree,all
+freetext,d207f78beb6cd754268881bf575c8f98000667ea,llama3.2:3b,agree,all
+freetext,d207f78beb6cd754268881bf575c8f98000667ea,mistral:7b-instruct,agree,all
+freetext,d207f78beb6cd754268881bf575c8f98000667ea,qwen3.5:122b,agree,all
+freetext,d207f78beb6cd754268881bf575c8f98000667ea,qwen3.5:4b,agree,all
+freetext,d207f78beb6cd754268881bf575c8f98000667ea,qwen3.5:9b,agree,all
+freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,gemma4:31b,agree,all
+freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,llama3.2:3b,agree,all
+freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,mistral:7b-instruct,agree,all
+freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,qwen3.5:122b,agree,all
+freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,qwen3.5:4b,agree,all
+freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,qwen3.5:9b,agree,all
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,gemma4:31b,all differ,some
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,llama3.2:3b,all differ,some
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,mistral:7b-instruct,all differ,none
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:122b,all differ,none
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:4b,all differ,some
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:9b,all differ,none
+freetext,d5e716c1386b6485e63075e980f80d44564d0aa2,gemma4:31b,partly agree,some
+freetext,d5e716c1386b6485e63075e980f80d44564d0aa2,llama3.2:3b,partly agree,some
+freetext,d5e716c1386b6485e63075e980f80d44564d0aa2,mistral:7b-instruct,partly agree,some
+freetext,d5e716c1386b6485e63075e980f80d44564d0aa2,qwen3.5:122b,partly agree,none
+freetext,d5e716c1386b6485e63075e980f80d44564d0aa2,qwen3.5:4b,partly agree,some
+freetext,d5e716c1386b6485e63075e980f80d44564d0aa2,qwen3.5:9b,partly agree,none
+freetext,d7e43a3db8616a106304ac04ba729c1fee78761d,gemma4:31b,agree,none
+freetext,d7e43a3db8616a106304ac04ba729c1fee78761d,llama3.2:3b,agree,none
+freetext,d7e43a3db8616a106304ac04ba729c1fee78761d,mistral:7b-instruct,agree,none
+freetext,d7e43a3db8616a106304ac04ba729c1fee78761d,qwen3.5:122b,agree,none
+freetext,d7e43a3db8616a106304ac04ba729c1fee78761d,qwen3.5:4b,agree,none
+freetext,d7e43a3db8616a106304ac04ba729c1fee78761d,qwen3.5:9b,agree,none
+freetext,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,gemma4:31b,agree,all
+freetext,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,llama3.2:3b,agree,all
+freetext,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,mistral:7b-instruct,agree,all
+freetext,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,qwen3.5:122b,agree,all
+freetext,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,qwen3.5:4b,agree,none
+freetext,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,qwen3.5:9b,agree,all
+freetext,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,gemma4:31b,agree,all
+freetext,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,llama3.2:3b,agree,all
+freetext,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,mistral:7b-instruct,agree,all
+freetext,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,qwen3.5:122b,agree,all
+freetext,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,qwen3.5:4b,agree,all
+freetext,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,qwen3.5:9b,agree,all
+freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,gemma4:31b,partly agree,some
+freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,llama3.2:3b,partly agree,some
+freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,mistral:7b-instruct,partly agree,all
+freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:122b,partly agree,all
+freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:4b,partly agree,some
+freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:9b,partly agree,some
+freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,gemma4:31b,all differ,none
+freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,llama3.2:3b,all differ,none
+freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,mistral:7b-instruct,all differ,some
+freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,qwen3.5:122b,all differ,some
+freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,qwen3.5:4b,all differ,none
+freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,qwen3.5:9b,all differ,none
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,gemma4:31b,partly agree,none
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,llama3.2:3b,partly agree,all
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,mistral:7b-instruct,partly agree,all
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:122b,partly agree,all
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:4b,partly agree,none
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:9b,partly agree,all
+freetext,ec8f39d32084996ab825debd7113c71daac38b06,gemma4:31b,partly agree,all
+freetext,ec8f39d32084996ab825debd7113c71daac38b06,llama3.2:3b,partly agree,all
+freetext,ec8f39d32084996ab825debd7113c71daac38b06,mistral:7b-instruct,partly agree,all
+freetext,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:122b,partly agree,all
+freetext,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:4b,partly agree,some
+freetext,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:9b,partly agree,all
+freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,gemma4:31b,all differ,some
+freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,llama3.2:3b,all differ,some
+freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,mistral:7b-instruct,all differ,some
+freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,qwen3.5:122b,all differ,none
+freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,qwen3.5:4b,all differ,some
+freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,qwen3.5:9b,all differ,some
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,gemma4:31b,all differ,some
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,llama3.2:3b,all differ,none
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,mistral:7b-instruct,all differ,none
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:122b,all differ,none
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:4b,all differ,none
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:9b,all differ,none
+freetext,f741d32b92630328df30f674af16fbbefcad3f93,gemma4:31b,agree,all
+freetext,f741d32b92630328df30f674af16fbbefcad3f93,llama3.2:3b,agree,all
+freetext,f741d32b92630328df30f674af16fbbefcad3f93,mistral:7b-instruct,agree,all
+freetext,f741d32b92630328df30f674af16fbbefcad3f93,qwen3.5:122b,agree,all
+freetext,f741d32b92630328df30f674af16fbbefcad3f93,qwen3.5:4b,agree,all
+freetext,f741d32b92630328df30f674af16fbbefcad3f93,qwen3.5:9b,agree,all
+freetext,f94cea545f745994800c1fb4654d64d1384f2c26,gemma4:31b,all differ,none
+freetext,f94cea545f745994800c1fb4654d64d1384f2c26,llama3.2:3b,all differ,none
+freetext,f94cea545f745994800c1fb4654d64d1384f2c26,mistral:7b-instruct,all differ,none
+freetext,f94cea545f745994800c1fb4654d64d1384f2c26,qwen3.5:122b,all differ,none
+freetext,f94cea545f745994800c1fb4654d64d1384f2c26,qwen3.5:4b,all differ,none
+freetext,f94cea545f745994800c1fb4654d64d1384f2c26,qwen3.5:9b,all differ,none
+freetext,fac273ecb3e72f2dc94cdbc797582d7225a8e070,gemma4:31b,all differ,some
+freetext,fac273ecb3e72f2dc94cdbc797582d7225a8e070,llama3.2:3b,all differ,none
+freetext,fac273ecb3e72f2dc94cdbc797582d7225a8e070,mistral:7b-instruct,all differ,none
+freetext,fac273ecb3e72f2dc94cdbc797582d7225a8e070,qwen3.5:122b,all differ,some
+freetext,fac273ecb3e72f2dc94cdbc797582d7225a8e070,qwen3.5:4b,all differ,some
+freetext,fac273ecb3e72f2dc94cdbc797582d7225a8e070,qwen3.5:9b,all differ,some
+freetext,fef5b65263c81299acc350a101dabaf5a8cb9c6e,gemma4:31b,agree,all
+freetext,fef5b65263c81299acc350a101dabaf5a8cb9c6e,llama3.2:3b,agree,all
+freetext,fef5b65263c81299acc350a101dabaf5a8cb9c6e,mistral:7b-instruct,agree,all
+freetext,fef5b65263c81299acc350a101dabaf5a8cb9c6e,qwen3.5:122b,agree,all
+freetext,fef5b65263c81299acc350a101dabaf5a8cb9c6e,qwen3.5:4b,agree,all
+freetext,fef5b65263c81299acc350a101dabaf5a8cb9c6e,qwen3.5:9b,agree,all
+answerable,a913aa14d4e05cc9d658bf6697fe5b2652589b1b,llama3.2:3b,agree,none
+answerable,044c66c6b7ff7378682f24887b05e1af79dcd04f,llama3.2:3b,agree,all
+answerable,8ba582939823faae6822a27448ea011ab6b90ed7,llama3.2:3b,disagree,some
+answerable,b02a6f59270b8c55fa4df3751bcb66fca2371451,llama3.2:3b,agree,all
+answerable,2c4db4398ecff7e4c1c335a2cb3864bfdc31df1a,llama3.2:3b,disagree,some
+answerable,810e6d09813486a64e87ef6c1fb9b1e205871632,llama3.2:3b,disagree,some
+answerable,a57e266c936e438aeeab5e8d20d9edd1c15a32ee,llama3.2:3b,disagree,some
+answerable,4830459e3d1d204e431025ce7e596ef3f8d757d2,llama3.2:3b,agree,none
+answerable,101d7a355e8bf6d1860917876ee0b9971eae7a2f,llama3.2:3b,disagree,some
+answerable,fae930129c2638ba6f9c9b3383e85aa130a73876,llama3.2:3b,disagree,some
+answerable,ab95ca983240ad5289c123a2774f8e0db424f4a1,llama3.2:3b,agree,none
+answerable,cc8f495cac0af12054c746a5b796e989ff0e5d5f,llama3.2:3b,agree,none
+answerable,e86b9633dc691976dd00ed57d1675e1460f7167b,llama3.2:3b,agree,all
+answerable,dd807195d10c492da2b0da8b2c56b8f7b75db20e,llama3.2:3b,agree,none
+answerable,3098793595252039f363ee1150d4ea956f2504b8,llama3.2:3b,disagree,some
+answerable,0035b351df63971ec57e36d4bfc6f7594bed41ae,llama3.2:3b,agree,none
+answerable,c0cebef0e29b9d13c165b6f19f6ca8393348c671,llama3.2:3b,disagree,some
+answerable,65c9aee2051ff7c47112b2aee0d928d9b6a8c2fe,llama3.2:3b,disagree,some
+answerable,0b5a505c1fca92258b9e83f53bb8cfeb81cb655a,llama3.2:3b,agree,all
+answerable,58259f2e22363aab20c448e5dd7b6f432556b32d,llama3.2:3b,disagree,some
+answerable,863d8d32a1605402e11f0bf63968a14bcfd15337,llama3.2:3b,disagree,some
+answerable,079ca5810060e1cdc12b5935d8c248492f0478b9,llama3.2:3b,disagree,some
+answerable,7f8fc3c7d59aba80a3e7c839db6892a1fc329210,llama3.2:3b,agree,none
+answerable,8908d1b865137bc309dde10a93735ec76037e5f9,llama3.2:3b,disagree,some
+answerable,2a55076a66795793d79a3edfae1041098404fbc3,llama3.2:3b,agree,all
+answerable,d3d6a4a721b8bc9776f62759b8d9be1a19c6b0d2,llama3.2:3b,agree,all
+answerable,63279ecb2ba4e51c1225e63b81cb021abc10d0d1,llama3.2:3b,agree,none
+answerable,c32fc488f0527f330273263fa8956788bd071efc,llama3.2:3b,disagree,some
+answerable,9f8c0e02a7a8e9ee69f4c1757817cde85c7944bd,llama3.2:3b,disagree,some
+answerable,9bf60073fbb69fbf860196513fc6fd2f466535f6,llama3.2:3b,agree,none
+answerable,6073be8b88f0378cd0c4ffcad87e1327bc98b991,llama3.2:3b,agree,none
+answerable,4f8b078b9f60be30520fd32a3d8601ab3babb5c0,llama3.2:3b,disagree,some
+answerable,84f9952814d6995bc99bbb3abb372d90ef2f28b4,llama3.2:3b,agree,all
+answerable,1fa9b6300401530738995f14a37e074c48bc9fd8,llama3.2:3b,agree,all
+answerable,7f11f128fd39b8060f5810fa84102f000d94ea33,llama3.2:3b,disagree,some
+answerable,78a0c25b83cdeaeaf0a4781f502105a514b2af0e,llama3.2:3b,agree,all
+answerable,71e1f06daf6310609d00850340e64a846fbe2dfb,llama3.2:3b,agree,all
+answerable,37b0ee4a9d0df3ae3493e3b9114c3f385746da5c,llama3.2:3b,agree,none
+answerable,2f9a31f5a2b668acf3bce8958f5daa67ab8b2c83,llama3.2:3b,disagree,some
+answerable,90829d5fde4f5f0ffc184c5e8fc64c8ac5ece521,llama3.2:3b,agree,none
+answerable,2d92ae6b36567e7edb6afdd72f97b06ac144fbdf,llama3.2:3b,disagree,some
+answerable,1cc394bdfdfd187fc0af28500ad47a0a764d5645,llama3.2:3b,disagree,some
+answerable,347dc2fd6427b39cf2358d43864750044437dff8,llama3.2:3b,agree,none
+answerable,7fba61426737394304e307cdc7537225f6253150,llama3.2:3b,agree,all
+answerable,be0b438952048fe6bb91c61ba48e529d784bdcea,llama3.2:3b,agree,all
+answerable,2f142cd11731d29d0c3fa426e26ef80d997862e0,llama3.2:3b,disagree,some
+answerable,946d7c877d363f549f84e9500c852dce70ae5d36,llama3.2:3b,agree,all
+answerable,e7ce612f53e9be705cdb8daa775eae51778825ef,llama3.2:3b,agree,none
+answerable,58df55002fbcba76b9aeb2181d78378b8c01a827,llama3.2:3b,agree,none
+answerable,c626637ed14dee3049b87171ddf326115e59d9ee,llama3.2:3b,agree,all
+answerable,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,llama3.2:3b,agree,all
+yesno,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,llama3.2:3b,agree,none
+answerable,1e7e3f0f760cd628f698b73d82c0f946707855ca,llama3.2:3b,agree,all
+yesno,1e7e3f0f760cd628f698b73d82c0f946707855ca,llama3.2:3b,agree,all
+answerable,d9949dd4865e79c53284932d868ca8fd10d55e70,llama3.2:3b,agree,all
+yesno,d9949dd4865e79c53284932d868ca8fd10d55e70,llama3.2:3b,disagree,some
+answerable,e099a37db801718ab341ac9a380a146c7452fd21,llama3.2:3b,agree,all
+yesno,e099a37db801718ab341ac9a380a146c7452fd21,llama3.2:3b,disagree,some
+answerable,a6603305f4fd3dd0010ac31243c40999a116537e,llama3.2:3b,agree,all
+answerable,8476d0bf5962f4ed619a7b87415ebe28c38ce296,llama3.2:3b,disagree,some
+answerable,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,llama3.2:3b,agree,all
+yesno,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,llama3.2:3b,agree,all
+answerable,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,llama3.2:3b,agree,all
+yesno,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,llama3.2:3b,agree,all
+answerable,b62b7ec5128219f04be41854247d5af992797937,llama3.2:3b,agree,all
+yesno,b62b7ec5128219f04be41854247d5af992797937,llama3.2:3b,agree,all
+answerable,4cf05da602669a4c09c91ff5a1baae6e30adefdf,llama3.2:3b,agree,all
+yesno,4cf05da602669a4c09c91ff5a1baae6e30adefdf,llama3.2:3b,disagree,some
+answerable,caebea05935cae1f5d88749a2fc748e62976eab7,llama3.2:3b,agree,all
+yesno,caebea05935cae1f5d88749a2fc748e62976eab7,llama3.2:3b,agree,all
+answerable,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,llama3.2:3b,agree,all
+yesno,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,llama3.2:3b,agree,none
+answerable,79e61134a6e29141cd19252571ffc92a0b4bc97f,llama3.2:3b,agree,all
+yesno,79e61134a6e29141cd19252571ffc92a0b4bc97f,llama3.2:3b,agree,all
+answerable,dfd07a8e2de80c3a8d075a0f400fb13a1f1d4c60,llama3.2:3b,disagree,some
+answerable,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,llama3.2:3b,agree,all
+yesno,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,llama3.2:3b,disagree,some
+answerable,ab37ae82e38f64d3fa95782f2c791488f26cd43f,llama3.2:3b,agree,all
+yesno,ab37ae82e38f64d3fa95782f2c791488f26cd43f,llama3.2:3b,agree,none
+answerable,f2dba5bf75967407cce5d0a9c2618269225081f5,llama3.2:3b,agree,all
+yesno,f2dba5bf75967407cce5d0a9c2618269225081f5,llama3.2:3b,disagree,some
+answerable,753a187c1dd8d96353187fbb193b5f86293a796c,llama3.2:3b,agree,all
+yesno,753a187c1dd8d96353187fbb193b5f86293a796c,llama3.2:3b,agree,all
+answerable,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,llama3.2:3b,agree,all
+yesno,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,llama3.2:3b,agree,all
+answerable,bc7081aaa207de2362e0bea7bc8108d338aee36f,llama3.2:3b,disagree,some
+answerable,9133a85730c4090fe8b8d08eb3d9146efe7d7037,llama3.2:3b,agree,all
+yesno,9133a85730c4090fe8b8d08eb3d9146efe7d7037,llama3.2:3b,disagree,none
+answerable,4cb2e80da73ae36de372190b4c1c490b72977ef8,llama3.2:3b,agree,all
+answerable,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,llama3.2:3b,agree,all
+yesno,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,llama3.2:3b,disagree,some
+answerable,ed15a593d64a5ba58f63c021ae9fd8f50051a667,llama3.2:3b,agree,all
+yesno,ed15a593d64a5ba58f63c021ae9fd8f50051a667,llama3.2:3b,agree,all
+answerable,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,llama3.2:3b,agree,all
+yesno,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,llama3.2:3b,agree,none
+answerable,521a3e7300567f6e8e4c531f223dbc9fc306c393,llama3.2:3b,agree,all
+yesno,521a3e7300567f6e8e4c531f223dbc9fc306c393,llama3.2:3b,agree,all
+answerable,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,llama3.2:3b,agree,all
+yesno,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,llama3.2:3b,agree,all
+answerable,1edfe390828f02a2db9a88454421c7f3d4cdd611,llama3.2:3b,agree,all
+yesno,1edfe390828f02a2db9a88454421c7f3d4cdd611,llama3.2:3b,agree,all
+answerable,8599d6d14ac157169920c73b98a79737c7a68cf5,llama3.2:3b,agree,all
+yesno,8599d6d14ac157169920c73b98a79737c7a68cf5,llama3.2:3b,disagree,some
+answerable,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,llama3.2:3b,agree,all
+yesno,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,llama3.2:3b,agree,all
+answerable,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,llama3.2:3b,agree,all
+yesno,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,llama3.2:3b,disagree,some
+answerable,c0120d339fcdb3833884622e532e7513d1b2c7dd,llama3.2:3b,agree,all
+yesno,c0120d339fcdb3833884622e532e7513d1b2c7dd,llama3.2:3b,disagree,some
+answerable,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,llama3.2:3b,agree,all
+yesno,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,llama3.2:3b,agree,all
+answerable,ee19fd54997f2eec7c87c7d4a2169026fe208285,llama3.2:3b,disagree,some
+answerable,fd8a8eb69f07c584a76633f8802c2746f7236d64,llama3.2:3b,agree,all
+yesno,fd8a8eb69f07c584a76633f8802c2746f7236d64,llama3.2:3b,agree,all
+answerable,b9e0b1940805a5056f71c66d176cc87829e314d4,llama3.2:3b,agree,all
+yesno,b9e0b1940805a5056f71c66d176cc87829e314d4,llama3.2:3b,disagree,some
+answerable,e4cbfabf4509ae0f476f950c1079714a9cd3814e,llama3.2:3b,disagree,some
+answerable,693cdb9978749db04ba34d9c168e71534f00a226,llama3.2:3b,disagree,some
+answerable,b21f61c0f95fefdb1bdb90d51cbba4655cd59896,llama3.2:3b,disagree,some
+answerable,da0a2195bbf6736119ff32493898d2aadffcbcb8,llama3.2:3b,agree,all
+yesno,da0a2195bbf6736119ff32493898d2aadffcbcb8,llama3.2:3b,agree,all
+answerable,55bafa0f7394163f4afd1d73340aac94c2d9f36c,llama3.2:3b,agree,all
+yesno,55bafa0f7394163f4afd1d73340aac94c2d9f36c,llama3.2:3b,agree,all
+answerable,f6346828c2f44529dc307abf04dd246bfeb4a9b2,llama3.2:3b,agree,all
+yesno,f6346828c2f44529dc307abf04dd246bfeb4a9b2,llama3.2:3b,disagree,some
+answerable,5752c8d333afc1e6c666b18d1477c8f669b7a602,llama3.2:3b,agree,all
+yesno,5752c8d333afc1e6c666b18d1477c8f669b7a602,llama3.2:3b,agree,all
+answerable,49474a3047fa3f35e1bcd63991e6f15e012ac10b,llama3.2:3b,agree,all
+yesno,49474a3047fa3f35e1bcd63991e6f15e012ac10b,llama3.2:3b,agree,all
+answerable,2b32cf05c5e736f764ceecc08477e20ab9f2f5d7,llama3.2:3b,agree,all
+answerable,ae2142ee9e093ce485025168f4bcb3da4602739d,llama3.2:3b,agree,all
+answerable,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,llama3.2:3b,agree,all
+yesno,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,llama3.2:3b,disagree,some
+answerable,c27b885b1e38542244f52056abf288b2389b9fc6,llama3.2:3b,agree,all
+answerable,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,llama3.2:3b,agree,all
+yesno,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,llama3.2:3b,agree,all
+answerable,59f41306383dd6e201bded0f1c7c959ec4f61c5a,llama3.2:3b,agree,all
+answerable,1e582319df1739dcd07ba0ba39e8f70187fba049,llama3.2:3b,agree,all
+answerable,2abf916bc03222d3b2a3d66851d87921ff35c0d2,llama3.2:3b,agree,all
+answerable,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,llama3.2:3b,agree,all
+answerable,477da8d997ff87400c6aad19dcc74f8998bc89c3,llama3.2:3b,agree,all
+answerable,8f00859f74fc77832fa7d38c22f23f74ba13a07e,llama3.2:3b,agree,all
+answerable,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,llama3.2:3b,agree,all
+answerable,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,llama3.2:3b,agree,all
+answerable,027814f3a879a6c7852e033f9d99519b8729e444,llama3.2:3b,agree,none
+answerable,9da181ac8f2600eb19364c1b1e3cdeb569811a11,llama3.2:3b,agree,all
+answerable,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,llama3.2:3b,agree,all
+answerable,f0404673085517eea708c5e91f32fb0f7728fa08,llama3.2:3b,agree,all
+answerable,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,llama3.2:3b,agree,all
+answerable,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,llama3.2:3b,agree,all
+answerable,afeceee343360d3fe715f405dac7760d9a6754a7,llama3.2:3b,agree,all
+answerable,ec8f39d32084996ab825debd7113c71daac38b06,llama3.2:3b,agree,all
+answerable,246e924017c48fa1f069361c44133fdf4f0386e1,llama3.2:3b,agree,all
+answerable,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,llama3.2:3b,agree,all
+answerable,330fe3815f74037a9be93a4c16610c736a2a27b3,llama3.2:3b,agree,all
+answerable,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,llama3.2:3b,agree,all
+answerable,c87966e7f497975b76a60f6be50c33d296a4a4e7,llama3.2:3b,agree,all
+answerable,d7e43a3db8616a106304ac04ba729c1fee78761d,llama3.2:3b,agree,all
+answerable,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,llama3.2:3b,agree,all
+answerable,9ea3669528c2b295f21770cb7f70d0c4b4389223,llama3.2:3b,agree,all
+answerable,0a736e0e3305a50d771dfc059c7d94b8bd27032e,llama3.2:3b,disagree,some
+answerable,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,llama3.2:3b,agree,all
+answerable,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,llama3.2:3b,agree,all
+answerable,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,llama3.2:3b,agree,all
+answerable,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,llama3.2:3b,agree,all
+answerable,697c5d2ba7e019ddb91a1de5031a90fe741f2468,llama3.2:3b,disagree,some
+answerable,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,llama3.2:3b,agree,all
+answerable,69a46a227269c3aac9bf9d7c3d698c787642f806,llama3.2:3b,agree,all
+answerable,f010f9aa4ba1b4360a78c00aa0747d7730a61805,llama3.2:3b,agree,all
+answerable,cdbbba22e62bc9402aea74ac5960503f59e984ff,llama3.2:3b,agree,all
+answerable,a064337bafca8cf01e222950ea97ebc184c47bc0,llama3.2:3b,agree,all
+answerable,6a90135bd001be69a888076aff1b149b78adf443,llama3.2:3b,agree,none
+answerable,16b816925567deb734049416c149747118e13963,llama3.2:3b,agree,none
+answerable,f94cea545f745994800c1fb4654d64d1384f2c26,llama3.2:3b,agree,all
+answerable,98aa86ee948096d6fe16c02c1e49920da00e32d4,llama3.2:3b,agree,all
+answerable,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,llama3.2:3b,agree,all
+answerable,240058371e91c6b9509c0398cbe900855b46c328,llama3.2:3b,agree,all
+answerable,64632981279c7aa16ffc1a44ffc31f4520f5559e,llama3.2:3b,agree,all
+answerable,fac273ecb3e72f2dc94cdbc797582d7225a8e070,llama3.2:3b,agree,all
+answerable,d207f78beb6cd754268881bf575c8f98000667ea,llama3.2:3b,agree,all
+answerable,7ef34b4996ada33a4965f164a8f96e20af7470c0,llama3.2:3b,agree,all
+answerable,74396ead9f88a9efc7626240ce128582ab69ef2b,llama3.2:3b,agree,all
+answerable,cfe21b979a6c851bdafb2e414622f61e62b1d98c,llama3.2:3b,agree,all
+answerable,aebd1f0d728d0de5f76238844da044a44109f76f,llama3.2:3b,agree,all
+answerable,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,llama3.2:3b,agree,all
+answerable,5db47bbb97282983e10414240db78154ea7ac75f,llama3.2:3b,agree,all
+answerable,71fd0efea1b441d86d9a75255815ba3efe09779b,llama3.2:3b,agree,all
+answerable,e42916924b69cab1df25d3b4e6072feaa0ba8084,llama3.2:3b,disagree,some
+answerable,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,llama3.2:3b,agree,all
+answerable,84ee6180d3267115ad27852027d147fb86a33135,llama3.2:3b,disagree,some
+answerable,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,llama3.2:3b,agree,all
+answerable,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,llama3.2:3b,agree,all
+answerable,f741d32b92630328df30f674af16fbbefcad3f93,llama3.2:3b,agree,all
+answerable,31236a876277c6e1c80891a3293c105a1b1be008,llama3.2:3b,disagree,some
+answerable,d5bce5da746a075421c80abe10c97ad11a96c6cd,llama3.2:3b,agree,all
+answerable,636ac549cf4917c5922cd09a655abf278924c930,llama3.2:3b,agree,all
+answerable,9186b2c5b7000ab7f15a46a47da73ea45544bace,llama3.2:3b,agree,all
+answerable,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,llama3.2:3b,agree,all
+answerable,6167618e0c53964f3a706758bdf5e807bc5d7760,llama3.2:3b,agree,all
+answerable,d5e716c1386b6485e63075e980f80d44564d0aa2,llama3.2:3b,agree,all
+answerable,620b6c410a055295d137511d3c99207a47c03b5e,llama3.2:3b,agree,all
+answerable,37ac705166fa87dc74fe86575bf04bea56cc4930,llama3.2:3b,agree,all
+answerable,471683ba6251b631f38a24d42b6dba6f52dee429,llama3.2:3b,agree,all
+answerable,7969b8d80e12aa3ebb89b5622bc564f44e98329f,llama3.2:3b,agree,all
+answerable,67cb001f8ca122ea859724804b41529fea5faeef,llama3.2:3b,agree,all
+answerable,9b3371dcd855f1d3342edb212efa39dfc9142ae3,llama3.2:3b,disagree,some
+answerable,2e4688205c8e344cded7a053b6014cce04ef1bd5,llama3.2:3b,agree,all
+answerable,fef5b65263c81299acc350a101dabaf5a8cb9c6e,llama3.2:3b,agree,all
+answerable,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,llama3.2:3b,agree,all
+answerable,4748a50c96acb1aa03f7efd1b43376c193b2450a,llama3.2:3b,agree,all
+answerable,d323f0d65b57b30ae85fb9f24298927a3d1216e9,llama3.2:3b,agree,all
+answerable,a77d38427639d54461ae308f3045434f81e497d0,llama3.2:3b,agree,all
+answerable,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,llama3.2:3b,agree,all
+answerable,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,llama3.2:3b,agree,all
+answerable,38363a7ed250bc729508c4c1dc975696a65c53cb,llama3.2:3b,agree,all
+answerable,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,llama3.2:3b,agree,all
+answerable,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,llama3.2:3b,agree,all
+answerable,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,llama3.2:3b,agree,all
+answerable,d126d5d6b7cfaacd58494f1879547be9e91d1364,llama3.2:3b,agree,all
+answerable,732bd97ae34541f215c436e2a1b98db1649cba27,llama3.2:3b,agree,all
+answerable,5181527e6a61a9a192db5f8064e56ec263c42661,llama3.2:3b,agree,all
+answerable,8bb2280483af8013a32e0d294e97d44444f08ab0,llama3.2:3b,agree,all
+answerable,a59e86a15405c8a11890db072b99fda3173e5ab2,llama3.2:3b,agree,all
+answerable,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,llama3.2:3b,agree,all
+answerable,9c1f70affc87024b4280f0876839309b8dddd579,llama3.2:3b,agree,all
+answerable,a67a2d9acad1787b636ca2681330f4c29a0b0254,llama3.2:3b,agree,all
+answerable,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,llama3.2:3b,agree,all
+answerable,00db191facf903cef18fb1727d1cab638c277e0a,llama3.2:3b,agree,all
+answerable,d14118b18ee94dafe170439291e20cb19ab7a43c,llama3.2:3b,disagree,some
+answerable,a3a867f7b3557c168d05c517c468ff6c7337bff9,llama3.2:3b,agree,all
+answerable,52faf319e37aa15fff1ab47f634a5a584dc42e75,llama3.2:3b,agree,all
+answerable,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,llama3.2:3b,agree,all
+answerable,de84972c5d1bbf664d0f8b702fce5f161449ec23,llama3.2:3b,disagree,some
+answerable,230ff86b7b90b87c33c53014bb1e9c582dfc107f,llama3.2:3b,agree,all
+answerable,2d91554c3f320a4bcfeb00aa466309074a206712,llama3.2:3b,agree,all
+answerable,a913aa14d4e05cc9d658bf6697fe5b2652589b1b,qwen3.5:4b,agree,none
+answerable,044c66c6b7ff7378682f24887b05e1af79dcd04f,qwen3.5:4b,agree,all
+answerable,8ba582939823faae6822a27448ea011ab6b90ed7,qwen3.5:4b,disagree,some
+answerable,b02a6f59270b8c55fa4df3751bcb66fca2371451,qwen3.5:4b,agree,all
+answerable,2c4db4398ecff7e4c1c335a2cb3864bfdc31df1a,qwen3.5:4b,disagree,some
+answerable,810e6d09813486a64e87ef6c1fb9b1e205871632,qwen3.5:4b,disagree,some
+answerable,a57e266c936e438aeeab5e8d20d9edd1c15a32ee,qwen3.5:4b,disagree,some
+answerable,4830459e3d1d204e431025ce7e596ef3f8d757d2,qwen3.5:4b,agree,none
+answerable,101d7a355e8bf6d1860917876ee0b9971eae7a2f,qwen3.5:4b,disagree,some
+answerable,fae930129c2638ba6f9c9b3383e85aa130a73876,qwen3.5:4b,disagree,some
+answerable,ab95ca983240ad5289c123a2774f8e0db424f4a1,qwen3.5:4b,agree,all
+answerable,cc8f495cac0af12054c746a5b796e989ff0e5d5f,qwen3.5:4b,agree,all
+answerable,e86b9633dc691976dd00ed57d1675e1460f7167b,qwen3.5:4b,agree,all
+answerable,3098793595252039f363ee1150d4ea956f2504b8,qwen3.5:4b,disagree,some
+answerable,dd807195d10c492da2b0da8b2c56b8f7b75db20e,qwen3.5:4b,agree,all
+answerable,0035b351df63971ec57e36d4bfc6f7594bed41ae,qwen3.5:4b,agree,none
+answerable,c0cebef0e29b9d13c165b6f19f6ca8393348c671,qwen3.5:4b,disagree,some
+answerable,0b5a505c1fca92258b9e83f53bb8cfeb81cb655a,qwen3.5:4b,agree,none
+answerable,65c9aee2051ff7c47112b2aee0d928d9b6a8c2fe,qwen3.5:4b,disagree,some
+answerable,58259f2e22363aab20c448e5dd7b6f432556b32d,qwen3.5:4b,disagree,some
+answerable,863d8d32a1605402e11f0bf63968a14bcfd15337,qwen3.5:4b,disagree,some
+answerable,079ca5810060e1cdc12b5935d8c248492f0478b9,qwen3.5:4b,disagree,some
+answerable,8908d1b865137bc309dde10a93735ec76037e5f9,qwen3.5:4b,disagree,some
+answerable,7f8fc3c7d59aba80a3e7c839db6892a1fc329210,qwen3.5:4b,agree,none
+answerable,2a55076a66795793d79a3edfae1041098404fbc3,qwen3.5:4b,agree,all
+answerable,d3d6a4a721b8bc9776f62759b8d9be1a19c6b0d2,qwen3.5:4b,agree,all
+answerable,63279ecb2ba4e51c1225e63b81cb021abc10d0d1,qwen3.5:4b,agree,all
+answerable,c32fc488f0527f330273263fa8956788bd071efc,qwen3.5:4b,disagree,some
+answerable,9f8c0e02a7a8e9ee69f4c1757817cde85c7944bd,qwen3.5:4b,disagree,some
+answerable,6073be8b88f0378cd0c4ffcad87e1327bc98b991,qwen3.5:4b,agree,none
+answerable,9bf60073fbb69fbf860196513fc6fd2f466535f6,qwen3.5:4b,agree,none
+answerable,4f8b078b9f60be30520fd32a3d8601ab3babb5c0,qwen3.5:4b,disagree,some
+answerable,84f9952814d6995bc99bbb3abb372d90ef2f28b4,qwen3.5:4b,agree,none
+answerable,7f11f128fd39b8060f5810fa84102f000d94ea33,qwen3.5:4b,disagree,some
+answerable,1fa9b6300401530738995f14a37e074c48bc9fd8,qwen3.5:4b,agree,none
+answerable,78a0c25b83cdeaeaf0a4781f502105a514b2af0e,qwen3.5:4b,agree,none
+answerable,71e1f06daf6310609d00850340e64a846fbe2dfb,qwen3.5:4b,agree,all
+answerable,2f9a31f5a2b668acf3bce8958f5daa67ab8b2c83,qwen3.5:4b,disagree,some
+answerable,37b0ee4a9d0df3ae3493e3b9114c3f385746da5c,qwen3.5:4b,agree,none
+answerable,90829d5fde4f5f0ffc184c5e8fc64c8ac5ece521,qwen3.5:4b,agree,none
+answerable,2d92ae6b36567e7edb6afdd72f97b06ac144fbdf,qwen3.5:4b,disagree,some
+answerable,1cc394bdfdfd187fc0af28500ad47a0a764d5645,qwen3.5:4b,disagree,some
+answerable,be0b438952048fe6bb91c61ba48e529d784bdcea,qwen3.5:4b,agree,all
+answerable,347dc2fd6427b39cf2358d43864750044437dff8,qwen3.5:4b,agree,none
+answerable,7fba61426737394304e307cdc7537225f6253150,qwen3.5:4b,agree,all
+answerable,2f142cd11731d29d0c3fa426e26ef80d997862e0,qwen3.5:4b,disagree,some
+answerable,946d7c877d363f549f84e9500c852dce70ae5d36,qwen3.5:4b,agree,all
+answerable,e7ce612f53e9be705cdb8daa775eae51778825ef,qwen3.5:4b,agree,none
+answerable,58df55002fbcba76b9aeb2181d78378b8c01a827,qwen3.5:4b,agree,none
+answerable,c626637ed14dee3049b87171ddf326115e59d9ee,qwen3.5:4b,agree,all
+answerable,1e7e3f0f760cd628f698b73d82c0f946707855ca,qwen3.5:4b,agree,all
+yesno,1e7e3f0f760cd628f698b73d82c0f946707855ca,qwen3.5:4b,agree,all
+answerable,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,qwen3.5:4b,agree,all
+yesno,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,qwen3.5:4b,agree,none
+answerable,d9949dd4865e79c53284932d868ca8fd10d55e70,qwen3.5:4b,agree,all
+yesno,d9949dd4865e79c53284932d868ca8fd10d55e70,qwen3.5:4b,disagree,some
+answerable,e099a37db801718ab341ac9a380a146c7452fd21,qwen3.5:4b,agree,all
+yesno,e099a37db801718ab341ac9a380a146c7452fd21,qwen3.5:4b,disagree,some
+answerable,a6603305f4fd3dd0010ac31243c40999a116537e,qwen3.5:4b,agree,all
+answerable,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,qwen3.5:4b,agree,all
+yesno,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,qwen3.5:4b,agree,all
+answerable,8476d0bf5962f4ed619a7b87415ebe28c38ce296,qwen3.5:4b,disagree,some
+answerable,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,qwen3.5:4b,agree,all
+yesno,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,qwen3.5:4b,agree,all
+answerable,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,qwen3.5:4b,agree,all
+yesno,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,qwen3.5:4b,agree,all
+answerable,b62b7ec5128219f04be41854247d5af992797937,qwen3.5:4b,agree,all
+yesno,b62b7ec5128219f04be41854247d5af992797937,qwen3.5:4b,agree,all
+answerable,4cf05da602669a4c09c91ff5a1baae6e30adefdf,qwen3.5:4b,agree,all
+yesno,4cf05da602669a4c09c91ff5a1baae6e30adefdf,qwen3.5:4b,disagree,some
+answerable,caebea05935cae1f5d88749a2fc748e62976eab7,qwen3.5:4b,agree,all
+yesno,caebea05935cae1f5d88749a2fc748e62976eab7,qwen3.5:4b,agree,none
+answerable,79e61134a6e29141cd19252571ffc92a0b4bc97f,qwen3.5:4b,agree,all
+yesno,79e61134a6e29141cd19252571ffc92a0b4bc97f,qwen3.5:4b,agree,all
+answerable,dfd07a8e2de80c3a8d075a0f400fb13a1f1d4c60,qwen3.5:4b,disagree,some
+answerable,ab37ae82e38f64d3fa95782f2c791488f26cd43f,qwen3.5:4b,agree,all
+yesno,ab37ae82e38f64d3fa95782f2c791488f26cd43f,qwen3.5:4b,agree,none
+answerable,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,qwen3.5:4b,agree,all
+yesno,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,qwen3.5:4b,disagree,some
+answerable,f2dba5bf75967407cce5d0a9c2618269225081f5,qwen3.5:4b,agree,all
+yesno,f2dba5bf75967407cce5d0a9c2618269225081f5,qwen3.5:4b,disagree,some
+answerable,753a187c1dd8d96353187fbb193b5f86293a796c,qwen3.5:4b,agree,all
+yesno,753a187c1dd8d96353187fbb193b5f86293a796c,qwen3.5:4b,agree,all
+answerable,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,qwen3.5:4b,agree,all
+yesno,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,qwen3.5:4b,agree,all
+answerable,9133a85730c4090fe8b8d08eb3d9146efe7d7037,qwen3.5:4b,agree,all
+yesno,9133a85730c4090fe8b8d08eb3d9146efe7d7037,qwen3.5:4b,disagree,some
+answerable,bc7081aaa207de2362e0bea7bc8108d338aee36f,qwen3.5:4b,disagree,some
+answerable,4cb2e80da73ae36de372190b4c1c490b72977ef8,qwen3.5:4b,agree,all
+answerable,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,qwen3.5:4b,agree,all
+yesno,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,qwen3.5:4b,disagree,some
+answerable,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,qwen3.5:4b,agree,all
+yesno,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,qwen3.5:4b,agree,none
+answerable,ed15a593d64a5ba58f63c021ae9fd8f50051a667,qwen3.5:4b,agree,all
+yesno,ed15a593d64a5ba58f63c021ae9fd8f50051a667,qwen3.5:4b,agree,all
+answerable,521a3e7300567f6e8e4c531f223dbc9fc306c393,qwen3.5:4b,agree,all
+yesno,521a3e7300567f6e8e4c531f223dbc9fc306c393,qwen3.5:4b,agree,all
+answerable,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,qwen3.5:4b,agree,none
+yesno,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,qwen3.5:4b,agree,none
+answerable,1edfe390828f02a2db9a88454421c7f3d4cdd611,qwen3.5:4b,agree,all
+yesno,1edfe390828f02a2db9a88454421c7f3d4cdd611,qwen3.5:4b,agree,all
+answerable,8599d6d14ac157169920c73b98a79737c7a68cf5,qwen3.5:4b,agree,all
+yesno,8599d6d14ac157169920c73b98a79737c7a68cf5,qwen3.5:4b,disagree,some
+answerable,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,qwen3.5:4b,agree,all
+yesno,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,qwen3.5:4b,agree,all
+answerable,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,qwen3.5:4b,agree,all
+yesno,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,qwen3.5:4b,disagree,some
+answerable,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,qwen3.5:4b,agree,all
+yesno,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,qwen3.5:4b,agree,all
+answerable,c0120d339fcdb3833884622e532e7513d1b2c7dd,qwen3.5:4b,agree,all
+yesno,c0120d339fcdb3833884622e532e7513d1b2c7dd,qwen3.5:4b,disagree,some
+answerable,ee19fd54997f2eec7c87c7d4a2169026fe208285,qwen3.5:4b,disagree,some
+answerable,fd8a8eb69f07c584a76633f8802c2746f7236d64,qwen3.5:4b,agree,all
+yesno,fd8a8eb69f07c584a76633f8802c2746f7236d64,qwen3.5:4b,agree,all
+answerable,b9e0b1940805a5056f71c66d176cc87829e314d4,qwen3.5:4b,agree,all
+yesno,b9e0b1940805a5056f71c66d176cc87829e314d4,qwen3.5:4b,disagree,some
+answerable,e4cbfabf4509ae0f476f950c1079714a9cd3814e,qwen3.5:4b,disagree,some
+answerable,693cdb9978749db04ba34d9c168e71534f00a226,qwen3.5:4b,disagree,some
+answerable,b21f61c0f95fefdb1bdb90d51cbba4655cd59896,qwen3.5:4b,disagree,some
+answerable,da0a2195bbf6736119ff32493898d2aadffcbcb8,qwen3.5:4b,agree,all
+yesno,da0a2195bbf6736119ff32493898d2aadffcbcb8,qwen3.5:4b,agree,all
+answerable,55bafa0f7394163f4afd1d73340aac94c2d9f36c,qwen3.5:4b,agree,all
+yesno,55bafa0f7394163f4afd1d73340aac94c2d9f36c,qwen3.5:4b,agree,all
+answerable,f6346828c2f44529dc307abf04dd246bfeb4a9b2,qwen3.5:4b,agree,all
+yesno,f6346828c2f44529dc307abf04dd246bfeb4a9b2,qwen3.5:4b,disagree,some
+answerable,5752c8d333afc1e6c666b18d1477c8f669b7a602,qwen3.5:4b,agree,all
+yesno,5752c8d333afc1e6c666b18d1477c8f669b7a602,qwen3.5:4b,agree,all
+answerable,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,qwen3.5:4b,agree,all
+yesno,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,qwen3.5:4b,agree,all
+answerable,49474a3047fa3f35e1bcd63991e6f15e012ac10b,qwen3.5:4b,agree,none
+yesno,49474a3047fa3f35e1bcd63991e6f15e012ac10b,qwen3.5:4b,agree,none
+answerable,2b32cf05c5e736f764ceecc08477e20ab9f2f5d7,qwen3.5:4b,agree,all
+answerable,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,qwen3.5:4b,agree,all
+yesno,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,qwen3.5:4b,disagree,some
+answerable,ae2142ee9e093ce485025168f4bcb3da4602739d,qwen3.5:4b,agree,all
+answerable,c27b885b1e38542244f52056abf288b2389b9fc6,qwen3.5:4b,agree,all
+answerable,59f41306383dd6e201bded0f1c7c959ec4f61c5a,qwen3.5:4b,agree,all
+answerable,2abf916bc03222d3b2a3d66851d87921ff35c0d2,qwen3.5:4b,agree,all
+answerable,1e582319df1739dcd07ba0ba39e8f70187fba049,qwen3.5:4b,agree,none
+answerable,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,qwen3.5:4b,agree,none
+answerable,8f00859f74fc77832fa7d38c22f23f74ba13a07e,qwen3.5:4b,agree,all
+answerable,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:4b,agree,all
+answerable,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:4b,agree,all
+answerable,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:4b,agree,all
+answerable,9da181ac8f2600eb19364c1b1e3cdeb569811a11,qwen3.5:4b,agree,all
+answerable,027814f3a879a6c7852e033f9d99519b8729e444,qwen3.5:4b,agree,none
+answerable,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:4b,agree,all
+answerable,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:4b,agree,all
+answerable,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,qwen3.5:4b,agree,all
+answerable,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,qwen3.5:4b,agree,all
+answerable,246e924017c48fa1f069361c44133fdf4f0386e1,qwen3.5:4b,agree,all
+answerable,afeceee343360d3fe715f405dac7760d9a6754a7,qwen3.5:4b,agree,all
+answerable,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:4b,agree,all
+answerable,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,qwen3.5:4b,agree,all
+answerable,330fe3815f74037a9be93a4c16610c736a2a27b3,qwen3.5:4b,agree,none
+answerable,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,qwen3.5:4b,agree,all
+answerable,d7e43a3db8616a106304ac04ba729c1fee78761d,qwen3.5:4b,agree,none
+answerable,9ea3669528c2b295f21770cb7f70d0c4b4389223,qwen3.5:4b,agree,all
+answerable,c87966e7f497975b76a60f6be50c33d296a4a4e7,qwen3.5:4b,agree,all
+answerable,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,qwen3.5:4b,agree,all
+answerable,0a736e0e3305a50d771dfc059c7d94b8bd27032e,qwen3.5:4b,disagree,some
+answerable,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,qwen3.5:4b,agree,all
+answerable,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,qwen3.5:4b,agree,all
+answerable,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,qwen3.5:4b,agree,all
+answerable,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,qwen3.5:4b,agree,none
+answerable,697c5d2ba7e019ddb91a1de5031a90fe741f2468,qwen3.5:4b,disagree,some
+answerable,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,qwen3.5:4b,agree,all
+answerable,f010f9aa4ba1b4360a78c00aa0747d7730a61805,qwen3.5:4b,agree,all
+answerable,69a46a227269c3aac9bf9d7c3d698c787642f806,qwen3.5:4b,agree,all
+answerable,6a90135bd001be69a888076aff1b149b78adf443,qwen3.5:4b,agree,none
+answerable,cdbbba22e62bc9402aea74ac5960503f59e984ff,qwen3.5:4b,agree,all
+answerable,a064337bafca8cf01e222950ea97ebc184c47bc0,qwen3.5:4b,agree,all
+answerable,16b816925567deb734049416c149747118e13963,qwen3.5:4b,agree,none
+answerable,f94cea545f745994800c1fb4654d64d1384f2c26,qwen3.5:4b,agree,all
+answerable,98aa86ee948096d6fe16c02c1e49920da00e32d4,qwen3.5:4b,agree,all
+answerable,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,qwen3.5:4b,agree,all
+answerable,240058371e91c6b9509c0398cbe900855b46c328,qwen3.5:4b,agree,all
+answerable,64632981279c7aa16ffc1a44ffc31f4520f5559e,qwen3.5:4b,agree,all
+answerable,fac273ecb3e72f2dc94cdbc797582d7225a8e070,qwen3.5:4b,agree,all
+answerable,d207f78beb6cd754268881bf575c8f98000667ea,qwen3.5:4b,agree,all
+answerable,7ef34b4996ada33a4965f164a8f96e20af7470c0,qwen3.5:4b,agree,all
+answerable,74396ead9f88a9efc7626240ce128582ab69ef2b,qwen3.5:4b,agree,all
+answerable,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,qwen3.5:4b,agree,all
+answerable,cfe21b979a6c851bdafb2e414622f61e62b1d98c,qwen3.5:4b,agree,all
+answerable,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:4b,agree,all
+answerable,5db47bbb97282983e10414240db78154ea7ac75f,qwen3.5:4b,agree,all
+answerable,71fd0efea1b441d86d9a75255815ba3efe09779b,qwen3.5:4b,agree,all
+answerable,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:4b,disagree,some
+answerable,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,qwen3.5:4b,agree,all
+answerable,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:4b,disagree,some
+answerable,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,qwen3.5:4b,agree,all
+answerable,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,qwen3.5:4b,agree,all
+answerable,f741d32b92630328df30f674af16fbbefcad3f93,qwen3.5:4b,agree,all
+answerable,31236a876277c6e1c80891a3293c105a1b1be008,qwen3.5:4b,disagree,some
+answerable,636ac549cf4917c5922cd09a655abf278924c930,qwen3.5:4b,agree,all
+answerable,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:4b,agree,all
+answerable,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:4b,agree,all
+answerable,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,qwen3.5:4b,agree,all
+answerable,6167618e0c53964f3a706758bdf5e807bc5d7760,qwen3.5:4b,agree,all
+answerable,d5e716c1386b6485e63075e980f80d44564d0aa2,qwen3.5:4b,agree,all
+answerable,620b6c410a055295d137511d3c99207a47c03b5e,qwen3.5:4b,agree,all
+answerable,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:4b,agree,all
+answerable,471683ba6251b631f38a24d42b6dba6f52dee429,qwen3.5:4b,agree,all
+answerable,7969b8d80e12aa3ebb89b5622bc564f44e98329f,qwen3.5:4b,agree,all
+answerable,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:4b,agree,all
+answerable,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,qwen3.5:4b,agree,all
+answerable,9b3371dcd855f1d3342edb212efa39dfc9142ae3,qwen3.5:4b,disagree,some
+answerable,fef5b65263c81299acc350a101dabaf5a8cb9c6e,qwen3.5:4b,agree,all
+answerable,2e4688205c8e344cded7a053b6014cce04ef1bd5,qwen3.5:4b,agree,all
+answerable,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:4b,agree,all
+answerable,d323f0d65b57b30ae85fb9f24298927a3d1216e9,qwen3.5:4b,agree,all
+answerable,a77d38427639d54461ae308f3045434f81e497d0,qwen3.5:4b,agree,all
+answerable,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,qwen3.5:4b,agree,all
+answerable,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:4b,agree,all
+answerable,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:4b,agree,all
+answerable,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,qwen3.5:4b,agree,all
+answerable,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,qwen3.5:4b,agree,all
+answerable,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:4b,agree,all
+answerable,d126d5d6b7cfaacd58494f1879547be9e91d1364,qwen3.5:4b,agree,all
+answerable,732bd97ae34541f215c436e2a1b98db1649cba27,qwen3.5:4b,agree,all
+answerable,5181527e6a61a9a192db5f8064e56ec263c42661,qwen3.5:4b,agree,all
+answerable,8bb2280483af8013a32e0d294e97d44444f08ab0,qwen3.5:4b,agree,all
+answerable,a59e86a15405c8a11890db072b99fda3173e5ab2,qwen3.5:4b,agree,all
+answerable,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,qwen3.5:4b,agree,all
+answerable,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:4b,agree,all
+answerable,a67a2d9acad1787b636ca2681330f4c29a0b0254,qwen3.5:4b,agree,all
+answerable,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,qwen3.5:4b,agree,all
+answerable,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:4b,agree,all
+answerable,d14118b18ee94dafe170439291e20cb19ab7a43c,qwen3.5:4b,disagree,some
+answerable,a3a867f7b3557c168d05c517c468ff6c7337bff9,qwen3.5:4b,agree,all
+answerable,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:4b,agree,all
+answerable,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,qwen3.5:4b,agree,all
+answerable,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:4b,disagree,some
+answerable,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:4b,agree,all
+answerable,2d91554c3f320a4bcfeb00aa466309074a206712,qwen3.5:4b,agree,all
+answerable,a913aa14d4e05cc9d658bf6697fe5b2652589b1b,mistral:7b-instruct,agree,none
+answerable,044c66c6b7ff7378682f24887b05e1af79dcd04f,mistral:7b-instruct,agree,all
+answerable,8ba582939823faae6822a27448ea011ab6b90ed7,mistral:7b-instruct,disagree,some
+answerable,b02a6f59270b8c55fa4df3751bcb66fca2371451,mistral:7b-instruct,agree,all
+answerable,2c4db4398ecff7e4c1c335a2cb3864bfdc31df1a,mistral:7b-instruct,disagree,some
+answerable,810e6d09813486a64e87ef6c1fb9b1e205871632,mistral:7b-instruct,disagree,some
+answerable,a57e266c936e438aeeab5e8d20d9edd1c15a32ee,mistral:7b-instruct,disagree,some
+answerable,4830459e3d1d204e431025ce7e596ef3f8d757d2,mistral:7b-instruct,agree,all
+answerable,101d7a355e8bf6d1860917876ee0b9971eae7a2f,mistral:7b-instruct,disagree,some
+answerable,fae930129c2638ba6f9c9b3383e85aa130a73876,mistral:7b-instruct,disagree,some
+answerable,ab95ca983240ad5289c123a2774f8e0db424f4a1,mistral:7b-instruct,agree,none
+answerable,cc8f495cac0af12054c746a5b796e989ff0e5d5f,mistral:7b-instruct,agree,all
+answerable,e86b9633dc691976dd00ed57d1675e1460f7167b,mistral:7b-instruct,agree,none
+answerable,3098793595252039f363ee1150d4ea956f2504b8,mistral:7b-instruct,disagree,some
+answerable,dd807195d10c492da2b0da8b2c56b8f7b75db20e,mistral:7b-instruct,agree,all
+answerable,0035b351df63971ec57e36d4bfc6f7594bed41ae,mistral:7b-instruct,agree,none
+answerable,c0cebef0e29b9d13c165b6f19f6ca8393348c671,mistral:7b-instruct,disagree,some
+answerable,0b5a505c1fca92258b9e83f53bb8cfeb81cb655a,mistral:7b-instruct,agree,none
+answerable,65c9aee2051ff7c47112b2aee0d928d9b6a8c2fe,mistral:7b-instruct,disagree,some
+answerable,58259f2e22363aab20c448e5dd7b6f432556b32d,mistral:7b-instruct,disagree,some
+answerable,863d8d32a1605402e11f0bf63968a14bcfd15337,mistral:7b-instruct,disagree,some
+answerable,079ca5810060e1cdc12b5935d8c248492f0478b9,mistral:7b-instruct,disagree,some
+answerable,8908d1b865137bc309dde10a93735ec76037e5f9,mistral:7b-instruct,disagree,some
+answerable,7f8fc3c7d59aba80a3e7c839db6892a1fc329210,mistral:7b-instruct,agree,all
+answerable,2a55076a66795793d79a3edfae1041098404fbc3,mistral:7b-instruct,agree,all
+answerable,d3d6a4a721b8bc9776f62759b8d9be1a19c6b0d2,mistral:7b-instruct,agree,all
+answerable,63279ecb2ba4e51c1225e63b81cb021abc10d0d1,mistral:7b-instruct,agree,none
+answerable,c32fc488f0527f330273263fa8956788bd071efc,mistral:7b-instruct,disagree,some
+answerable,9f8c0e02a7a8e9ee69f4c1757817cde85c7944bd,mistral:7b-instruct,disagree,some
+answerable,6073be8b88f0378cd0c4ffcad87e1327bc98b991,mistral:7b-instruct,agree,none
+answerable,9bf60073fbb69fbf860196513fc6fd2f466535f6,mistral:7b-instruct,agree,none
+answerable,4f8b078b9f60be30520fd32a3d8601ab3babb5c0,mistral:7b-instruct,disagree,some
+answerable,84f9952814d6995bc99bbb3abb372d90ef2f28b4,mistral:7b-instruct,agree,all
+answerable,7f11f128fd39b8060f5810fa84102f000d94ea33,mistral:7b-instruct,disagree,some
+answerable,1fa9b6300401530738995f14a37e074c48bc9fd8,mistral:7b-instruct,agree,all
+answerable,78a0c25b83cdeaeaf0a4781f502105a514b2af0e,mistral:7b-instruct,agree,all
+answerable,2f9a31f5a2b668acf3bce8958f5daa67ab8b2c83,mistral:7b-instruct,disagree,some
+answerable,71e1f06daf6310609d00850340e64a846fbe2dfb,mistral:7b-instruct,agree,all
+answerable,37b0ee4a9d0df3ae3493e3b9114c3f385746da5c,mistral:7b-instruct,agree,none
+answerable,90829d5fde4f5f0ffc184c5e8fc64c8ac5ece521,mistral:7b-instruct,agree,none
+answerable,2d92ae6b36567e7edb6afdd72f97b06ac144fbdf,mistral:7b-instruct,disagree,some
+answerable,1cc394bdfdfd187fc0af28500ad47a0a764d5645,mistral:7b-instruct,disagree,some
+answerable,be0b438952048fe6bb91c61ba48e529d784bdcea,mistral:7b-instruct,agree,all
+answerable,347dc2fd6427b39cf2358d43864750044437dff8,mistral:7b-instruct,agree,none
+answerable,7fba61426737394304e307cdc7537225f6253150,mistral:7b-instruct,agree,all
+answerable,2f142cd11731d29d0c3fa426e26ef80d997862e0,mistral:7b-instruct,disagree,some
+answerable,946d7c877d363f549f84e9500c852dce70ae5d36,mistral:7b-instruct,agree,all
+answerable,e7ce612f53e9be705cdb8daa775eae51778825ef,mistral:7b-instruct,agree,all
+answerable,58df55002fbcba76b9aeb2181d78378b8c01a827,mistral:7b-instruct,agree,none
+answerable,c626637ed14dee3049b87171ddf326115e59d9ee,mistral:7b-instruct,agree,all
+answerable,1e7e3f0f760cd628f698b73d82c0f946707855ca,mistral:7b-instruct,agree,all
+yesno,1e7e3f0f760cd628f698b73d82c0f946707855ca,mistral:7b-instruct,agree,all
+answerable,d9949dd4865e79c53284932d868ca8fd10d55e70,mistral:7b-instruct,agree,all
+yesno,d9949dd4865e79c53284932d868ca8fd10d55e70,mistral:7b-instruct,disagree,some
+answerable,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,mistral:7b-instruct,agree,all
+yesno,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,mistral:7b-instruct,agree,none
+answerable,e099a37db801718ab341ac9a380a146c7452fd21,mistral:7b-instruct,agree,all
+yesno,e099a37db801718ab341ac9a380a146c7452fd21,mistral:7b-instruct,disagree,some
+answerable,a6603305f4fd3dd0010ac31243c40999a116537e,mistral:7b-instruct,agree,all
+answerable,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,mistral:7b-instruct,agree,all
+yesno,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,mistral:7b-instruct,agree,none
+answerable,8476d0bf5962f4ed619a7b87415ebe28c38ce296,mistral:7b-instruct,disagree,some
+answerable,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,mistral:7b-instruct,agree,none
+yesno,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,mistral:7b-instruct,agree,none
+answerable,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,mistral:7b-instruct,agree,none
+yesno,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,mistral:7b-instruct,agree,none
+answerable,b62b7ec5128219f04be41854247d5af992797937,mistral:7b-instruct,agree,all
+yesno,b62b7ec5128219f04be41854247d5af992797937,mistral:7b-instruct,agree,all
+answerable,4cf05da602669a4c09c91ff5a1baae6e30adefdf,mistral:7b-instruct,agree,all
+yesno,4cf05da602669a4c09c91ff5a1baae6e30adefdf,mistral:7b-instruct,disagree,some
+answerable,caebea05935cae1f5d88749a2fc748e62976eab7,mistral:7b-instruct,agree,all
+yesno,caebea05935cae1f5d88749a2fc748e62976eab7,mistral:7b-instruct,agree,none
+answerable,dfd07a8e2de80c3a8d075a0f400fb13a1f1d4c60,mistral:7b-instruct,disagree,some
+answerable,79e61134a6e29141cd19252571ffc92a0b4bc97f,mistral:7b-instruct,agree,none
+yesno,79e61134a6e29141cd19252571ffc92a0b4bc97f,mistral:7b-instruct,agree,none
+answerable,ab37ae82e38f64d3fa95782f2c791488f26cd43f,mistral:7b-instruct,agree,all
+yesno,ab37ae82e38f64d3fa95782f2c791488f26cd43f,mistral:7b-instruct,agree,none
+answerable,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,mistral:7b-instruct,agree,all
+yesno,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,mistral:7b-instruct,disagree,some
+answerable,753a187c1dd8d96353187fbb193b5f86293a796c,mistral:7b-instruct,agree,all
+yesno,753a187c1dd8d96353187fbb193b5f86293a796c,mistral:7b-instruct,agree,all
+answerable,f2dba5bf75967407cce5d0a9c2618269225081f5,mistral:7b-instruct,agree,all
+yesno,f2dba5bf75967407cce5d0a9c2618269225081f5,mistral:7b-instruct,disagree,some
+answerable,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,mistral:7b-instruct,agree,none
+yesno,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,mistral:7b-instruct,agree,none
+answerable,9133a85730c4090fe8b8d08eb3d9146efe7d7037,mistral:7b-instruct,agree,all
+yesno,9133a85730c4090fe8b8d08eb3d9146efe7d7037,mistral:7b-instruct,disagree,some
+answerable,bc7081aaa207de2362e0bea7bc8108d338aee36f,mistral:7b-instruct,disagree,some
+answerable,4cb2e80da73ae36de372190b4c1c490b72977ef8,mistral:7b-instruct,agree,none
+answerable,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,mistral:7b-instruct,agree,all
+yesno,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,mistral:7b-instruct,disagree,some
+answerable,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,mistral:7b-instruct,agree,none
+yesno,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,mistral:7b-instruct,agree,none
+answerable,ed15a593d64a5ba58f63c021ae9fd8f50051a667,mistral:7b-instruct,agree,none
+yesno,ed15a593d64a5ba58f63c021ae9fd8f50051a667,mistral:7b-instruct,agree,none
+answerable,521a3e7300567f6e8e4c531f223dbc9fc306c393,mistral:7b-instruct,agree,none
+yesno,521a3e7300567f6e8e4c531f223dbc9fc306c393,mistral:7b-instruct,agree,none
+answerable,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,mistral:7b-instruct,agree,none
+yesno,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,mistral:7b-instruct,agree,none
+answerable,1edfe390828f02a2db9a88454421c7f3d4cdd611,mistral:7b-instruct,agree,none
+yesno,1edfe390828f02a2db9a88454421c7f3d4cdd611,mistral:7b-instruct,agree,none
+answerable,8599d6d14ac157169920c73b98a79737c7a68cf5,mistral:7b-instruct,agree,none
+yesno,8599d6d14ac157169920c73b98a79737c7a68cf5,mistral:7b-instruct,disagree,none
+answerable,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,mistral:7b-instruct,agree,all
+yesno,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,mistral:7b-instruct,agree,all
+answerable,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,mistral:7b-instruct,agree,all
+yesno,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,mistral:7b-instruct,disagree,some
+answerable,c0120d339fcdb3833884622e532e7513d1b2c7dd,mistral:7b-instruct,agree,all
+yesno,c0120d339fcdb3833884622e532e7513d1b2c7dd,mistral:7b-instruct,disagree,some
+answerable,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,mistral:7b-instruct,agree,none
+yesno,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,mistral:7b-instruct,agree,none
+answerable,ee19fd54997f2eec7c87c7d4a2169026fe208285,mistral:7b-instruct,disagree,some
+answerable,fd8a8eb69f07c584a76633f8802c2746f7236d64,mistral:7b-instruct,agree,all
+yesno,fd8a8eb69f07c584a76633f8802c2746f7236d64,mistral:7b-instruct,agree,all
+answerable,b9e0b1940805a5056f71c66d176cc87829e314d4,mistral:7b-instruct,agree,all
+yesno,b9e0b1940805a5056f71c66d176cc87829e314d4,mistral:7b-instruct,disagree,some
+answerable,e4cbfabf4509ae0f476f950c1079714a9cd3814e,mistral:7b-instruct,disagree,some
+answerable,693cdb9978749db04ba34d9c168e71534f00a226,mistral:7b-instruct,disagree,some
+answerable,b21f61c0f95fefdb1bdb90d51cbba4655cd59896,mistral:7b-instruct,disagree,some
+answerable,da0a2195bbf6736119ff32493898d2aadffcbcb8,mistral:7b-instruct,agree,all
+yesno,da0a2195bbf6736119ff32493898d2aadffcbcb8,mistral:7b-instruct,agree,all
+answerable,55bafa0f7394163f4afd1d73340aac94c2d9f36c,mistral:7b-instruct,agree,all
+yesno,55bafa0f7394163f4afd1d73340aac94c2d9f36c,mistral:7b-instruct,agree,none
+answerable,f6346828c2f44529dc307abf04dd246bfeb4a9b2,mistral:7b-instruct,agree,all
+yesno,f6346828c2f44529dc307abf04dd246bfeb4a9b2,mistral:7b-instruct,disagree,some
+answerable,5752c8d333afc1e6c666b18d1477c8f669b7a602,mistral:7b-instruct,agree,all
+yesno,5752c8d333afc1e6c666b18d1477c8f669b7a602,mistral:7b-instruct,agree,all
+answerable,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,mistral:7b-instruct,agree,all
+yesno,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,mistral:7b-instruct,agree,none
+answerable,2b32cf05c5e736f764ceecc08477e20ab9f2f5d7,mistral:7b-instruct,agree,all
+answerable,49474a3047fa3f35e1bcd63991e6f15e012ac10b,mistral:7b-instruct,agree,none
+yesno,49474a3047fa3f35e1bcd63991e6f15e012ac10b,mistral:7b-instruct,agree,none
+answerable,ae2142ee9e093ce485025168f4bcb3da4602739d,mistral:7b-instruct,agree,all
+answerable,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,mistral:7b-instruct,agree,none
+yesno,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,mistral:7b-instruct,disagree,none
+answerable,c27b885b1e38542244f52056abf288b2389b9fc6,mistral:7b-instruct,agree,all
+answerable,59f41306383dd6e201bded0f1c7c959ec4f61c5a,mistral:7b-instruct,agree,all
+answerable,2abf916bc03222d3b2a3d66851d87921ff35c0d2,mistral:7b-instruct,agree,all
+answerable,1e582319df1739dcd07ba0ba39e8f70187fba049,mistral:7b-instruct,agree,all
+answerable,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,mistral:7b-instruct,agree,all
+answerable,8f00859f74fc77832fa7d38c22f23f74ba13a07e,mistral:7b-instruct,agree,all
+answerable,477da8d997ff87400c6aad19dcc74f8998bc89c3,mistral:7b-instruct,agree,all
+answerable,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,mistral:7b-instruct,agree,all
+answerable,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,mistral:7b-instruct,agree,all
+answerable,027814f3a879a6c7852e033f9d99519b8729e444,mistral:7b-instruct,agree,none
+answerable,9da181ac8f2600eb19364c1b1e3cdeb569811a11,mistral:7b-instruct,agree,all
+answerable,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,mistral:7b-instruct,agree,all
+answerable,f0404673085517eea708c5e91f32fb0f7728fa08,mistral:7b-instruct,agree,all
+answerable,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,mistral:7b-instruct,agree,all
+answerable,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,mistral:7b-instruct,agree,all
+answerable,246e924017c48fa1f069361c44133fdf4f0386e1,mistral:7b-instruct,agree,all
+answerable,afeceee343360d3fe715f405dac7760d9a6754a7,mistral:7b-instruct,agree,all
+answerable,ec8f39d32084996ab825debd7113c71daac38b06,mistral:7b-instruct,agree,all
+answerable,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,mistral:7b-instruct,agree,all
+answerable,330fe3815f74037a9be93a4c16610c736a2a27b3,mistral:7b-instruct,agree,all
+answerable,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,mistral:7b-instruct,agree,all
+answerable,c87966e7f497975b76a60f6be50c33d296a4a4e7,mistral:7b-instruct,agree,all
+answerable,d7e43a3db8616a106304ac04ba729c1fee78761d,mistral:7b-instruct,agree,all
+answerable,9ea3669528c2b295f21770cb7f70d0c4b4389223,mistral:7b-instruct,agree,all
+answerable,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,mistral:7b-instruct,agree,none
+answerable,0a736e0e3305a50d771dfc059c7d94b8bd27032e,mistral:7b-instruct,disagree,some
+answerable,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,mistral:7b-instruct,agree,all
+answerable,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,mistral:7b-instruct,agree,all
+answerable,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,mistral:7b-instruct,agree,all
+answerable,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,mistral:7b-instruct,agree,all
+answerable,697c5d2ba7e019ddb91a1de5031a90fe741f2468,mistral:7b-instruct,disagree,some
+answerable,69a46a227269c3aac9bf9d7c3d698c787642f806,mistral:7b-instruct,agree,all
+answerable,f010f9aa4ba1b4360a78c00aa0747d7730a61805,mistral:7b-instruct,agree,all
+answerable,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,mistral:7b-instruct,agree,all
+answerable,6a90135bd001be69a888076aff1b149b78adf443,mistral:7b-instruct,agree,none
+answerable,cdbbba22e62bc9402aea74ac5960503f59e984ff,mistral:7b-instruct,agree,all
+answerable,a064337bafca8cf01e222950ea97ebc184c47bc0,mistral:7b-instruct,agree,all
+answerable,16b816925567deb734049416c149747118e13963,mistral:7b-instruct,agree,all
+answerable,f94cea545f745994800c1fb4654d64d1384f2c26,mistral:7b-instruct,agree,all
+answerable,98aa86ee948096d6fe16c02c1e49920da00e32d4,mistral:7b-instruct,agree,all
+answerable,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,mistral:7b-instruct,agree,all
+answerable,240058371e91c6b9509c0398cbe900855b46c328,mistral:7b-instruct,agree,all
+answerable,64632981279c7aa16ffc1a44ffc31f4520f5559e,mistral:7b-instruct,agree,all
+answerable,fac273ecb3e72f2dc94cdbc797582d7225a8e070,mistral:7b-instruct,agree,all
+answerable,d207f78beb6cd754268881bf575c8f98000667ea,mistral:7b-instruct,agree,all
+answerable,74396ead9f88a9efc7626240ce128582ab69ef2b,mistral:7b-instruct,agree,all
+answerable,7ef34b4996ada33a4965f164a8f96e20af7470c0,mistral:7b-instruct,agree,all
+answerable,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,mistral:7b-instruct,agree,all
+answerable,cfe21b979a6c851bdafb2e414622f61e62b1d98c,mistral:7b-instruct,agree,all
+answerable,aebd1f0d728d0de5f76238844da044a44109f76f,mistral:7b-instruct,agree,all
+answerable,5db47bbb97282983e10414240db78154ea7ac75f,mistral:7b-instruct,agree,all
+answerable,71fd0efea1b441d86d9a75255815ba3efe09779b,mistral:7b-instruct,agree,all
+answerable,e42916924b69cab1df25d3b4e6072feaa0ba8084,mistral:7b-instruct,disagree,some
+answerable,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,mistral:7b-instruct,agree,all
+answerable,84ee6180d3267115ad27852027d147fb86a33135,mistral:7b-instruct,disagree,some
+answerable,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,mistral:7b-instruct,agree,all
+answerable,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,mistral:7b-instruct,agree,all
+answerable,31236a876277c6e1c80891a3293c105a1b1be008,mistral:7b-instruct,disagree,some
+answerable,d5bce5da746a075421c80abe10c97ad11a96c6cd,mistral:7b-instruct,agree,all
+answerable,f741d32b92630328df30f674af16fbbefcad3f93,mistral:7b-instruct,agree,all
+answerable,636ac549cf4917c5922cd09a655abf278924c930,mistral:7b-instruct,agree,all
+answerable,9186b2c5b7000ab7f15a46a47da73ea45544bace,mistral:7b-instruct,agree,all
+answerable,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,mistral:7b-instruct,agree,all
+answerable,6167618e0c53964f3a706758bdf5e807bc5d7760,mistral:7b-instruct,agree,all
+answerable,d5e716c1386b6485e63075e980f80d44564d0aa2,mistral:7b-instruct,agree,all
+answerable,620b6c410a055295d137511d3c99207a47c03b5e,mistral:7b-instruct,agree,all
+answerable,37ac705166fa87dc74fe86575bf04bea56cc4930,mistral:7b-instruct,agree,all
+answerable,471683ba6251b631f38a24d42b6dba6f52dee429,mistral:7b-instruct,agree,all
+answerable,7969b8d80e12aa3ebb89b5622bc564f44e98329f,mistral:7b-instruct,agree,all
+answerable,67cb001f8ca122ea859724804b41529fea5faeef,mistral:7b-instruct,agree,all
+answerable,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,mistral:7b-instruct,agree,all
+answerable,9b3371dcd855f1d3342edb212efa39dfc9142ae3,mistral:7b-instruct,disagree,some
+answerable,fef5b65263c81299acc350a101dabaf5a8cb9c6e,mistral:7b-instruct,agree,all
+answerable,2e4688205c8e344cded7a053b6014cce04ef1bd5,mistral:7b-instruct,agree,all
+answerable,d323f0d65b57b30ae85fb9f24298927a3d1216e9,mistral:7b-instruct,agree,all
+answerable,4748a50c96acb1aa03f7efd1b43376c193b2450a,mistral:7b-instruct,agree,all
+answerable,a77d38427639d54461ae308f3045434f81e497d0,mistral:7b-instruct,agree,all
+answerable,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,mistral:7b-instruct,agree,all
+answerable,38363a7ed250bc729508c4c1dc975696a65c53cb,mistral:7b-instruct,agree,all
+answerable,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,mistral:7b-instruct,agree,all
+answerable,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,mistral:7b-instruct,agree,all
+answerable,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,mistral:7b-instruct,agree,all
+answerable,d126d5d6b7cfaacd58494f1879547be9e91d1364,mistral:7b-instruct,agree,all
+answerable,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,mistral:7b-instruct,agree,all
+answerable,732bd97ae34541f215c436e2a1b98db1649cba27,mistral:7b-instruct,agree,all
+answerable,5181527e6a61a9a192db5f8064e56ec263c42661,mistral:7b-instruct,agree,all
+answerable,8bb2280483af8013a32e0d294e97d44444f08ab0,mistral:7b-instruct,agree,all
+answerable,a59e86a15405c8a11890db072b99fda3173e5ab2,mistral:7b-instruct,agree,none
+answerable,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,mistral:7b-instruct,agree,all
+answerable,9c1f70affc87024b4280f0876839309b8dddd579,mistral:7b-instruct,agree,all
+answerable,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,mistral:7b-instruct,agree,all
+answerable,a67a2d9acad1787b636ca2681330f4c29a0b0254,mistral:7b-instruct,agree,all
+answerable,00db191facf903cef18fb1727d1cab638c277e0a,mistral:7b-instruct,agree,all
+answerable,d14118b18ee94dafe170439291e20cb19ab7a43c,mistral:7b-instruct,disagree,some
+answerable,a3a867f7b3557c168d05c517c468ff6c7337bff9,mistral:7b-instruct,agree,all
+answerable,52faf319e37aa15fff1ab47f634a5a584dc42e75,mistral:7b-instruct,agree,all
+answerable,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,mistral:7b-instruct,agree,all
+answerable,230ff86b7b90b87c33c53014bb1e9c582dfc107f,mistral:7b-instruct,agree,all
+answerable,de84972c5d1bbf664d0f8b702fce5f161449ec23,mistral:7b-instruct,disagree,some
+answerable,2d91554c3f320a4bcfeb00aa466309074a206712,mistral:7b-instruct,agree,all
+answerable,a913aa14d4e05cc9d658bf6697fe5b2652589b1b,qwen3.5:9b,agree,none
+answerable,044c66c6b7ff7378682f24887b05e1af79dcd04f,qwen3.5:9b,agree,all
+answerable,8ba582939823faae6822a27448ea011ab6b90ed7,qwen3.5:9b,disagree,some
+answerable,2c4db4398ecff7e4c1c335a2cb3864bfdc31df1a,qwen3.5:9b,disagree,some
+answerable,b02a6f59270b8c55fa4df3751bcb66fca2371451,qwen3.5:9b,agree,all
+answerable,810e6d09813486a64e87ef6c1fb9b1e205871632,qwen3.5:9b,disagree,some
+answerable,a57e266c936e438aeeab5e8d20d9edd1c15a32ee,qwen3.5:9b,disagree,some
+answerable,4830459e3d1d204e431025ce7e596ef3f8d757d2,qwen3.5:9b,agree,all
+answerable,101d7a355e8bf6d1860917876ee0b9971eae7a2f,qwen3.5:9b,disagree,some
+answerable,ab95ca983240ad5289c123a2774f8e0db424f4a1,qwen3.5:9b,agree,all
+answerable,fae930129c2638ba6f9c9b3383e85aa130a73876,qwen3.5:9b,disagree,some
+answerable,cc8f495cac0af12054c746a5b796e989ff0e5d5f,qwen3.5:9b,agree,none
+answerable,e86b9633dc691976dd00ed57d1675e1460f7167b,qwen3.5:9b,agree,all
+answerable,3098793595252039f363ee1150d4ea956f2504b8,qwen3.5:9b,disagree,some
+answerable,dd807195d10c492da2b0da8b2c56b8f7b75db20e,qwen3.5:9b,agree,all
+answerable,0035b351df63971ec57e36d4bfc6f7594bed41ae,qwen3.5:9b,agree,none
+answerable,c0cebef0e29b9d13c165b6f19f6ca8393348c671,qwen3.5:9b,disagree,some
+answerable,0b5a505c1fca92258b9e83f53bb8cfeb81cb655a,qwen3.5:9b,agree,none
+answerable,65c9aee2051ff7c47112b2aee0d928d9b6a8c2fe,qwen3.5:9b,disagree,some
+answerable,58259f2e22363aab20c448e5dd7b6f432556b32d,qwen3.5:9b,disagree,some
+answerable,863d8d32a1605402e11f0bf63968a14bcfd15337,qwen3.5:9b,disagree,some
+answerable,079ca5810060e1cdc12b5935d8c248492f0478b9,qwen3.5:9b,disagree,some
+answerable,8908d1b865137bc309dde10a93735ec76037e5f9,qwen3.5:9b,disagree,some
+answerable,7f8fc3c7d59aba80a3e7c839db6892a1fc329210,qwen3.5:9b,agree,all
+answerable,2a55076a66795793d79a3edfae1041098404fbc3,qwen3.5:9b,agree,all
+answerable,d3d6a4a721b8bc9776f62759b8d9be1a19c6b0d2,qwen3.5:9b,agree,all
+answerable,63279ecb2ba4e51c1225e63b81cb021abc10d0d1,qwen3.5:9b,agree,all
+answerable,9f8c0e02a7a8e9ee69f4c1757817cde85c7944bd,qwen3.5:9b,disagree,some
+answerable,c32fc488f0527f330273263fa8956788bd071efc,qwen3.5:9b,disagree,some
+answerable,6073be8b88f0378cd0c4ffcad87e1327bc98b991,qwen3.5:9b,agree,all
+answerable,9bf60073fbb69fbf860196513fc6fd2f466535f6,qwen3.5:9b,agree,all
+answerable,4f8b078b9f60be30520fd32a3d8601ab3babb5c0,qwen3.5:9b,disagree,some
+answerable,84f9952814d6995bc99bbb3abb372d90ef2f28b4,qwen3.5:9b,agree,none
+answerable,1fa9b6300401530738995f14a37e074c48bc9fd8,qwen3.5:9b,agree,all
+answerable,7f11f128fd39b8060f5810fa84102f000d94ea33,qwen3.5:9b,disagree,some
+answerable,78a0c25b83cdeaeaf0a4781f502105a514b2af0e,qwen3.5:9b,agree,all
+answerable,2f9a31f5a2b668acf3bce8958f5daa67ab8b2c83,qwen3.5:9b,disagree,some
+answerable,71e1f06daf6310609d00850340e64a846fbe2dfb,qwen3.5:9b,agree,all
+answerable,37b0ee4a9d0df3ae3493e3b9114c3f385746da5c,qwen3.5:9b,agree,all
+answerable,90829d5fde4f5f0ffc184c5e8fc64c8ac5ece521,qwen3.5:9b,agree,none
+answerable,2d92ae6b36567e7edb6afdd72f97b06ac144fbdf,qwen3.5:9b,disagree,some
+answerable,1cc394bdfdfd187fc0af28500ad47a0a764d5645,qwen3.5:9b,disagree,some
+answerable,be0b438952048fe6bb91c61ba48e529d784bdcea,qwen3.5:9b,agree,all
+answerable,347dc2fd6427b39cf2358d43864750044437dff8,qwen3.5:9b,agree,all
+answerable,7fba61426737394304e307cdc7537225f6253150,qwen3.5:9b,agree,all
+answerable,2f142cd11731d29d0c3fa426e26ef80d997862e0,qwen3.5:9b,disagree,some
+answerable,946d7c877d363f549f84e9500c852dce70ae5d36,qwen3.5:9b,agree,all
+answerable,e7ce612f53e9be705cdb8daa775eae51778825ef,qwen3.5:9b,agree,all
+answerable,58df55002fbcba76b9aeb2181d78378b8c01a827,qwen3.5:9b,agree,none
+answerable,c626637ed14dee3049b87171ddf326115e59d9ee,qwen3.5:9b,agree,all
+answerable,1e7e3f0f760cd628f698b73d82c0f946707855ca,qwen3.5:9b,agree,all
+yesno,1e7e3f0f760cd628f698b73d82c0f946707855ca,qwen3.5:9b,agree,all
+answerable,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,qwen3.5:9b,agree,all
+yesno,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,qwen3.5:9b,agree,none
+answerable,d9949dd4865e79c53284932d868ca8fd10d55e70,qwen3.5:9b,agree,all
+yesno,d9949dd4865e79c53284932d868ca8fd10d55e70,qwen3.5:9b,disagree,some
+answerable,e099a37db801718ab341ac9a380a146c7452fd21,qwen3.5:9b,agree,all
+yesno,e099a37db801718ab341ac9a380a146c7452fd21,qwen3.5:9b,disagree,some
+answerable,a6603305f4fd3dd0010ac31243c40999a116537e,qwen3.5:9b,agree,all
+answerable,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,qwen3.5:9b,agree,all
+yesno,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,qwen3.5:9b,agree,all
+answerable,8476d0bf5962f4ed619a7b87415ebe28c38ce296,qwen3.5:9b,disagree,some
+answerable,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,qwen3.5:9b,agree,all
+yesno,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,qwen3.5:9b,agree,all
+answerable,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,qwen3.5:9b,agree,all
+yesno,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,qwen3.5:9b,agree,all
+answerable,b62b7ec5128219f04be41854247d5af992797937,qwen3.5:9b,agree,all
+yesno,b62b7ec5128219f04be41854247d5af992797937,qwen3.5:9b,agree,all
+answerable,4cf05da602669a4c09c91ff5a1baae6e30adefdf,qwen3.5:9b,agree,all
+yesno,4cf05da602669a4c09c91ff5a1baae6e30adefdf,qwen3.5:9b,disagree,some
+answerable,caebea05935cae1f5d88749a2fc748e62976eab7,qwen3.5:9b,agree,all
+yesno,caebea05935cae1f5d88749a2fc748e62976eab7,qwen3.5:9b,agree,none
+answerable,dfd07a8e2de80c3a8d075a0f400fb13a1f1d4c60,qwen3.5:9b,disagree,some
+answerable,79e61134a6e29141cd19252571ffc92a0b4bc97f,qwen3.5:9b,agree,all
+yesno,79e61134a6e29141cd19252571ffc92a0b4bc97f,qwen3.5:9b,agree,all
+answerable,ab37ae82e38f64d3fa95782f2c791488f26cd43f,qwen3.5:9b,agree,all
+yesno,ab37ae82e38f64d3fa95782f2c791488f26cd43f,qwen3.5:9b,agree,all
+answerable,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,qwen3.5:9b,agree,all
+yesno,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,qwen3.5:9b,disagree,some
+answerable,f2dba5bf75967407cce5d0a9c2618269225081f5,qwen3.5:9b,agree,none
+yesno,f2dba5bf75967407cce5d0a9c2618269225081f5,qwen3.5:9b,disagree,none
+answerable,753a187c1dd8d96353187fbb193b5f86293a796c,qwen3.5:9b,agree,all
+yesno,753a187c1dd8d96353187fbb193b5f86293a796c,qwen3.5:9b,agree,all
+answerable,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,qwen3.5:9b,agree,all
+yesno,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,qwen3.5:9b,agree,all
+answerable,9133a85730c4090fe8b8d08eb3d9146efe7d7037,qwen3.5:9b,agree,all
+yesno,9133a85730c4090fe8b8d08eb3d9146efe7d7037,qwen3.5:9b,disagree,some
+answerable,bc7081aaa207de2362e0bea7bc8108d338aee36f,qwen3.5:9b,disagree,some
+answerable,4cb2e80da73ae36de372190b4c1c490b72977ef8,qwen3.5:9b,agree,all
+answerable,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,qwen3.5:9b,agree,all
+yesno,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,qwen3.5:9b,disagree,some
+answerable,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,qwen3.5:9b,agree,all
+yesno,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,qwen3.5:9b,agree,none
+answerable,ed15a593d64a5ba58f63c021ae9fd8f50051a667,qwen3.5:9b,agree,all
+yesno,ed15a593d64a5ba58f63c021ae9fd8f50051a667,qwen3.5:9b,agree,all
+answerable,521a3e7300567f6e8e4c531f223dbc9fc306c393,qwen3.5:9b,agree,all
+yesno,521a3e7300567f6e8e4c531f223dbc9fc306c393,qwen3.5:9b,agree,all
+answerable,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,qwen3.5:9b,agree,none
+yesno,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,qwen3.5:9b,agree,none
+answerable,1edfe390828f02a2db9a88454421c7f3d4cdd611,qwen3.5:9b,agree,all
+yesno,1edfe390828f02a2db9a88454421c7f3d4cdd611,qwen3.5:9b,agree,all
+answerable,8599d6d14ac157169920c73b98a79737c7a68cf5,qwen3.5:9b,agree,all
+yesno,8599d6d14ac157169920c73b98a79737c7a68cf5,qwen3.5:9b,disagree,some
+answerable,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,qwen3.5:9b,agree,all
+yesno,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,qwen3.5:9b,agree,all
+answerable,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,qwen3.5:9b,agree,all
+yesno,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,qwen3.5:9b,disagree,some
+answerable,c0120d339fcdb3833884622e532e7513d1b2c7dd,qwen3.5:9b,agree,all
+yesno,c0120d339fcdb3833884622e532e7513d1b2c7dd,qwen3.5:9b,disagree,some
+answerable,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,qwen3.5:9b,agree,all
+yesno,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,qwen3.5:9b,agree,all
+answerable,ee19fd54997f2eec7c87c7d4a2169026fe208285,qwen3.5:9b,disagree,some
+answerable,fd8a8eb69f07c584a76633f8802c2746f7236d64,qwen3.5:9b,agree,all
+yesno,fd8a8eb69f07c584a76633f8802c2746f7236d64,qwen3.5:9b,agree,all
+answerable,b9e0b1940805a5056f71c66d176cc87829e314d4,qwen3.5:9b,agree,all
+yesno,b9e0b1940805a5056f71c66d176cc87829e314d4,qwen3.5:9b,disagree,some
+answerable,e4cbfabf4509ae0f476f950c1079714a9cd3814e,qwen3.5:9b,disagree,some
+answerable,693cdb9978749db04ba34d9c168e71534f00a226,qwen3.5:9b,disagree,some
+answerable,b21f61c0f95fefdb1bdb90d51cbba4655cd59896,qwen3.5:9b,disagree,some
+answerable,da0a2195bbf6736119ff32493898d2aadffcbcb8,qwen3.5:9b,agree,all
+yesno,da0a2195bbf6736119ff32493898d2aadffcbcb8,qwen3.5:9b,agree,all
+answerable,55bafa0f7394163f4afd1d73340aac94c2d9f36c,qwen3.5:9b,agree,all
+yesno,55bafa0f7394163f4afd1d73340aac94c2d9f36c,qwen3.5:9b,agree,all
+answerable,f6346828c2f44529dc307abf04dd246bfeb4a9b2,qwen3.5:9b,agree,all
+yesno,f6346828c2f44529dc307abf04dd246bfeb4a9b2,qwen3.5:9b,disagree,some
+answerable,5752c8d333afc1e6c666b18d1477c8f669b7a602,qwen3.5:9b,agree,all
+yesno,5752c8d333afc1e6c666b18d1477c8f669b7a602,qwen3.5:9b,agree,all
+answerable,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,qwen3.5:9b,agree,all
+yesno,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,qwen3.5:9b,agree,all
+answerable,2b32cf05c5e736f764ceecc08477e20ab9f2f5d7,qwen3.5:9b,agree,all
+answerable,49474a3047fa3f35e1bcd63991e6f15e012ac10b,qwen3.5:9b,agree,none
+yesno,49474a3047fa3f35e1bcd63991e6f15e012ac10b,qwen3.5:9b,agree,none
+answerable,ae2142ee9e093ce485025168f4bcb3da4602739d,qwen3.5:9b,agree,all
+answerable,c27b885b1e38542244f52056abf288b2389b9fc6,qwen3.5:9b,agree,all
+answerable,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,qwen3.5:9b,agree,all
+yesno,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,qwen3.5:9b,disagree,some
+answerable,59f41306383dd6e201bded0f1c7c959ec4f61c5a,qwen3.5:9b,agree,all
+answerable,2abf916bc03222d3b2a3d66851d87921ff35c0d2,qwen3.5:9b,agree,all
+answerable,1e582319df1739dcd07ba0ba39e8f70187fba049,qwen3.5:9b,agree,none
+answerable,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,qwen3.5:9b,agree,none
+answerable,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:9b,agree,all
+answerable,8f00859f74fc77832fa7d38c22f23f74ba13a07e,qwen3.5:9b,agree,all
+answerable,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:9b,agree,all
+answerable,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:9b,agree,all
+answerable,9da181ac8f2600eb19364c1b1e3cdeb569811a11,qwen3.5:9b,agree,all
+answerable,027814f3a879a6c7852e033f9d99519b8729e444,qwen3.5:9b,agree,none
+answerable,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:9b,agree,all
+answerable,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:9b,agree,all
+answerable,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,qwen3.5:9b,agree,all
+answerable,246e924017c48fa1f069361c44133fdf4f0386e1,qwen3.5:9b,agree,all
+answerable,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,qwen3.5:9b,agree,all
+answerable,afeceee343360d3fe715f405dac7760d9a6754a7,qwen3.5:9b,agree,all
+answerable,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:9b,agree,all
+answerable,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,qwen3.5:9b,agree,all
+answerable,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,qwen3.5:9b,agree,all
+answerable,330fe3815f74037a9be93a4c16610c736a2a27b3,qwen3.5:9b,agree,none
+answerable,c87966e7f497975b76a60f6be50c33d296a4a4e7,qwen3.5:9b,agree,all
+answerable,d7e43a3db8616a106304ac04ba729c1fee78761d,qwen3.5:9b,agree,none
+answerable,9ea3669528c2b295f21770cb7f70d0c4b4389223,qwen3.5:9b,agree,all
+answerable,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,qwen3.5:9b,agree,all
+answerable,0a736e0e3305a50d771dfc059c7d94b8bd27032e,qwen3.5:9b,disagree,some
+answerable,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,qwen3.5:9b,agree,all
+answerable,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,qwen3.5:9b,agree,none
+answerable,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,qwen3.5:9b,agree,all
+answerable,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,qwen3.5:9b,agree,none
+answerable,697c5d2ba7e019ddb91a1de5031a90fe741f2468,qwen3.5:9b,disagree,some
+answerable,f010f9aa4ba1b4360a78c00aa0747d7730a61805,qwen3.5:9b,agree,all
+answerable,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,qwen3.5:9b,agree,all
+answerable,69a46a227269c3aac9bf9d7c3d698c787642f806,qwen3.5:9b,agree,all
+answerable,6a90135bd001be69a888076aff1b149b78adf443,qwen3.5:9b,agree,none
+answerable,cdbbba22e62bc9402aea74ac5960503f59e984ff,qwen3.5:9b,agree,all
+answerable,a064337bafca8cf01e222950ea97ebc184c47bc0,qwen3.5:9b,agree,all
+answerable,16b816925567deb734049416c149747118e13963,qwen3.5:9b,agree,none
+answerable,98aa86ee948096d6fe16c02c1e49920da00e32d4,qwen3.5:9b,agree,all
+answerable,f94cea545f745994800c1fb4654d64d1384f2c26,qwen3.5:9b,agree,all
+answerable,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,qwen3.5:9b,agree,all
+answerable,64632981279c7aa16ffc1a44ffc31f4520f5559e,qwen3.5:9b,agree,all
+answerable,240058371e91c6b9509c0398cbe900855b46c328,qwen3.5:9b,agree,all
+answerable,fac273ecb3e72f2dc94cdbc797582d7225a8e070,qwen3.5:9b,agree,all
+answerable,d207f78beb6cd754268881bf575c8f98000667ea,qwen3.5:9b,agree,all
+answerable,7ef34b4996ada33a4965f164a8f96e20af7470c0,qwen3.5:9b,agree,all
+answerable,74396ead9f88a9efc7626240ce128582ab69ef2b,qwen3.5:9b,agree,all
+answerable,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,qwen3.5:9b,agree,all
+answerable,cfe21b979a6c851bdafb2e414622f61e62b1d98c,qwen3.5:9b,agree,all
+answerable,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:9b,agree,all
+answerable,5db47bbb97282983e10414240db78154ea7ac75f,qwen3.5:9b,agree,all
+answerable,71fd0efea1b441d86d9a75255815ba3efe09779b,qwen3.5:9b,agree,all
+answerable,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:9b,disagree,some
+answerable,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,qwen3.5:9b,agree,all
+answerable,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:9b,disagree,some
+answerable,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,qwen3.5:9b,agree,all
+answerable,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,qwen3.5:9b,agree,all
+answerable,f741d32b92630328df30f674af16fbbefcad3f93,qwen3.5:9b,agree,all
+answerable,31236a876277c6e1c80891a3293c105a1b1be008,qwen3.5:9b,disagree,some
+answerable,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:9b,agree,all
+answerable,636ac549cf4917c5922cd09a655abf278924c930,qwen3.5:9b,agree,all
+answerable,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:9b,agree,all
+answerable,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,qwen3.5:9b,agree,all
+answerable,d5e716c1386b6485e63075e980f80d44564d0aa2,qwen3.5:9b,agree,all
+answerable,6167618e0c53964f3a706758bdf5e807bc5d7760,qwen3.5:9b,agree,all
+answerable,620b6c410a055295d137511d3c99207a47c03b5e,qwen3.5:9b,agree,all
+answerable,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:9b,agree,all
+answerable,471683ba6251b631f38a24d42b6dba6f52dee429,qwen3.5:9b,agree,all
+answerable,7969b8d80e12aa3ebb89b5622bc564f44e98329f,qwen3.5:9b,agree,all
+answerable,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:9b,agree,all
+answerable,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,qwen3.5:9b,agree,all
+answerable,fef5b65263c81299acc350a101dabaf5a8cb9c6e,qwen3.5:9b,agree,all
+answerable,9b3371dcd855f1d3342edb212efa39dfc9142ae3,qwen3.5:9b,disagree,some
+answerable,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:9b,agree,all
+answerable,d323f0d65b57b30ae85fb9f24298927a3d1216e9,qwen3.5:9b,agree,all
+answerable,2e4688205c8e344cded7a053b6014cce04ef1bd5,qwen3.5:9b,agree,all
+answerable,a77d38427639d54461ae308f3045434f81e497d0,qwen3.5:9b,agree,all
+answerable,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,qwen3.5:9b,agree,all
+answerable,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:9b,agree,all
+answerable,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:9b,agree,all
+answerable,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,qwen3.5:9b,agree,all
+answerable,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,qwen3.5:9b,agree,all
+answerable,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:9b,agree,all
+answerable,d126d5d6b7cfaacd58494f1879547be9e91d1364,qwen3.5:9b,agree,all
+answerable,732bd97ae34541f215c436e2a1b98db1649cba27,qwen3.5:9b,agree,all
+answerable,5181527e6a61a9a192db5f8064e56ec263c42661,qwen3.5:9b,agree,all
+answerable,8bb2280483af8013a32e0d294e97d44444f08ab0,qwen3.5:9b,agree,all
+answerable,a59e86a15405c8a11890db072b99fda3173e5ab2,qwen3.5:9b,agree,none
+answerable,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,qwen3.5:9b,agree,all
+answerable,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:9b,agree,all
+answerable,a67a2d9acad1787b636ca2681330f4c29a0b0254,qwen3.5:9b,agree,all
+answerable,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,qwen3.5:9b,agree,none
+answerable,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:9b,agree,all
+answerable,d14118b18ee94dafe170439291e20cb19ab7a43c,qwen3.5:9b,disagree,some
+answerable,a3a867f7b3557c168d05c517c468ff6c7337bff9,qwen3.5:9b,agree,all
+answerable,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:9b,agree,all
+answerable,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,qwen3.5:9b,agree,all
+answerable,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:9b,disagree,some
+answerable,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:9b,agree,all
+answerable,2d91554c3f320a4bcfeb00aa466309074a206712,qwen3.5:9b,agree,all
+answerable,a913aa14d4e05cc9d658bf6697fe5b2652589b1b,gemma4:31b,agree,all
+answerable,8ba582939823faae6822a27448ea011ab6b90ed7,gemma4:31b,disagree,some
+answerable,044c66c6b7ff7378682f24887b05e1af79dcd04f,gemma4:31b,agree,all
+answerable,b02a6f59270b8c55fa4df3751bcb66fca2371451,gemma4:31b,agree,all
+answerable,2c4db4398ecff7e4c1c335a2cb3864bfdc31df1a,gemma4:31b,disagree,some
+answerable,810e6d09813486a64e87ef6c1fb9b1e205871632,gemma4:31b,disagree,some
+answerable,a57e266c936e438aeeab5e8d20d9edd1c15a32ee,gemma4:31b,disagree,some
+answerable,101d7a355e8bf6d1860917876ee0b9971eae7a2f,gemma4:31b,disagree,some
+answerable,4830459e3d1d204e431025ce7e596ef3f8d757d2,gemma4:31b,agree,all
+answerable,fae930129c2638ba6f9c9b3383e85aa130a73876,gemma4:31b,disagree,some
+answerable,ab95ca983240ad5289c123a2774f8e0db424f4a1,gemma4:31b,agree,all
+answerable,cc8f495cac0af12054c746a5b796e989ff0e5d5f,gemma4:31b,agree,none
+answerable,e86b9633dc691976dd00ed57d1675e1460f7167b,gemma4:31b,agree,all
+answerable,dd807195d10c492da2b0da8b2c56b8f7b75db20e,gemma4:31b,agree,all
+answerable,3098793595252039f363ee1150d4ea956f2504b8,gemma4:31b,disagree,some
+answerable,0035b351df63971ec57e36d4bfc6f7594bed41ae,gemma4:31b,agree,none
+answerable,c0cebef0e29b9d13c165b6f19f6ca8393348c671,gemma4:31b,disagree,some
+answerable,0b5a505c1fca92258b9e83f53bb8cfeb81cb655a,gemma4:31b,agree,all
+answerable,65c9aee2051ff7c47112b2aee0d928d9b6a8c2fe,gemma4:31b,disagree,some
+answerable,863d8d32a1605402e11f0bf63968a14bcfd15337,gemma4:31b,disagree,some
+answerable,58259f2e22363aab20c448e5dd7b6f432556b32d,gemma4:31b,disagree,some
+answerable,079ca5810060e1cdc12b5935d8c248492f0478b9,gemma4:31b,disagree,some
+answerable,8908d1b865137bc309dde10a93735ec76037e5f9,gemma4:31b,disagree,some
+answerable,7f8fc3c7d59aba80a3e7c839db6892a1fc329210,gemma4:31b,agree,all
+answerable,2a55076a66795793d79a3edfae1041098404fbc3,gemma4:31b,agree,all
+answerable,d3d6a4a721b8bc9776f62759b8d9be1a19c6b0d2,gemma4:31b,agree,all
+answerable,63279ecb2ba4e51c1225e63b81cb021abc10d0d1,gemma4:31b,agree,all
+answerable,c32fc488f0527f330273263fa8956788bd071efc,gemma4:31b,disagree,some
+answerable,9f8c0e02a7a8e9ee69f4c1757817cde85c7944bd,gemma4:31b,disagree,some
+answerable,6073be8b88f0378cd0c4ffcad87e1327bc98b991,gemma4:31b,agree,all
+answerable,9bf60073fbb69fbf860196513fc6fd2f466535f6,gemma4:31b,agree,all
+answerable,4f8b078b9f60be30520fd32a3d8601ab3babb5c0,gemma4:31b,disagree,some
+answerable,84f9952814d6995bc99bbb3abb372d90ef2f28b4,gemma4:31b,agree,all
+answerable,7f11f128fd39b8060f5810fa84102f000d94ea33,gemma4:31b,disagree,some
+answerable,78a0c25b83cdeaeaf0a4781f502105a514b2af0e,gemma4:31b,agree,all
+answerable,2f9a31f5a2b668acf3bce8958f5daa67ab8b2c83,gemma4:31b,disagree,some
+answerable,1fa9b6300401530738995f14a37e074c48bc9fd8,gemma4:31b,agree,all
+answerable,37b0ee4a9d0df3ae3493e3b9114c3f385746da5c,gemma4:31b,agree,all
+answerable,71e1f06daf6310609d00850340e64a846fbe2dfb,gemma4:31b,agree,all
+answerable,2d92ae6b36567e7edb6afdd72f97b06ac144fbdf,gemma4:31b,disagree,some
+answerable,90829d5fde4f5f0ffc184c5e8fc64c8ac5ece521,gemma4:31b,agree,all
+answerable,1cc394bdfdfd187fc0af28500ad47a0a764d5645,gemma4:31b,disagree,some
+answerable,be0b438952048fe6bb91c61ba48e529d784bdcea,gemma4:31b,agree,all
+answerable,347dc2fd6427b39cf2358d43864750044437dff8,gemma4:31b,agree,all
+answerable,7fba61426737394304e307cdc7537225f6253150,gemma4:31b,agree,all
+answerable,2f142cd11731d29d0c3fa426e26ef80d997862e0,gemma4:31b,disagree,some
+answerable,946d7c877d363f549f84e9500c852dce70ae5d36,gemma4:31b,agree,all
+answerable,e7ce612f53e9be705cdb8daa775eae51778825ef,gemma4:31b,agree,all
+answerable,58df55002fbcba76b9aeb2181d78378b8c01a827,gemma4:31b,agree,all
+answerable,c626637ed14dee3049b87171ddf326115e59d9ee,gemma4:31b,agree,all
+answerable,1e7e3f0f760cd628f698b73d82c0f946707855ca,gemma4:31b,agree,all
+yesno,1e7e3f0f760cd628f698b73d82c0f946707855ca,gemma4:31b,agree,all
+answerable,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,gemma4:31b,agree,all
+yesno,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,gemma4:31b,agree,none
+answerable,d9949dd4865e79c53284932d868ca8fd10d55e70,gemma4:31b,agree,all
+yesno,d9949dd4865e79c53284932d868ca8fd10d55e70,gemma4:31b,disagree,some
+answerable,e099a37db801718ab341ac9a380a146c7452fd21,gemma4:31b,agree,all
+yesno,e099a37db801718ab341ac9a380a146c7452fd21,gemma4:31b,disagree,some
+answerable,a6603305f4fd3dd0010ac31243c40999a116537e,gemma4:31b,agree,all
+answerable,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,gemma4:31b,agree,all
+yesno,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,gemma4:31b,agree,all
+answerable,8476d0bf5962f4ed619a7b87415ebe28c38ce296,gemma4:31b,disagree,some
+answerable,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,gemma4:31b,agree,all
+yesno,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,gemma4:31b,agree,all
+answerable,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,gemma4:31b,agree,all
+yesno,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,gemma4:31b,agree,all
+answerable,b62b7ec5128219f04be41854247d5af992797937,gemma4:31b,agree,all
+yesno,b62b7ec5128219f04be41854247d5af992797937,gemma4:31b,agree,all
+answerable,4cf05da602669a4c09c91ff5a1baae6e30adefdf,gemma4:31b,agree,none
+yesno,4cf05da602669a4c09c91ff5a1baae6e30adefdf,gemma4:31b,disagree,none
+answerable,caebea05935cae1f5d88749a2fc748e62976eab7,gemma4:31b,agree,all
+yesno,caebea05935cae1f5d88749a2fc748e62976eab7,gemma4:31b,agree,none
+answerable,dfd07a8e2de80c3a8d075a0f400fb13a1f1d4c60,gemma4:31b,disagree,some
+answerable,79e61134a6e29141cd19252571ffc92a0b4bc97f,gemma4:31b,agree,all
+yesno,79e61134a6e29141cd19252571ffc92a0b4bc97f,gemma4:31b,agree,all
+answerable,ab37ae82e38f64d3fa95782f2c791488f26cd43f,gemma4:31b,agree,all
+yesno,ab37ae82e38f64d3fa95782f2c791488f26cd43f,gemma4:31b,agree,all
+answerable,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,gemma4:31b,agree,all
+yesno,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,gemma4:31b,disagree,some
+answerable,f2dba5bf75967407cce5d0a9c2618269225081f5,gemma4:31b,agree,none
+yesno,f2dba5bf75967407cce5d0a9c2618269225081f5,gemma4:31b,disagree,none
+answerable,753a187c1dd8d96353187fbb193b5f86293a796c,gemma4:31b,agree,all
+yesno,753a187c1dd8d96353187fbb193b5f86293a796c,gemma4:31b,agree,all
+answerable,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,gemma4:31b,agree,all
+yesno,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,gemma4:31b,agree,all
+answerable,9133a85730c4090fe8b8d08eb3d9146efe7d7037,gemma4:31b,agree,none
+yesno,9133a85730c4090fe8b8d08eb3d9146efe7d7037,gemma4:31b,disagree,none
+answerable,bc7081aaa207de2362e0bea7bc8108d338aee36f,gemma4:31b,disagree,some
+answerable,4cb2e80da73ae36de372190b4c1c490b72977ef8,gemma4:31b,agree,all
+answerable,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,gemma4:31b,agree,all
+yesno,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,gemma4:31b,disagree,some
+answerable,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,gemma4:31b,agree,all
+yesno,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,gemma4:31b,agree,none
+answerable,ed15a593d64a5ba58f63c021ae9fd8f50051a667,gemma4:31b,agree,none
+yesno,ed15a593d64a5ba58f63c021ae9fd8f50051a667,gemma4:31b,agree,none
+answerable,521a3e7300567f6e8e4c531f223dbc9fc306c393,gemma4:31b,agree,all
+yesno,521a3e7300567f6e8e4c531f223dbc9fc306c393,gemma4:31b,agree,all
+answerable,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,gemma4:31b,agree,none
+yesno,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,gemma4:31b,agree,none
+answerable,1edfe390828f02a2db9a88454421c7f3d4cdd611,gemma4:31b,agree,none
+yesno,1edfe390828f02a2db9a88454421c7f3d4cdd611,gemma4:31b,agree,none
+answerable,8599d6d14ac157169920c73b98a79737c7a68cf5,gemma4:31b,agree,none
+yesno,8599d6d14ac157169920c73b98a79737c7a68cf5,gemma4:31b,disagree,none
+answerable,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,gemma4:31b,agree,all
+yesno,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,gemma4:31b,agree,all
+answerable,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,gemma4:31b,agree,all
+yesno,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,gemma4:31b,disagree,some
+answerable,c0120d339fcdb3833884622e532e7513d1b2c7dd,gemma4:31b,agree,all
+yesno,c0120d339fcdb3833884622e532e7513d1b2c7dd,gemma4:31b,disagree,some
+answerable,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,gemma4:31b,agree,all
+yesno,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,gemma4:31b,agree,all
+answerable,ee19fd54997f2eec7c87c7d4a2169026fe208285,gemma4:31b,disagree,some
+answerable,fd8a8eb69f07c584a76633f8802c2746f7236d64,gemma4:31b,agree,all
+yesno,fd8a8eb69f07c584a76633f8802c2746f7236d64,gemma4:31b,agree,all
+answerable,b9e0b1940805a5056f71c66d176cc87829e314d4,gemma4:31b,agree,all
+yesno,b9e0b1940805a5056f71c66d176cc87829e314d4,gemma4:31b,disagree,some
+answerable,e4cbfabf4509ae0f476f950c1079714a9cd3814e,gemma4:31b,disagree,some
+answerable,693cdb9978749db04ba34d9c168e71534f00a226,gemma4:31b,disagree,some
+answerable,b21f61c0f95fefdb1bdb90d51cbba4655cd59896,gemma4:31b,disagree,some
+answerable,da0a2195bbf6736119ff32493898d2aadffcbcb8,gemma4:31b,agree,all
+yesno,da0a2195bbf6736119ff32493898d2aadffcbcb8,gemma4:31b,agree,all
+answerable,55bafa0f7394163f4afd1d73340aac94c2d9f36c,gemma4:31b,agree,all
+yesno,55bafa0f7394163f4afd1d73340aac94c2d9f36c,gemma4:31b,agree,all
+answerable,f6346828c2f44529dc307abf04dd246bfeb4a9b2,gemma4:31b,agree,all
+yesno,f6346828c2f44529dc307abf04dd246bfeb4a9b2,gemma4:31b,disagree,some
+answerable,5752c8d333afc1e6c666b18d1477c8f669b7a602,gemma4:31b,agree,all
+yesno,5752c8d333afc1e6c666b18d1477c8f669b7a602,gemma4:31b,agree,all
+answerable,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,gemma4:31b,agree,all
+yesno,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,gemma4:31b,agree,all
+answerable,2b32cf05c5e736f764ceecc08477e20ab9f2f5d7,gemma4:31b,agree,none
+answerable,49474a3047fa3f35e1bcd63991e6f15e012ac10b,gemma4:31b,agree,none
+yesno,49474a3047fa3f35e1bcd63991e6f15e012ac10b,gemma4:31b,agree,none
+answerable,ae2142ee9e093ce485025168f4bcb3da4602739d,gemma4:31b,agree,all
+answerable,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,gemma4:31b,agree,all
+yesno,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,gemma4:31b,disagree,some
+answerable,c27b885b1e38542244f52056abf288b2389b9fc6,gemma4:31b,agree,all
+answerable,59f41306383dd6e201bded0f1c7c959ec4f61c5a,gemma4:31b,agree,all
+answerable,2abf916bc03222d3b2a3d66851d87921ff35c0d2,gemma4:31b,agree,all
+answerable,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,gemma4:31b,agree,all
+answerable,1e582319df1739dcd07ba0ba39e8f70187fba049,gemma4:31b,agree,none
+answerable,8f00859f74fc77832fa7d38c22f23f74ba13a07e,gemma4:31b,agree,none
+answerable,477da8d997ff87400c6aad19dcc74f8998bc89c3,gemma4:31b,agree,all
+answerable,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,gemma4:31b,agree,all
+answerable,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,gemma4:31b,agree,all
+answerable,9da181ac8f2600eb19364c1b1e3cdeb569811a11,gemma4:31b,agree,all
+answerable,027814f3a879a6c7852e033f9d99519b8729e444,gemma4:31b,agree,none
+answerable,f0404673085517eea708c5e91f32fb0f7728fa08,gemma4:31b,agree,all
+answerable,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,gemma4:31b,agree,all
+answerable,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,gemma4:31b,agree,all
+answerable,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,gemma4:31b,agree,none
+answerable,246e924017c48fa1f069361c44133fdf4f0386e1,gemma4:31b,agree,none
+answerable,afeceee343360d3fe715f405dac7760d9a6754a7,gemma4:31b,agree,all
+answerable,ec8f39d32084996ab825debd7113c71daac38b06,gemma4:31b,agree,all
+answerable,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,gemma4:31b,agree,all
+answerable,330fe3815f74037a9be93a4c16610c736a2a27b3,gemma4:31b,agree,all
+answerable,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,gemma4:31b,agree,all
+answerable,c87966e7f497975b76a60f6be50c33d296a4a4e7,gemma4:31b,agree,all
+answerable,d7e43a3db8616a106304ac04ba729c1fee78761d,gemma4:31b,agree,none
+answerable,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,gemma4:31b,agree,all
+answerable,9ea3669528c2b295f21770cb7f70d0c4b4389223,gemma4:31b,agree,none
+answerable,0a736e0e3305a50d771dfc059c7d94b8bd27032e,gemma4:31b,disagree,some
+answerable,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,gemma4:31b,agree,all
+answerable,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,gemma4:31b,agree,none
+answerable,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,gemma4:31b,agree,none
+answerable,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,gemma4:31b,agree,all
+answerable,697c5d2ba7e019ddb91a1de5031a90fe741f2468,gemma4:31b,disagree,some
+answerable,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,gemma4:31b,agree,all
+answerable,69a46a227269c3aac9bf9d7c3d698c787642f806,gemma4:31b,agree,all
+answerable,f010f9aa4ba1b4360a78c00aa0747d7730a61805,gemma4:31b,agree,all
+answerable,6a90135bd001be69a888076aff1b149b78adf443,gemma4:31b,agree,none
+answerable,cdbbba22e62bc9402aea74ac5960503f59e984ff,gemma4:31b,agree,all
+answerable,a064337bafca8cf01e222950ea97ebc184c47bc0,gemma4:31b,agree,all
+answerable,16b816925567deb734049416c149747118e13963,gemma4:31b,agree,none
+answerable,f94cea545f745994800c1fb4654d64d1384f2c26,gemma4:31b,agree,none
+answerable,98aa86ee948096d6fe16c02c1e49920da00e32d4,gemma4:31b,agree,all
+answerable,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,gemma4:31b,agree,all
+answerable,240058371e91c6b9509c0398cbe900855b46c328,gemma4:31b,agree,all
+answerable,64632981279c7aa16ffc1a44ffc31f4520f5559e,gemma4:31b,agree,all
+answerable,fac273ecb3e72f2dc94cdbc797582d7225a8e070,gemma4:31b,agree,all
+answerable,d207f78beb6cd754268881bf575c8f98000667ea,gemma4:31b,agree,all
+answerable,7ef34b4996ada33a4965f164a8f96e20af7470c0,gemma4:31b,agree,none
+answerable,74396ead9f88a9efc7626240ce128582ab69ef2b,gemma4:31b,agree,all
+answerable,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,gemma4:31b,agree,all
+answerable,cfe21b979a6c851bdafb2e414622f61e62b1d98c,gemma4:31b,agree,all
+answerable,aebd1f0d728d0de5f76238844da044a44109f76f,gemma4:31b,agree,all
+answerable,5db47bbb97282983e10414240db78154ea7ac75f,gemma4:31b,agree,all
+answerable,71fd0efea1b441d86d9a75255815ba3efe09779b,gemma4:31b,agree,all
+answerable,e42916924b69cab1df25d3b4e6072feaa0ba8084,gemma4:31b,disagree,some
+answerable,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,gemma4:31b,agree,all
+answerable,84ee6180d3267115ad27852027d147fb86a33135,gemma4:31b,disagree,some
+answerable,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,gemma4:31b,agree,all
+answerable,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,gemma4:31b,agree,all
+answerable,f741d32b92630328df30f674af16fbbefcad3f93,gemma4:31b,agree,all
+answerable,d5bce5da746a075421c80abe10c97ad11a96c6cd,gemma4:31b,agree,all
+answerable,31236a876277c6e1c80891a3293c105a1b1be008,gemma4:31b,disagree,some
+answerable,636ac549cf4917c5922cd09a655abf278924c930,gemma4:31b,agree,all
+answerable,9186b2c5b7000ab7f15a46a47da73ea45544bace,gemma4:31b,agree,all
+answerable,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,gemma4:31b,agree,all
+answerable,6167618e0c53964f3a706758bdf5e807bc5d7760,gemma4:31b,agree,all
+answerable,d5e716c1386b6485e63075e980f80d44564d0aa2,gemma4:31b,agree,all
+answerable,620b6c410a055295d137511d3c99207a47c03b5e,gemma4:31b,agree,all
+answerable,37ac705166fa87dc74fe86575bf04bea56cc4930,gemma4:31b,agree,all
+answerable,471683ba6251b631f38a24d42b6dba6f52dee429,gemma4:31b,agree,all
+answerable,7969b8d80e12aa3ebb89b5622bc564f44e98329f,gemma4:31b,agree,all
+answerable,67cb001f8ca122ea859724804b41529fea5faeef,gemma4:31b,agree,all
+answerable,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,gemma4:31b,agree,all
+answerable,9b3371dcd855f1d3342edb212efa39dfc9142ae3,gemma4:31b,disagree,some
+answerable,fef5b65263c81299acc350a101dabaf5a8cb9c6e,gemma4:31b,agree,all
+answerable,2e4688205c8e344cded7a053b6014cce04ef1bd5,gemma4:31b,agree,all
+answerable,4748a50c96acb1aa03f7efd1b43376c193b2450a,gemma4:31b,agree,all
+answerable,d323f0d65b57b30ae85fb9f24298927a3d1216e9,gemma4:31b,agree,all
+answerable,a77d38427639d54461ae308f3045434f81e497d0,gemma4:31b,agree,all
+answerable,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,gemma4:31b,agree,all
+answerable,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,gemma4:31b,agree,all
+answerable,38363a7ed250bc729508c4c1dc975696a65c53cb,gemma4:31b,agree,all
+answerable,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,gemma4:31b,agree,all
+answerable,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,gemma4:31b,agree,all
+answerable,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,gemma4:31b,agree,all
+answerable,d126d5d6b7cfaacd58494f1879547be9e91d1364,gemma4:31b,agree,all
+answerable,732bd97ae34541f215c436e2a1b98db1649cba27,gemma4:31b,agree,all
+answerable,5181527e6a61a9a192db5f8064e56ec263c42661,gemma4:31b,agree,all
+answerable,8bb2280483af8013a32e0d294e97d44444f08ab0,gemma4:31b,agree,none
+answerable,a59e86a15405c8a11890db072b99fda3173e5ab2,gemma4:31b,agree,none
+answerable,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,gemma4:31b,agree,all
+answerable,9c1f70affc87024b4280f0876839309b8dddd579,gemma4:31b,agree,all
+answerable,a67a2d9acad1787b636ca2681330f4c29a0b0254,gemma4:31b,agree,all
+answerable,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,gemma4:31b,agree,none
+answerable,00db191facf903cef18fb1727d1cab638c277e0a,gemma4:31b,agree,all
+answerable,d14118b18ee94dafe170439291e20cb19ab7a43c,gemma4:31b,disagree,some
+answerable,a3a867f7b3557c168d05c517c468ff6c7337bff9,gemma4:31b,agree,all
+answerable,52faf319e37aa15fff1ab47f634a5a584dc42e75,gemma4:31b,agree,all
+answerable,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,gemma4:31b,agree,all
+answerable,de84972c5d1bbf664d0f8b702fce5f161449ec23,gemma4:31b,disagree,some
+answerable,230ff86b7b90b87c33c53014bb1e9c582dfc107f,gemma4:31b,agree,all
+answerable,2d91554c3f320a4bcfeb00aa466309074a206712,gemma4:31b,agree,all
+answerable,044c66c6b7ff7378682f24887b05e1af79dcd04f,qwen3.5:122b,agree,all
+answerable,a913aa14d4e05cc9d658bf6697fe5b2652589b1b,qwen3.5:122b,agree,none
+answerable,8ba582939823faae6822a27448ea011ab6b90ed7,qwen3.5:122b,disagree,some
+answerable,b02a6f59270b8c55fa4df3751bcb66fca2371451,qwen3.5:122b,agree,all
+answerable,2c4db4398ecff7e4c1c335a2cb3864bfdc31df1a,qwen3.5:122b,disagree,some
+answerable,810e6d09813486a64e87ef6c1fb9b1e205871632,qwen3.5:122b,disagree,some
+answerable,4830459e3d1d204e431025ce7e596ef3f8d757d2,qwen3.5:122b,agree,all
+answerable,a57e266c936e438aeeab5e8d20d9edd1c15a32ee,qwen3.5:122b,disagree,some
+answerable,101d7a355e8bf6d1860917876ee0b9971eae7a2f,qwen3.5:122b,disagree,some
+answerable,ab95ca983240ad5289c123a2774f8e0db424f4a1,qwen3.5:122b,agree,all
+answerable,fae930129c2638ba6f9c9b3383e85aa130a73876,qwen3.5:122b,disagree,some
+answerable,cc8f495cac0af12054c746a5b796e989ff0e5d5f,qwen3.5:122b,agree,none
+answerable,e86b9633dc691976dd00ed57d1675e1460f7167b,qwen3.5:122b,agree,all
+answerable,3098793595252039f363ee1150d4ea956f2504b8,qwen3.5:122b,disagree,some
+answerable,dd807195d10c492da2b0da8b2c56b8f7b75db20e,qwen3.5:122b,agree,all
+answerable,0035b351df63971ec57e36d4bfc6f7594bed41ae,qwen3.5:122b,agree,all
+answerable,c0cebef0e29b9d13c165b6f19f6ca8393348c671,qwen3.5:122b,disagree,some
+answerable,0b5a505c1fca92258b9e83f53bb8cfeb81cb655a,qwen3.5:122b,agree,all
+answerable,65c9aee2051ff7c47112b2aee0d928d9b6a8c2fe,qwen3.5:122b,disagree,some
+answerable,863d8d32a1605402e11f0bf63968a14bcfd15337,qwen3.5:122b,disagree,some
+answerable,8908d1b865137bc309dde10a93735ec76037e5f9,qwen3.5:122b,disagree,some
+answerable,58259f2e22363aab20c448e5dd7b6f432556b32d,qwen3.5:122b,disagree,some
+answerable,079ca5810060e1cdc12b5935d8c248492f0478b9,qwen3.5:122b,disagree,some
+answerable,7f8fc3c7d59aba80a3e7c839db6892a1fc329210,qwen3.5:122b,agree,none
+answerable,2a55076a66795793d79a3edfae1041098404fbc3,qwen3.5:122b,agree,all
+answerable,d3d6a4a721b8bc9776f62759b8d9be1a19c6b0d2,qwen3.5:122b,agree,all
+answerable,63279ecb2ba4e51c1225e63b81cb021abc10d0d1,qwen3.5:122b,agree,all
+answerable,9f8c0e02a7a8e9ee69f4c1757817cde85c7944bd,qwen3.5:122b,disagree,some
+answerable,c32fc488f0527f330273263fa8956788bd071efc,qwen3.5:122b,disagree,some
+answerable,9bf60073fbb69fbf860196513fc6fd2f466535f6,qwen3.5:122b,agree,all
+answerable,6073be8b88f0378cd0c4ffcad87e1327bc98b991,qwen3.5:122b,agree,all
+answerable,4f8b078b9f60be30520fd32a3d8601ab3babb5c0,qwen3.5:122b,disagree,some
+answerable,1fa9b6300401530738995f14a37e074c48bc9fd8,qwen3.5:122b,agree,all
+answerable,7f11f128fd39b8060f5810fa84102f000d94ea33,qwen3.5:122b,disagree,some
+answerable,84f9952814d6995bc99bbb3abb372d90ef2f28b4,qwen3.5:122b,agree,all
+answerable,78a0c25b83cdeaeaf0a4781f502105a514b2af0e,qwen3.5:122b,agree,all
+answerable,71e1f06daf6310609d00850340e64a846fbe2dfb,qwen3.5:122b,agree,all
+answerable,2f9a31f5a2b668acf3bce8958f5daa67ab8b2c83,qwen3.5:122b,disagree,some
+answerable,37b0ee4a9d0df3ae3493e3b9114c3f385746da5c,qwen3.5:122b,agree,all
+answerable,90829d5fde4f5f0ffc184c5e8fc64c8ac5ece521,qwen3.5:122b,agree,all
+answerable,2d92ae6b36567e7edb6afdd72f97b06ac144fbdf,qwen3.5:122b,disagree,some
+answerable,1cc394bdfdfd187fc0af28500ad47a0a764d5645,qwen3.5:122b,disagree,some
+answerable,be0b438952048fe6bb91c61ba48e529d784bdcea,qwen3.5:122b,agree,none
+answerable,347dc2fd6427b39cf2358d43864750044437dff8,qwen3.5:122b,agree,all
+answerable,7fba61426737394304e307cdc7537225f6253150,qwen3.5:122b,agree,all
+answerable,2f142cd11731d29d0c3fa426e26ef80d997862e0,qwen3.5:122b,disagree,some
+answerable,946d7c877d363f549f84e9500c852dce70ae5d36,qwen3.5:122b,agree,all
+answerable,58df55002fbcba76b9aeb2181d78378b8c01a827,qwen3.5:122b,agree,none
+answerable,e7ce612f53e9be705cdb8daa775eae51778825ef,qwen3.5:122b,agree,all
+answerable,c626637ed14dee3049b87171ddf326115e59d9ee,qwen3.5:122b,agree,all
+answerable,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,qwen3.5:122b,agree,all
+yesno,5181aefb8a7272b4c83a1f7cb61f864ead6a1f1f,qwen3.5:122b,agree,none
+answerable,1e7e3f0f760cd628f698b73d82c0f946707855ca,qwen3.5:122b,agree,all
+yesno,1e7e3f0f760cd628f698b73d82c0f946707855ca,qwen3.5:122b,agree,all
+answerable,d9949dd4865e79c53284932d868ca8fd10d55e70,qwen3.5:122b,agree,all
+yesno,d9949dd4865e79c53284932d868ca8fd10d55e70,qwen3.5:122b,disagree,some
+answerable,e099a37db801718ab341ac9a380a146c7452fd21,qwen3.5:122b,agree,all
+yesno,e099a37db801718ab341ac9a380a146c7452fd21,qwen3.5:122b,disagree,some
+answerable,a6603305f4fd3dd0010ac31243c40999a116537e,qwen3.5:122b,agree,all
+answerable,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,qwen3.5:122b,agree,all
+yesno,1ce6c09cf886df41a3d3c52ce82f370c5a30334a,qwen3.5:122b,agree,none
+answerable,8476d0bf5962f4ed619a7b87415ebe28c38ce296,qwen3.5:122b,disagree,some
+answerable,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,qwen3.5:122b,agree,all
+yesno,e56c1f0e9eabda41f929d0dfd5cfa50edd69fa89,qwen3.5:122b,agree,all
+answerable,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,qwen3.5:122b,agree,all
+yesno,c4b621f573bbb411bdaa84a7562c9c4795a7eb3a,qwen3.5:122b,agree,all
+answerable,4cf05da602669a4c09c91ff5a1baae6e30adefdf,qwen3.5:122b,agree,all
+yesno,4cf05da602669a4c09c91ff5a1baae6e30adefdf,qwen3.5:122b,disagree,some
+answerable,caebea05935cae1f5d88749a2fc748e62976eab7,qwen3.5:122b,agree,all
+yesno,caebea05935cae1f5d88749a2fc748e62976eab7,qwen3.5:122b,agree,none
+answerable,b62b7ec5128219f04be41854247d5af992797937,qwen3.5:122b,agree,all
+yesno,b62b7ec5128219f04be41854247d5af992797937,qwen3.5:122b,agree,all
+answerable,dfd07a8e2de80c3a8d075a0f400fb13a1f1d4c60,qwen3.5:122b,disagree,some
+answerable,79e61134a6e29141cd19252571ffc92a0b4bc97f,qwen3.5:122b,agree,all
+yesno,79e61134a6e29141cd19252571ffc92a0b4bc97f,qwen3.5:122b,agree,all
+answerable,ab37ae82e38f64d3fa95782f2c791488f26cd43f,qwen3.5:122b,agree,all
+yesno,ab37ae82e38f64d3fa95782f2c791488f26cd43f,qwen3.5:122b,agree,all
+answerable,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,qwen3.5:122b,agree,all
+yesno,54b0d2df6ee27aaacdaf7f9c76c897b27e534667,qwen3.5:122b,disagree,some
+answerable,f2dba5bf75967407cce5d0a9c2618269225081f5,qwen3.5:122b,agree,all
+yesno,f2dba5bf75967407cce5d0a9c2618269225081f5,qwen3.5:122b,disagree,some
+answerable,753a187c1dd8d96353187fbb193b5f86293a796c,qwen3.5:122b,agree,all
+yesno,753a187c1dd8d96353187fbb193b5f86293a796c,qwen3.5:122b,agree,all
+answerable,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,qwen3.5:122b,agree,all
+yesno,73c535a7b46f0c2408ea2b1da0a878b376a2bca5,qwen3.5:122b,agree,all
+answerable,9133a85730c4090fe8b8d08eb3d9146efe7d7037,qwen3.5:122b,agree,all
+yesno,9133a85730c4090fe8b8d08eb3d9146efe7d7037,qwen3.5:122b,disagree,some
+answerable,bc7081aaa207de2362e0bea7bc8108d338aee36f,qwen3.5:122b,disagree,some
+answerable,4cb2e80da73ae36de372190b4c1c490b72977ef8,qwen3.5:122b,agree,all
+answerable,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,qwen3.5:122b,agree,all
+yesno,e12166fa9d6f63c4e92252c95c6a7bc96977ebf4,qwen3.5:122b,disagree,some
+answerable,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,qwen3.5:122b,agree,all
+yesno,cc8bcea4052bf92f249dda276acc5fd16cac6fb4,qwen3.5:122b,agree,none
+answerable,ed15a593d64a5ba58f63c021ae9fd8f50051a667,qwen3.5:122b,agree,all
+yesno,ed15a593d64a5ba58f63c021ae9fd8f50051a667,qwen3.5:122b,agree,all
+answerable,521a3e7300567f6e8e4c531f223dbc9fc306c393,qwen3.5:122b,agree,all
+yesno,521a3e7300567f6e8e4c531f223dbc9fc306c393,qwen3.5:122b,agree,all
+answerable,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,qwen3.5:122b,agree,none
+yesno,b6dae03d56dff0db8ad2a1bff9c7dd3f87551cd1,qwen3.5:122b,agree,none
+answerable,1edfe390828f02a2db9a88454421c7f3d4cdd611,qwen3.5:122b,agree,all
+yesno,1edfe390828f02a2db9a88454421c7f3d4cdd611,qwen3.5:122b,agree,all
+answerable,8599d6d14ac157169920c73b98a79737c7a68cf5,qwen3.5:122b,agree,all
+yesno,8599d6d14ac157169920c73b98a79737c7a68cf5,qwen3.5:122b,disagree,some
+answerable,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,qwen3.5:122b,agree,all
+yesno,4f57ac24f3f4689a2f885715cd84b7d867fe3f12,qwen3.5:122b,agree,all
+answerable,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,qwen3.5:122b,agree,all
+yesno,c2745e44ebe7dd57126b784ac065f0b7fc2630f1,qwen3.5:122b,disagree,some
+answerable,c0120d339fcdb3833884622e532e7513d1b2c7dd,qwen3.5:122b,agree,all
+yesno,c0120d339fcdb3833884622e532e7513d1b2c7dd,qwen3.5:122b,disagree,some
+answerable,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,qwen3.5:122b,agree,all
+yesno,deb0c3524a3b3707e8b20abd27f54ad6188d6e4e,qwen3.5:122b,agree,all
+answerable,ee19fd54997f2eec7c87c7d4a2169026fe208285,qwen3.5:122b,disagree,some
+answerable,fd8a8eb69f07c584a76633f8802c2746f7236d64,qwen3.5:122b,agree,all
+yesno,fd8a8eb69f07c584a76633f8802c2746f7236d64,qwen3.5:122b,agree,all
+answerable,b9e0b1940805a5056f71c66d176cc87829e314d4,qwen3.5:122b,agree,all
+yesno,b9e0b1940805a5056f71c66d176cc87829e314d4,qwen3.5:122b,disagree,some
+answerable,e4cbfabf4509ae0f476f950c1079714a9cd3814e,qwen3.5:122b,disagree,some
+answerable,693cdb9978749db04ba34d9c168e71534f00a226,qwen3.5:122b,disagree,some
+answerable,b21f61c0f95fefdb1bdb90d51cbba4655cd59896,qwen3.5:122b,disagree,some
+answerable,da0a2195bbf6736119ff32493898d2aadffcbcb8,qwen3.5:122b,agree,all
+yesno,da0a2195bbf6736119ff32493898d2aadffcbcb8,qwen3.5:122b,agree,all
+answerable,55bafa0f7394163f4afd1d73340aac94c2d9f36c,qwen3.5:122b,agree,all
+yesno,55bafa0f7394163f4afd1d73340aac94c2d9f36c,qwen3.5:122b,agree,all
+answerable,f6346828c2f44529dc307abf04dd246bfeb4a9b2,qwen3.5:122b,agree,all
+yesno,f6346828c2f44529dc307abf04dd246bfeb4a9b2,qwen3.5:122b,disagree,some
+answerable,5752c8d333afc1e6c666b18d1477c8f669b7a602,qwen3.5:122b,agree,all
+yesno,5752c8d333afc1e6c666b18d1477c8f669b7a602,qwen3.5:122b,agree,all
+answerable,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,qwen3.5:122b,agree,all
+yesno,9aabcba3d44ee7d0bbf6a2c019ab9e0f02fab244,qwen3.5:122b,agree,all
+answerable,2b32cf05c5e736f764ceecc08477e20ab9f2f5d7,qwen3.5:122b,agree,all
+answerable,49474a3047fa3f35e1bcd63991e6f15e012ac10b,qwen3.5:122b,agree,all
+yesno,49474a3047fa3f35e1bcd63991e6f15e012ac10b,qwen3.5:122b,agree,all
+answerable,ae2142ee9e093ce485025168f4bcb3da4602739d,qwen3.5:122b,agree,all
+answerable,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,qwen3.5:122b,agree,all
+yesno,d2451d32c5a11a0eb8356a5e9d94a9231b59f198,qwen3.5:122b,disagree,some
+answerable,c27b885b1e38542244f52056abf288b2389b9fc6,qwen3.5:122b,agree,all
+answerable,59f41306383dd6e201bded0f1c7c959ec4f61c5a,qwen3.5:122b,agree,all
+answerable,2abf916bc03222d3b2a3d66851d87921ff35c0d2,qwen3.5:122b,agree,all
+answerable,1e582319df1739dcd07ba0ba39e8f70187fba049,qwen3.5:122b,agree,none
+answerable,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,qwen3.5:122b,agree,none
+answerable,8f00859f74fc77832fa7d38c22f23f74ba13a07e,qwen3.5:122b,agree,none
+answerable,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:122b,agree,all
+answerable,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:122b,agree,all
+answerable,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:122b,agree,all
+answerable,9da181ac8f2600eb19364c1b1e3cdeb569811a11,qwen3.5:122b,agree,all
+answerable,027814f3a879a6c7852e033f9d99519b8729e444,qwen3.5:122b,agree,none
+answerable,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:122b,agree,all
+answerable,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:122b,agree,all
+answerable,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,qwen3.5:122b,agree,all
+answerable,b6e97d1b1565732b1b3f1d74e6d2800dd21be37a,qwen3.5:122b,agree,none
+answerable,246e924017c48fa1f069361c44133fdf4f0386e1,qwen3.5:122b,agree,none
+answerable,afeceee343360d3fe715f405dac7760d9a6754a7,qwen3.5:122b,agree,all
+answerable,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:122b,agree,all
+answerable,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,qwen3.5:122b,agree,all
+answerable,330fe3815f74037a9be93a4c16610c736a2a27b3,qwen3.5:122b,agree,all
+answerable,028d0d9b7a71133e51a14a32cd09dea1e2f39f05,qwen3.5:122b,agree,all
+answerable,d7e43a3db8616a106304ac04ba729c1fee78761d,qwen3.5:122b,agree,none
+answerable,c87966e7f497975b76a60f6be50c33d296a4a4e7,qwen3.5:122b,agree,all
+answerable,9ea3669528c2b295f21770cb7f70d0c4b4389223,qwen3.5:122b,agree,none
+answerable,0871827cfeceed4ee78ce7407aaf6e85dd1f9c25,qwen3.5:122b,agree,all
+answerable,0a736e0e3305a50d771dfc059c7d94b8bd27032e,qwen3.5:122b,disagree,some
+answerable,6d6a9b855ec70f170b854baab6d8f7e94d3b5614,qwen3.5:122b,agree,all
+answerable,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,qwen3.5:122b,agree,all
+answerable,8da8c4651979a4b1d1d3008c1f77bc7e9397183b,qwen3.5:122b,agree,all
+answerable,82b93ecd2397e417e1e80f93b7cf49c7bd9aeec3,qwen3.5:122b,agree,none
+answerable,697c5d2ba7e019ddb91a1de5031a90fe741f2468,qwen3.5:122b,disagree,some
+answerable,d8ae36ae1b4d3af5b59ebd24efe94796101c1c12,qwen3.5:122b,agree,all
+answerable,69a46a227269c3aac9bf9d7c3d698c787642f806,qwen3.5:122b,agree,all
+answerable,f010f9aa4ba1b4360a78c00aa0747d7730a61805,qwen3.5:122b,agree,none
+answerable,cdbbba22e62bc9402aea74ac5960503f59e984ff,qwen3.5:122b,agree,all
+answerable,6a90135bd001be69a888076aff1b149b78adf443,qwen3.5:122b,agree,none
+answerable,a064337bafca8cf01e222950ea97ebc184c47bc0,qwen3.5:122b,agree,all
+answerable,16b816925567deb734049416c149747118e13963,qwen3.5:122b,agree,none
+answerable,f94cea545f745994800c1fb4654d64d1384f2c26,qwen3.5:122b,agree,all
+answerable,98aa86ee948096d6fe16c02c1e49920da00e32d4,qwen3.5:122b,agree,all
+answerable,240058371e91c6b9509c0398cbe900855b46c328,qwen3.5:122b,agree,all
+answerable,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,qwen3.5:122b,agree,all
+answerable,64632981279c7aa16ffc1a44ffc31f4520f5559e,qwen3.5:122b,agree,all
+answerable,d207f78beb6cd754268881bf575c8f98000667ea,qwen3.5:122b,agree,all
+answerable,fac273ecb3e72f2dc94cdbc797582d7225a8e070,qwen3.5:122b,agree,all
+answerable,7ef34b4996ada33a4965f164a8f96e20af7470c0,qwen3.5:122b,agree,all
+answerable,74396ead9f88a9efc7626240ce128582ab69ef2b,qwen3.5:122b,agree,all
+answerable,1d9d7c96c5e826ac06741eb40e89fca6b4b022bd,qwen3.5:122b,agree,all
+answerable,cfe21b979a6c851bdafb2e414622f61e62b1d98c,qwen3.5:122b,agree,all
+answerable,5db47bbb97282983e10414240db78154ea7ac75f,qwen3.5:122b,agree,all
+answerable,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:122b,agree,all
+answerable,71fd0efea1b441d86d9a75255815ba3efe09779b,qwen3.5:122b,agree,all
+answerable,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:122b,disagree,some
+answerable,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:122b,disagree,some
+answerable,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,qwen3.5:122b,agree,all
+answerable,0778cbbd093f8b779f7cf26302b2a8e081ccfb40,qwen3.5:122b,agree,all
+answerable,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,qwen3.5:122b,agree,all
+answerable,f741d32b92630328df30f674af16fbbefcad3f93,qwen3.5:122b,agree,all
+answerable,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:122b,agree,none
+answerable,31236a876277c6e1c80891a3293c105a1b1be008,qwen3.5:122b,disagree,some
+answerable,636ac549cf4917c5922cd09a655abf278924c930,qwen3.5:122b,agree,all
+answerable,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:122b,agree,all
+answerable,6167618e0c53964f3a706758bdf5e807bc5d7760,qwen3.5:122b,agree,all
+answerable,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,qwen3.5:122b,agree,all
+answerable,d5e716c1386b6485e63075e980f80d44564d0aa2,qwen3.5:122b,agree,all
+answerable,620b6c410a055295d137511d3c99207a47c03b5e,qwen3.5:122b,agree,all
+answerable,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:122b,agree,all
+answerable,471683ba6251b631f38a24d42b6dba6f52dee429,qwen3.5:122b,agree,all
+answerable,7969b8d80e12aa3ebb89b5622bc564f44e98329f,qwen3.5:122b,agree,all
+answerable,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:122b,agree,all
+answerable,b1fe6a39b474933038b44b6d45e5ca32af7c3e36,qwen3.5:122b,agree,all
+answerable,9b3371dcd855f1d3342edb212efa39dfc9142ae3,qwen3.5:122b,disagree,some
+answerable,2e4688205c8e344cded7a053b6014cce04ef1bd5,qwen3.5:122b,agree,all
+answerable,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:122b,agree,all
+answerable,fef5b65263c81299acc350a101dabaf5a8cb9c6e,qwen3.5:122b,agree,all
+answerable,d323f0d65b57b30ae85fb9f24298927a3d1216e9,qwen3.5:122b,agree,all
+answerable,a77d38427639d54461ae308f3045434f81e497d0,qwen3.5:122b,agree,all
+answerable,0b5c599195973c563c4b1a0fe5d8fc77204d71a0,qwen3.5:122b,agree,all
+answerable,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:122b,agree,all
+answerable,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:122b,agree,all
+answerable,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,qwen3.5:122b,agree,all
+answerable,1e4f45c956dfb40fadb8e10d4c1bfafa8968be4d,qwen3.5:122b,agree,all
+answerable,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:122b,agree,all
+answerable,d126d5d6b7cfaacd58494f1879547be9e91d1364,qwen3.5:122b,agree,all
+answerable,732bd97ae34541f215c436e2a1b98db1649cba27,qwen3.5:122b,agree,all
+answerable,8bb2280483af8013a32e0d294e97d44444f08ab0,qwen3.5:122b,agree,none
+answerable,5181527e6a61a9a192db5f8064e56ec263c42661,qwen3.5:122b,agree,all
+answerable,a59e86a15405c8a11890db072b99fda3173e5ab2,qwen3.5:122b,agree,all
+answerable,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,qwen3.5:122b,agree,all
+answerable,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:122b,agree,all
+answerable,a67a2d9acad1787b636ca2681330f4c29a0b0254,qwen3.5:122b,agree,all
+answerable,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,qwen3.5:122b,agree,none
+answerable,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:122b,agree,all
+answerable,d14118b18ee94dafe170439291e20cb19ab7a43c,qwen3.5:122b,disagree,some
+answerable,a3a867f7b3557c168d05c517c468ff6c7337bff9,qwen3.5:122b,agree,all
+answerable,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:122b,agree,all
+answerable,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:122b,disagree,some
+answerable,3f8a42eb0e904ce84c3fded2103f674e9cbc893d,qwen3.5:122b,agree,all
+answerable,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:122b,agree,all
+answerable,2d91554c3f320a4bcfeb00aa466309074a206712,qwen3.5:122b,agree,all
