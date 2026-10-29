@@ -1200,7 +1200,7 @@ def rq6_budget(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame | None:
     write(out / "tables" / "budget.tex", rf"""% Gerado por `python -m llmeval analyze` (rq6_budget). Não editar à mão.
 \begin{{table}}[t]
 \centering
-\caption{{Accuracy (\%) with reasoning for each generation budget $B$ (tokens), pooled over the five conditions run with reasoning, and without reasoning on the same questions. In parentheses: share of answers lost because reasoning exhausted the budget (\%), counted as incorrect.}}
+\caption{{Accuracy (\%) with reasoning for each generation budget $B$ (tokens), pooled over the five conditions run with reasoning (closed book, full document, hybrid $k=5$, search + hybrid, read, then search), and without reasoning on the same questions. In parentheses: share of answers lost because reasoning exhausted the budget (\%), counted as incorrect.}}
 \label{{tab:budget}}
 \footnotesize
 \setlength{{\tabcolsep}}{{2.2pt}}
@@ -1239,7 +1239,7 @@ def fig_budget(cfg, pooled: pd.DataFrame, out: Path) -> None:
         bottom.set_ylabel("Lost to budget (%)" if col == 0 else "")
         bottom.set_xlabel("Generation budget $B$ (tokens)")
         bottom.set_xscale("log", base=2)
-        bottom.set_xticks(sorted(pooled.budget.unique()), [f"{b:,}" for b in sorted(pooled.budget.unique())])
+        bottom.set_xticks(sorted(pooled.budget.unique()), [str(b) for b in sorted(pooled.budget.unique())])
         bottom.set_ylim(0, 100)
     h, l = axes[0, 0].get_legend_handles_labels()
     fig.legend(h, l, ncol=4, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.01))
@@ -1326,11 +1326,11 @@ def human_ceiling(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame | None:
         return "--" if r.empty else str(int(r.n_questions.iloc[0]))
 
     lines = [r"Human, all test questions & " + " & ".join(cell(t, "test", "human") for t, _ in tasks) + r" \\",
-             r"\quad questions & " + " & ".join(n_q(t, "test", "human") for t, _ in tasks) + r" \\",
+             r"\quad questions (test) & " + " & ".join(n_q(t, "test", "human") for t, _ in tasks) + r" \\",
              r"\midrule",
              r"Human, sample & " + " & ".join(cell(t, "sample", "human") for t, _ in tasks) + r" \\"]
     lines += [f"{labels[m]} & " + " & ".join(cell(t, "sample", m) for t, _ in tasks) + r" \\" for m in models]
-    lines += [r"\quad questions & " + " & ".join(n_q(t, "sample", "human") for t, _ in tasks) + r" \\"]
+    lines += [r"\quad questions (sample) & " + " & ".join(n_q(t, "sample", "human") for t, _ in tasks) + r" \\"]
     write(out / "tables" / "human_ceiling.tex", rf"""% Gerado por `python -m llmeval analyze` (human_ceiling). Não editar à mão.
 \begin{{table}}[t]
 \centering
