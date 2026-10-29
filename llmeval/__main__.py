@@ -12,7 +12,7 @@ STAGES = ("sample", "generate", "judge", "metrics", "analyze")
 
 def main() -> None:
     ap = argparse.ArgumentParser(prog="llmeval")
-    ap.add_argument("stage", choices=STAGES + ("all", "agreement"))
+    ap.add_argument("stage", choices=STAGES + ("all", "agreement", "agreement_pairs"))
     ap.add_argument("--config", default=None)
     ap.add_argument("--no-think", action="store_true", help="geração sem a passada com raciocínio (RQ6)")
     ap.add_argument("--budget", type=int, default=None,
@@ -53,6 +53,9 @@ def run_stages(cfg, stage_arg: str) -> None:
         elif stage == "agreement":  # concordância com humanos no QASPER (fora de "all")
             from .agreement import run_agreement
             run_agreement(cfg)
+        elif stage == "agreement_pairs":  # comparações par a par na amostra (fora de "all")
+            from .agreement import run_agreement_pairs
+            run_agreement_pairs(cfg)
         elif stage == "analyze":
             from .analysis import run_analysis
             run_analysis(cfg)

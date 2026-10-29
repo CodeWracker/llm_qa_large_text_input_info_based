@@ -90,3 +90,49 @@ def run_agreement(cfg) -> None:
         log.warning("%d votos ausentes; reexecute `agreement` para refazê-los", missing)
     write_jsonl(results / "agreement.jsonl", rows)
     log.info("concordância concluída: %d itens", len(rows))
+
+
+def run_agreement_pairs(cfg) -> None:
+    """Comparações par a par nas perguntas de texto livre da amostra: cada anotador contra cada outro anotador
+    sozinho e cada modelo contra cada anotador sozinho. Com dois anotadores isso coincide com o "deixa um de
+    fora" (e sai do cache); com três ou mais, separa "bate com todos" de "bate com alguns" sem ambiguidade.
+    Grava results/agreement_pairs.jsonl."""
+    results = cfg.path("results")
+    sample_q = {q["qid"] for q in read_jsonl(cfg.path("sample") / "questions.jsonl") if q["dataset"] == "qasper"}
+    by_q: dict[str, list[dict]] = {}
+    for g in read_jsonl(results / "generations.jsonl"):
+        if g["dataset"] == "qasper" and not g.get("think") and g["condition"] == "full":
+            by_q.setdefault(g["qid"], []).append(g)
+
+    items, todo = [], {}
+    for q in _annotations(cfg):
+        if q["qid"] not in sample_q or q["stratum"] not in ("extractive", "abstractive"):
+            continue
+        cands = [(f"human:{i}", {"answer": t, "abstained": typ == "unanswerable"}) for i, (typ, t) in
+                 enumerate(q["annotations"])]
+        cands += [(g["model"], {"answer": g["answer"], "abstained": g["abstained"]}) for g in by_q.get(q["qid"], [])]
+        for name, c in cands:
+            for j, (_, ref) in enumerate(q["annotations"]):
+                if name == f"human:{j}":
+                    continue
+                refs = [UNANSWERABLE_REFERENCE if ref == UNANSWERABLE else ref]
+                rule = rule_verdict({"dataset": "qasper", **c}, [ref])
+                key = None
+                if rule is None:
+                    key = (q["question"], tuple(refs), c["answer"])
+                    todo[key] = None
+                items.append(({"qid": q["qid"], "candidate": name, "ref": j, "n_annotations": len(q["annotations"])},
+                              rule, key))
+    log.info("pares: %d comparações, %d chamadas únicas por juiz", len(items), len(todo))
+    if cfg["generation"].get("dry_run"):
+        return
+    verdicts = ask_jury(cfg, OllamaClient(cfg, cfg.path("cache")), todo)
+    rows = []
+    for meta, rule, key in items:
+        if rule is not None:
+            rows.append({**meta, "source": "rule", "correct": rule == "correct"})
+        else:
+            out = aggregate(verdicts[key])
+            rows.append({**meta, "source": "jury", "correct": out["correct"], "votes": out["votes"]})
+    write_jsonl(results / "agreement_pairs.jsonl", rows)
+    log.info("pares concluídos: %d comparações", len(rows))

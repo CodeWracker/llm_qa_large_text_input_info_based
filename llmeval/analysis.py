@@ -1375,11 +1375,23 @@ def consensus(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame | None:
     def cat(lo, hi):  # aceito contra todos os conjuntos / nenhum / alguns
         return "all" if lo == 1 else ("none" if hi == 0 else "some")
 
-    a = pd.DataFrame(read_jsonl(agr_path))
-    a = a[a.in_sample & a.stratum.isin(["extractive", "abstractive"])]
-    hum = a[a.candidate == "human"].groupby("qid").correct.agg(["min", "max"])
-    hstate = {q: state_name[cat(r["min"], r["max"])] for q, r in hum.iterrows()}
-    m = a[a.candidate != "human"].groupby(["qid", "candidate"]).correct.agg(["min", "max"]).reset_index()
+    pairs_path = cfg.path("results") / "agreement_pairs.jsonl"
+    if pairs_path.exists():
+        # par a par, com o mesmo critério do modelo: "i bate com j" quando o júri aceita a resposta de i contra
+        # a de j (i contém a informação essencial de j). Pares ordenados: todos aceitos = respostas equivalentes
+        # (a); nenhum aceito = nenhum anotador contém a resposta de outro, em nenhum sentido (c)
+        pr = pd.DataFrame(read_jsonl(pairs_path))
+        hp = pr[pr.candidate.str.startswith("human:")]
+        pm = hp.groupby("qid").correct.agg(["min", "max"])
+        hstate = {q: state_name[cat(r["min"], r["max"])] for q, r in pm.iterrows()}
+        m = pr[~pr.candidate.str.startswith("human:")].groupby(["qid", "candidate"]).correct.agg(["min", "max"])
+    else:  # aproximação pelos conjuntos "deixa um de fora" (exata só com dois anotadores)
+        a = pd.DataFrame(read_jsonl(agr_path))
+        a = a[a.in_sample & a.stratum.isin(["extractive", "abstractive"])]
+        hum = a[a.candidate == "human"].groupby("qid").correct.agg(["min", "max"])
+        hstate = {q: state_name[cat(r["min"], r["max"])] for q, r in hum.iterrows()}
+        m = a[a.candidate != "human"].groupby(["qid", "candidate"]).correct.agg(["min", "max"])
+    m = m.reset_index()
     rows = [{"task": "freetext", "qid": r.qid, "model": r.candidate, "humans": hstate[r.qid],
              "cat": cat(r["min"], r["max"])} for _, r in m.iterrows()]
 

@@ -1,9 +1,9 @@
 task,qid,model,humans,cat
 freetext,00db191facf903cef18fb1727d1cab638c277e0a,gemma4:31b,partly agree,all
-freetext,00db191facf903cef18fb1727d1cab638c277e0a,llama3.2:3b,partly agree,none
-freetext,00db191facf903cef18fb1727d1cab638c277e0a,mistral:7b-instruct,partly agree,none
-freetext,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:122b,partly agree,all
-freetext,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:4b,partly agree,none
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,llama3.2:3b,partly agree,some
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,mistral:7b-instruct,partly agree,some
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:122b,partly agree,some
+freetext,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:4b,partly agree,some
 freetext,00db191facf903cef18fb1727d1cab638c277e0a,qwen3.5:9b,partly agree,some
 freetext,027814f3a879a6c7852e033f9d99519b8729e444,gemma4:31b,agree,none
 freetext,027814f3a879a6c7852e033f9d99519b8729e444,llama3.2:3b,agree,none
@@ -47,18 +47,18 @@ freetext,16b816925567deb734049416c149747118e13963,mistral:7b-instruct,all differ
 freetext,16b816925567deb734049416c149747118e13963,qwen3.5:122b,all differ,none
 freetext,16b816925567deb734049416c149747118e13963,qwen3.5:4b,all differ,none
 freetext,16b816925567deb734049416c149747118e13963,qwen3.5:9b,all differ,none
-freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,gemma4:31b,agree,all
-freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,llama3.2:3b,agree,none
-freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,mistral:7b-instruct,agree,all
-freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:122b,agree,all
-freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:4b,agree,none
-freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:9b,agree,none
-freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,gemma4:31b,partly agree,none
-freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,llama3.2:3b,partly agree,some
-freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,mistral:7b-instruct,partly agree,none
-freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:122b,partly agree,some
-freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:4b,partly agree,none
-freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:9b,partly agree,some
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,gemma4:31b,partly agree,some
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,llama3.2:3b,partly agree,some
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,mistral:7b-instruct,partly agree,some
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:122b,partly agree,some
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:4b,partly agree,some
+freetext,181027f398a6b79b1ba44d8d41cc1aba0d6f5212,qwen3.5:9b,partly agree,none
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,gemma4:31b,all differ,some
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,llama3.2:3b,all differ,some
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,mistral:7b-instruct,all differ,none
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:122b,all differ,some
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:4b,all differ,none
+freetext,1a1d94c981c58e2f2ee18bdfc4abc69fd8f15e14,qwen3.5:9b,all differ,some
 freetext,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,gemma4:31b,all differ,none
 freetext,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,llama3.2:3b,all differ,none
 freetext,1c3a20dceec2a86fb61e70fab97a9fb549b5c54c,mistral:7b-instruct,all differ,none
@@ -83,12 +83,12 @@ freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,mistral:7b-instruct,agree,none
 freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,qwen3.5:122b,agree,none
 freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,qwen3.5:4b,agree,none
 freetext,1e582319df1739dcd07ba0ba39e8f70187fba049,qwen3.5:9b,agree,none
-freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,gemma4:31b,partly agree,all
-freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,llama3.2:3b,partly agree,all
-freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,mistral:7b-instruct,partly agree,all
-freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:122b,partly agree,all
-freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:4b,partly agree,all
-freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:9b,partly agree,all
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,gemma4:31b,partly agree,some
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,llama3.2:3b,partly agree,some
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,mistral:7b-instruct,partly agree,some
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:122b,partly agree,some
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:4b,partly agree,some
+freetext,230ff86b7b90b87c33c53014bb1e9c582dfc107f,qwen3.5:9b,partly agree,some
 freetext,240058371e91c6b9509c0398cbe900855b46c328,gemma4:31b,agree,none
 freetext,240058371e91c6b9509c0398cbe900855b46c328,llama3.2:3b,agree,none
 freetext,240058371e91c6b9509c0398cbe900855b46c328,mistral:7b-instruct,agree,none
@@ -131,18 +131,18 @@ freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,mistral:7b-instruct,all differ
 freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,qwen3.5:122b,all differ,some
 freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,qwen3.5:4b,all differ,none
 freetext,330fe3815f74037a9be93a4c16610c736a2a27b3,qwen3.5:9b,all differ,none
-freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,gemma4:31b,agree,all
+freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,gemma4:31b,agree,some
 freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,llama3.2:3b,agree,all
 freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,mistral:7b-instruct,agree,all
 freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:122b,agree,all
-freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:4b,agree,all
-freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:9b,agree,all
-freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,gemma4:31b,agree,all
-freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,llama3.2:3b,agree,some
-freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,mistral:7b-instruct,agree,some
-freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:122b,agree,all
-freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:4b,agree,all
-freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:9b,agree,all
+freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:4b,agree,some
+freetext,37ac705166fa87dc74fe86575bf04bea56cc4930,qwen3.5:9b,agree,some
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,gemma4:31b,partly agree,all
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,llama3.2:3b,partly agree,some
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,mistral:7b-instruct,partly agree,some
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:122b,partly agree,all
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:4b,partly agree,all
+freetext,38363a7ed250bc729508c4c1dc975696a65c53cb,qwen3.5:9b,partly agree,some
 freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,gemma4:31b,agree,all
 freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,llama3.2:3b,agree,some
 freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,mistral:7b-instruct,agree,all
@@ -150,7 +150,7 @@ freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,qwen3.5:122b,agree,all
 freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,qwen3.5:4b,agree,all
 freetext,3e23cc3c5e4d5cec51d158130d6aeae120e94fc8,qwen3.5:9b,agree,all
 freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,gemma4:31b,partly agree,some
-freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,llama3.2:3b,partly agree,all
+freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,llama3.2:3b,partly agree,some
 freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,mistral:7b-instruct,partly agree,none
 freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,qwen3.5:122b,partly agree,none
 freetext,3ed8ac1ba4df6609fa7de5077d83e820641edc5e,qwen3.5:4b,partly agree,some
@@ -172,25 +172,25 @@ freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,llama3.2:3b,partly agree,some
 freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,mistral:7b-instruct,partly agree,some
 freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:122b,partly agree,some
 freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:4b,partly agree,some
-freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:9b,partly agree,all
-freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,gemma4:31b,all differ,some
-freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,llama3.2:3b,all differ,all
-freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,mistral:7b-instruct,all differ,none
-freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:122b,all differ,some
-freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:4b,all differ,some
-freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:9b,all differ,some
+freetext,4748a50c96acb1aa03f7efd1b43376c193b2450a,qwen3.5:9b,partly agree,some
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,gemma4:31b,partly agree,some
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,llama3.2:3b,partly agree,some
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,mistral:7b-instruct,partly agree,some
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:122b,partly agree,some
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:4b,partly agree,some
+freetext,477da8d997ff87400c6aad19dcc74f8998bc89c3,qwen3.5:9b,partly agree,some
 freetext,5181527e6a61a9a192db5f8064e56ec263c42661,gemma4:31b,agree,all
 freetext,5181527e6a61a9a192db5f8064e56ec263c42661,llama3.2:3b,agree,none
 freetext,5181527e6a61a9a192db5f8064e56ec263c42661,mistral:7b-instruct,agree,all
 freetext,5181527e6a61a9a192db5f8064e56ec263c42661,qwen3.5:122b,agree,all
 freetext,5181527e6a61a9a192db5f8064e56ec263c42661,qwen3.5:4b,agree,all
 freetext,5181527e6a61a9a192db5f8064e56ec263c42661,qwen3.5:9b,agree,all
-freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,gemma4:31b,all differ,none
-freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,llama3.2:3b,all differ,some
-freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,mistral:7b-instruct,all differ,some
-freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:122b,all differ,none
-freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:4b,all differ,some
-freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:9b,all differ,some
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,gemma4:31b,partly agree,some
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,llama3.2:3b,partly agree,none
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,mistral:7b-instruct,partly agree,some
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:122b,partly agree,some
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:4b,partly agree,some
+freetext,52faf319e37aa15fff1ab47f634a5a584dc42e75,qwen3.5:9b,partly agree,some
 freetext,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,gemma4:31b,agree,all
 freetext,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,llama3.2:3b,agree,all
 freetext,53a8c3cf22d6bf6477bc576a85a83d8447ee0484,mistral:7b-instruct,agree,all
@@ -206,9 +206,9 @@ freetext,59f41306383dd6e201bded0f1c7c959ec4f61c5a,qwen3.5:9b,all differ,some
 freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,gemma4:31b,partly agree,all
 freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,llama3.2:3b,partly agree,none
 freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,mistral:7b-instruct,partly agree,none
-freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:122b,partly agree,some
-freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:4b,partly agree,none
-freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:9b,partly agree,some
+freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:122b,partly agree,all
+freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:4b,partly agree,some
+freetext,5a473f86052cf7781dfe40943ddf99bc9fe8a4e4,qwen3.5:9b,partly agree,all
 freetext,5db47bbb97282983e10414240db78154ea7ac75f,gemma4:31b,all differ,some
 freetext,5db47bbb97282983e10414240db78154ea7ac75f,llama3.2:3b,all differ,some
 freetext,5db47bbb97282983e10414240db78154ea7ac75f,mistral:7b-instruct,all differ,some
@@ -245,12 +245,12 @@ freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,mistral:7b-instruct,all differ
 freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,qwen3.5:122b,all differ,none
 freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,qwen3.5:4b,all differ,none
 freetext,654306d26ca1d9e77f4cdbeb92b3802aa9961da1,qwen3.5:9b,all differ,none
-freetext,67cb001f8ca122ea859724804b41529fea5faeef,gemma4:31b,all differ,some
-freetext,67cb001f8ca122ea859724804b41529fea5faeef,llama3.2:3b,all differ,none
-freetext,67cb001f8ca122ea859724804b41529fea5faeef,mistral:7b-instruct,all differ,none
-freetext,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:122b,all differ,none
-freetext,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:4b,all differ,some
-freetext,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:9b,all differ,some
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,gemma4:31b,partly agree,none
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,llama3.2:3b,partly agree,none
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,mistral:7b-instruct,partly agree,none
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:122b,partly agree,some
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:4b,partly agree,some
+freetext,67cb001f8ca122ea859724804b41529fea5faeef,qwen3.5:9b,partly agree,none
 freetext,697c5d2ba7e019ddb91a1de5031a90fe741f2468,gemma4:31b,all differ,some
 freetext,697c5d2ba7e019ddb91a1de5031a90fe741f2468,llama3.2:3b,all differ,none
 freetext,697c5d2ba7e019ddb91a1de5031a90fe741f2468,mistral:7b-instruct,all differ,none
@@ -317,12 +317,12 @@ freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,mistral:7b-instruct,all differ
 freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,qwen3.5:122b,all differ,none
 freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,qwen3.5:4b,all differ,none
 freetext,845bdcd900c0f96b2ae091d086fb1ab8bb1063f0,qwen3.5:9b,all differ,none
-freetext,84ee6180d3267115ad27852027d147fb86a33135,gemma4:31b,partly agree,all
-freetext,84ee6180d3267115ad27852027d147fb86a33135,llama3.2:3b,partly agree,all
-freetext,84ee6180d3267115ad27852027d147fb86a33135,mistral:7b-instruct,partly agree,all
-freetext,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:122b,partly agree,all
-freetext,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:4b,partly agree,all
-freetext,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:9b,partly agree,all
+freetext,84ee6180d3267115ad27852027d147fb86a33135,gemma4:31b,partly agree,some
+freetext,84ee6180d3267115ad27852027d147fb86a33135,llama3.2:3b,partly agree,some
+freetext,84ee6180d3267115ad27852027d147fb86a33135,mistral:7b-instruct,partly agree,some
+freetext,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:122b,partly agree,some
+freetext,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:4b,partly agree,some
+freetext,84ee6180d3267115ad27852027d147fb86a33135,qwen3.5:9b,partly agree,some
 freetext,8bb2280483af8013a32e0d294e97d44444f08ab0,gemma4:31b,all differ,none
 freetext,8bb2280483af8013a32e0d294e97d44444f08ab0,llama3.2:3b,all differ,none
 freetext,8bb2280483af8013a32e0d294e97d44444f08ab0,mistral:7b-instruct,all differ,none
@@ -343,10 +343,10 @@ freetext,8f00859f74fc77832fa7d38c22f23f74ba13a07e,qwen3.5:4b,all differ,none
 freetext,8f00859f74fc77832fa7d38c22f23f74ba13a07e,qwen3.5:9b,all differ,none
 freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,gemma4:31b,partly agree,some
 freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,llama3.2:3b,partly agree,none
-freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,mistral:7b-instruct,partly agree,all
+freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,mistral:7b-instruct,partly agree,some
 freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:122b,partly agree,some
 freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:4b,partly agree,some
-freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:9b,partly agree,all
+freetext,9186b2c5b7000ab7f15a46a47da73ea45544bace,qwen3.5:9b,partly agree,some
 freetext,98aa86ee948096d6fe16c02c1e49920da00e32d4,gemma4:31b,agree,all
 freetext,98aa86ee948096d6fe16c02c1e49920da00e32d4,llama3.2:3b,agree,all
 freetext,98aa86ee948096d6fe16c02c1e49920da00e32d4,mistral:7b-instruct,agree,all
@@ -359,12 +359,12 @@ freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,mistral:7b-instruct,all differ
 freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,qwen3.5:122b,all differ,none
 freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,qwen3.5:4b,all differ,none
 freetext,9b3371dcd855f1d3342edb212efa39dfc9142ae3,qwen3.5:9b,all differ,some
-freetext,9c1f70affc87024b4280f0876839309b8dddd579,gemma4:31b,partly agree,all
+freetext,9c1f70affc87024b4280f0876839309b8dddd579,gemma4:31b,partly agree,some
 freetext,9c1f70affc87024b4280f0876839309b8dddd579,llama3.2:3b,partly agree,none
 freetext,9c1f70affc87024b4280f0876839309b8dddd579,mistral:7b-instruct,partly agree,all
-freetext,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:122b,partly agree,all
+freetext,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:122b,partly agree,some
 freetext,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:4b,partly agree,none
-freetext,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:9b,partly agree,all
+freetext,9c1f70affc87024b4280f0876839309b8dddd579,qwen3.5:9b,partly agree,some
 freetext,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,gemma4:31b,partly agree,some
 freetext,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,llama3.2:3b,partly agree,some
 freetext,9ce90f4132b34a328fa49a63e897f376a3ad3ca8,mistral:7b-instruct,partly agree,some
@@ -419,14 +419,14 @@ freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,mistral:7b-instruct,partly agr
 freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,qwen3.5:122b,partly agree,none
 freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,qwen3.5:4b,partly agree,all
 freetext,a9ff35f77615b3a4e7fd7b3a53d0b288a46f06ce,qwen3.5:9b,partly agree,none
-freetext,aebd1f0d728d0de5f76238844da044a44109f76f,gemma4:31b,all differ,all
-freetext,aebd1f0d728d0de5f76238844da044a44109f76f,llama3.2:3b,all differ,all
-freetext,aebd1f0d728d0de5f76238844da044a44109f76f,mistral:7b-instruct,all differ,all
-freetext,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:122b,all differ,all
-freetext,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:4b,all differ,none
-freetext,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:9b,all differ,all
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,gemma4:31b,partly agree,all
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,llama3.2:3b,partly agree,some
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,mistral:7b-instruct,partly agree,some
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:122b,partly agree,some
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:4b,partly agree,none
+freetext,aebd1f0d728d0de5f76238844da044a44109f76f,qwen3.5:9b,partly agree,some
 freetext,afeceee343360d3fe715f405dac7760d9a6754a7,gemma4:31b,all differ,some
-freetext,afeceee343360d3fe715f405dac7760d9a6754a7,llama3.2:3b,all differ,all
+freetext,afeceee343360d3fe715f405dac7760d9a6754a7,llama3.2:3b,all differ,some
 freetext,afeceee343360d3fe715f405dac7760d9a6754a7,mistral:7b-instruct,all differ,some
 freetext,afeceee343360d3fe715f405dac7760d9a6754a7,qwen3.5:122b,all differ,some
 freetext,afeceee343360d3fe715f405dac7760d9a6754a7,qwen3.5:4b,all differ,some
@@ -451,15 +451,15 @@ freetext,c27b885b1e38542244f52056abf288b2389b9fc6,qwen3.5:4b,agree,none
 freetext,c27b885b1e38542244f52056abf288b2389b9fc6,qwen3.5:9b,agree,all
 freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,gemma4:31b,partly agree,some
 freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,llama3.2:3b,partly agree,all
-freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,mistral:7b-instruct,partly agree,all
+freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,mistral:7b-instruct,partly agree,some
 freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,qwen3.5:122b,partly agree,some
 freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,qwen3.5:4b,partly agree,some
 freetext,c87966e7f497975b76a60f6be50c33d296a4a4e7,qwen3.5:9b,partly agree,some
-freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,gemma4:31b,partly agree,some
-freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,llama3.2:3b,partly agree,none
+freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,gemma4:31b,partly agree,all
+freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,llama3.2:3b,partly agree,some
 freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,mistral:7b-instruct,partly agree,some
 freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:122b,partly agree,all
-freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:4b,partly agree,none
+freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:4b,partly agree,some
 freetext,cbb3c1c1e6e1818b6480f929f1c299eaa5ffd07a,qwen3.5:9b,partly agree,some
 freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,gemma4:31b,agree,all
 freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,llama3.2:3b,agree,all
@@ -467,12 +467,12 @@ freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,mistral:7b-instruct,agree,all
 freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,qwen3.5:122b,agree,all
 freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,qwen3.5:4b,agree,all
 freetext,cc78a08f5bfe233405c99cb3dac1f11f3a9268b1,qwen3.5:9b,agree,all
-freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,gemma4:31b,partly agree,all
-freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,llama3.2:3b,partly agree,all
-freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,mistral:7b-instruct,partly agree,all
-freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:122b,partly agree,all
-freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:4b,partly agree,all
-freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:9b,partly agree,all
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,gemma4:31b,partly agree,some
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,llama3.2:3b,partly agree,some
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,mistral:7b-instruct,partly agree,some
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:122b,partly agree,some
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:4b,partly agree,some
+freetext,cc8b4ed3985f9bfbe1b5d7761b31d9bd6a965444,qwen3.5:9b,partly agree,some
 freetext,cdbbba22e62bc9402aea74ac5960503f59e984ff,gemma4:31b,partly agree,all
 freetext,cdbbba22e62bc9402aea74ac5960503f59e984ff,llama3.2:3b,partly agree,all
 freetext,cdbbba22e62bc9402aea74ac5960503f59e984ff,mistral:7b-instruct,partly agree,all
@@ -509,12 +509,12 @@ freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,mistral:7b-instruct,agree,all
 freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,qwen3.5:122b,agree,all
 freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,qwen3.5:4b,agree,all
 freetext,d323f0d65b57b30ae85fb9f24298927a3d1216e9,qwen3.5:9b,agree,all
-freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,gemma4:31b,all differ,some
-freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,llama3.2:3b,all differ,some
-freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,mistral:7b-instruct,all differ,none
-freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:122b,all differ,none
-freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:4b,all differ,some
-freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:9b,all differ,none
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,gemma4:31b,partly agree,some
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,llama3.2:3b,partly agree,some
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,mistral:7b-instruct,partly agree,none
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:122b,partly agree,none
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:4b,partly agree,some
+freetext,d5bce5da746a075421c80abe10c97ad11a96c6cd,qwen3.5:9b,partly agree,none
 freetext,d5e716c1386b6485e63075e980f80d44564d0aa2,gemma4:31b,partly agree,some
 freetext,d5e716c1386b6485e63075e980f80d44564d0aa2,llama3.2:3b,partly agree,some
 freetext,d5e716c1386b6485e63075e980f80d44564d0aa2,mistral:7b-instruct,partly agree,some
@@ -541,8 +541,8 @@ freetext,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,qwen3.5:4b,agree,all
 freetext,d9e7633004ed1bc1ee45be58409bcc1fa6db59b2,qwen3.5:9b,agree,all
 freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,gemma4:31b,partly agree,some
 freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,llama3.2:3b,partly agree,some
-freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,mistral:7b-instruct,partly agree,all
-freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:122b,partly agree,all
+freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,mistral:7b-instruct,partly agree,some
+freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:122b,partly agree,some
 freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:4b,partly agree,some
 freetext,de84972c5d1bbf664d0f8b702fce5f161449ec23,qwen3.5:9b,partly agree,some
 freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,gemma4:31b,all differ,none
@@ -551,17 +551,17 @@ freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,mistral:7b-instruct,all differ
 freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,qwen3.5:122b,all differ,some
 freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,qwen3.5:4b,all differ,none
 freetext,e069fa1eecd711a573c0d5c83a3493f5f04b1d8a,qwen3.5:9b,all differ,none
-freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,gemma4:31b,partly agree,none
-freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,llama3.2:3b,partly agree,all
-freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,mistral:7b-instruct,partly agree,all
-freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:122b,partly agree,all
-freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:4b,partly agree,none
-freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:9b,partly agree,all
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,gemma4:31b,partly agree,some
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,llama3.2:3b,partly agree,some
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,mistral:7b-instruct,partly agree,some
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:122b,partly agree,some
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:4b,partly agree,some
+freetext,e42916924b69cab1df25d3b4e6072feaa0ba8084,qwen3.5:9b,partly agree,some
 freetext,ec8f39d32084996ab825debd7113c71daac38b06,gemma4:31b,partly agree,all
 freetext,ec8f39d32084996ab825debd7113c71daac38b06,llama3.2:3b,partly agree,all
 freetext,ec8f39d32084996ab825debd7113c71daac38b06,mistral:7b-instruct,partly agree,all
 freetext,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:122b,partly agree,all
-freetext,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:4b,partly agree,some
+freetext,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:4b,partly agree,all
 freetext,ec8f39d32084996ab825debd7113c71daac38b06,qwen3.5:9b,partly agree,all
 freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,gemma4:31b,all differ,some
 freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,llama3.2:3b,all differ,some
@@ -569,12 +569,12 @@ freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,mistral:7b-instruct,all differ
 freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,qwen3.5:122b,all differ,none
 freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,qwen3.5:4b,all differ,some
 freetext,f010f9aa4ba1b4360a78c00aa0747d7730a61805,qwen3.5:9b,all differ,some
-freetext,f0404673085517eea708c5e91f32fb0f7728fa08,gemma4:31b,all differ,some
-freetext,f0404673085517eea708c5e91f32fb0f7728fa08,llama3.2:3b,all differ,none
-freetext,f0404673085517eea708c5e91f32fb0f7728fa08,mistral:7b-instruct,all differ,none
-freetext,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:122b,all differ,none
-freetext,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:4b,all differ,none
-freetext,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:9b,all differ,none
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,gemma4:31b,partly agree,some
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,llama3.2:3b,partly agree,none
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,mistral:7b-instruct,partly agree,some
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:122b,partly agree,some
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:4b,partly agree,some
+freetext,f0404673085517eea708c5e91f32fb0f7728fa08,qwen3.5:9b,partly agree,some
 freetext,f741d32b92630328df30f674af16fbbefcad3f93,gemma4:31b,agree,all
 freetext,f741d32b92630328df30f674af16fbbefcad3f93,llama3.2:3b,agree,all
 freetext,f741d32b92630328df30f674af16fbbefcad3f93,mistral:7b-instruct,agree,all
