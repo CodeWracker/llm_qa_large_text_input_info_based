@@ -4,7 +4,8 @@
 # Uso: ./run_pipeline_after.sh <PID> [estágio ...]
 set -euo pipefail
 cd "$(dirname "$0")"
-source /etc/profile.d/99-persist-env.sh
+[ -f /etc/profile.d/99-persist-env.sh ] && source /etc/profile.d/99-persist-env.sh  # ambiente da máquina do estudo
+[ -f .env.local ] && source .env.local   # configuração local, fora do git (OLLAMA_URL, OLLAMA_INCIDENT_LOG)
 pid=$1; shift
 stages=("${@:-judge metrics analyze}")
 [ $# -eq 0 ] && stages=(judge metrics analyze)

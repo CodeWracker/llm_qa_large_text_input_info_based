@@ -7,7 +7,8 @@
 # termina quando a cadeia conclui. Uso: [IGNORAR_ALHEIOS=1] [IGNORAR_MODELOS="m1 m2"] [CHAIN=./run_extra.sh] setsid nohup ./aguarda_servidor.sh > results/logs/aguarda.log 2>&1 &
 set -uo pipefail
 cd "$(dirname "$0")"
-source /etc/profile.d/99-persist-env.sh
+[ -f /etc/profile.d/99-persist-env.sh ] && source /etc/profile.d/99-persist-env.sh  # ambiente da máquina do estudo
+[ -f .env.local ] && source .env.local   # configuração local, fora do git (OLLAMA_URL, OLLAMA_INCIDENT_LOG)
 INTERVALO=${INTERVALO:-60}
 CHAIN=${CHAIN:-./run_chain.sh}
 LIVRE_N=${LIVRE_N:-3}
