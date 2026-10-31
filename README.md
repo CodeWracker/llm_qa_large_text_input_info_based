@@ -124,8 +124,9 @@ done
 .venv/bin/python -m llmeval analyze
 ```
 
-We checked this path from a clean folder: every output file and every table of the paper came out identical to the
-published ones. The embedding cache matters: without it, the embeddings are recomputed, tiny floating-point
+We checked this path on a fresh clone: no call left the cache, and every model output, verdict, metric and table of
+the paper came out identical to the published ones (three summary CSVs differ only in the last floating-point
+digits of a statistical fit). The embedding cache matters: without it, the embeddings are recomputed, tiny floating-point
 differences can change a few retrieval rankings, and those prompts then fall outside the cache.
 
 ### Path C: run your own inference
