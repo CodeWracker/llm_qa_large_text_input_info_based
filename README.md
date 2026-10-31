@@ -79,66 +79,88 @@ uv pip install --python .venv/bin/python torch --index-url https://download.pyto
 
 A GPU is needed only to compute embeddings (BGE-M3) and BERTScore; set `CUDA_VISIBLE_DEVICES` as needed.
 
-## Reproducibility
+## Reproducibility: choose your path
 
-Every model call is cached by a hash of the request (`data/cache/chat.sqlite`), and every stage reads the cache
-before calling the server, so re-running a stage is cheap and deterministic. There are three levels of reproduction.
+There are three ways to use this repository. They differ in what you download and in whether a language model is
+called at all.
 
-### Level 1: tables and figures from the published outputs (no LLM, no GPU)
+| Path | What you get | Downloads | Needs |
+|---|---|---|---|
+| **A. Check our numbers** | the paper's tables, figures and numbers, recomputed from our model outputs | Zenodo record (outputs) | Python; no LLM, no GPU |
+| **B. Re-run our pipeline exactly** | every stage re-executed from our cached model calls, reproducing our outputs bit for bit | Zenodo record (outputs + caches) | Python; a GPU only for BERTScore |
+| **C. Run your own inference** | the whole experiment re-run with your own models | nothing from Zenodo; QASPER/QuALITY are downloaded automatically | an Ollama server with the models; a GPU |
+
+How it works: every model call is cached by a hash of the request (`data/cache/chat.sqlite`), and every stage looks in
+the cache before calling the server. With our cache in place, the code finds our answers and never calls a model;
+with an empty cache, it calls your server. `LLMEVAL_OFFLINE=1` makes this explicit: no request leaves the machine,
+and a call that is not in the cache fails instead of being sent.
+
+### Path A: check our numbers (no LLM, no GPU)
 
 ```bash
-# put the Zenodo files results/, data/sample/ and human_eval/ in place, then:
-.venv/bin/python -m llmeval sample     # pinned download of QASPER/QuALITY, rebuilds data/sample/documents.jsonl
+# download all files of the Zenodo record (DOI in the paper) into a folder, e.g. ~/llm-eval-data-v1.0, then:
+.venv/bin/python scripts/install_zenodo_data.py ~/llm-eval-data-v1.0    # checks SHA-256, copies results/, data/sample/, human_eval/
+.venv/bin/python -m llmeval sample                                       # pinned QASPER/QuALITY download; rebuilds documents.jsonl
 LLMEVAL_OFFLINE=1 .venv/bin/python -m llmeval analyze
 ```
 
-`sample` reproduces the published `questions.jsonl` and `documents.jsonl` byte for byte. `analyze` writes the tables
-and figures to the folder given by `paths.paper` in the config (by default `../latex-llmeval`) and the numbers to
-`results/analysis/`.
+`analyze` writes the tables (`.tex`) and figures (`.pdf`) to the folder given by `paths.paper` in
+`configs/experiment.yaml` (by default `../latex-llmeval`) and every number to `results/analysis/*.csv`.
 
-### Level 2: the whole pipeline from the caches (no model server)
-
-Decompress `chat.sqlite` and `embeddings_local.sqlite` from the Zenodo record into `data/cache/`, then:
+### Path B: re-run our pipeline exactly (no model server)
 
 ```bash
+.venv/bin/python scripts/install_zenodo_data.py ~/llm-eval-data-v1.0 --with-caches   # also installs data/cache/*.sqlite
 export LLMEVAL_OFFLINE=1
 .venv/bin/python -m llmeval sample
-.venv/bin/python -m llmeval generate
+.venv/bin/python -m llmeval generate          # 26,400 answers + 4,000 with reasoning, all read from the cache
 .venv/bin/python -m llmeval judge
-.venv/bin/python -m llmeval metrics
-for b in 512 1024 2048 4096 8192; do .venv/bin/python -m llmeval generate --budget $b; .venv/bin/python -m llmeval judge --budget $b; done
+.venv/bin/python -m llmeval metrics           # recomputes the metrics (GPU for BERTScore)
+for b in 512 1024 2048 4096 8192; do
+  .venv/bin/python -m llmeval generate --budget $b && .venv/bin/python -m llmeval judge --budget $b
+done
 .venv/bin/python -m llmeval agreement
 .venv/bin/python -m llmeval agreement_pairs
 .venv/bin/python -m llmeval analyze
 ```
 
-With `LLMEVAL_OFFLINE=1` nothing is sent to a server: a call that is not in the cache fails and is counted instead.
-Run this way, the pipeline reproduces the published outputs exactly. Without the embedding cache, the embeddings are
-recomputed on a GPU; tiny floating-point differences can then change a few retrieval rankings, which changes those
-prompts and sends them outside the cache.
+We checked this path from a clean folder: every output file and every table of the paper came out identical to the
+published ones. The embedding cache matters: without it, the embeddings are recomputed, tiny floating-point
+differences can change a few retrieval rankings, and those prompts then fall outside the cache.
 
-### Level 3: new inference with your own server
+### Path C: run your own inference
 
-Run the same commands without `LLMEVAL_OFFLINE`, pointing `OLLAMA_URL` to an Ollama server (Basic authentication is
-read from `~/.netrc`, or from `OLLAMA_USER`/`OLLAMA_PASSWORD`). Pull the tags listed in `configs/experiment.yaml`;
-the `digest` of each model identifies the exact weights we used (compare with `ollama list`). Local settings, such as
-`OLLAMA_URL` or `OLLAMA_INCIDENT_LOG` (an optional log of server failures), can go in an untracked `.env.local`,
-which the `run_*.sh` scripts source.
+1. **Start from an empty cache.** Do not install our caches (or delete `data/cache/chat.sqlite`); otherwise the code
+   reuses our answers instead of calling your models.
+2. **Serve the models with Ollama** (<https://ollama.com>) and pull the tags listed in `configs/experiment.yaml`
+   (`generators` and `jury.judges`), for example `ollama pull qwen3.5:9b`. Each entry has the `digest` of the weights
+   we used; compare it with `ollama list` (a tag can be re-published with different weights). Approximate memory at
+   the default 4-bit quantisation with a 32k context: 3B to 9B models fit in 8 to 16 GB of GPU memory, Gemma4-31B and
+   Qwen3-32B need about 24 GB, Llama-3.3-70B about 48 GB, GPT-OSS-120B and Qwen3.5-122B about 80 GB.
+3. **Point the code to the server**: `export OLLAMA_URL=http://localhost:11434` (the default). For a remote server
+   with Basic authentication, put the credentials in `~/.netrc` or in `OLLAMA_USER`/`OLLAMA_PASSWORD`. These
+   settings can go in an untracked `.env.local`, which the `run_*.sh` scripts source.
+4. **Run the stages** as in path B, without `LLMEVAL_OFFLINE`, or with the chained scripts below. `sample` downloads
+   QASPER and QuALITY from the pinned Hugging Face commits and rebuilds exactly our sample.
+5. **Scale it to your hardware.** To run fewer models or conditions, edit `generators`, `conditions` and
+   `generation` in `configs/experiment.yaml`. To evaluate a new model next to ours, install our caches, add the model
+   to `generators` and run normally: only the new model's calls go to your server. `python -m llmeval generate
+   --dry-run` counts the calls a run would send. For reference, our run (30,400 answers, about 6,000 jury items per
+   judge, the budget sweep and the human reference point) took several days on a shared university server.
 
-Expect the results to differ somewhat from ours, and by more than sampling noise in individual answers:
+Expect your numbers to differ from ours, even with the same tags:
 
 - **Model build and quantisation**: we used the default quantisation of each Ollama tag (Q4_K_M; MXFP4 for
-  GPT-OSS) as served by Ollama 0.40.8. Another quantisation, another runtime (vLLM, llama.cpp, transformers) or a
-  re-published tag with a different digest changes the answers.
-- **Run-to-run variation**: temperature 0 and a fixed seed do not guarantee identical outputs. Concurrent requests
-  are batched on the server, and batching changes the floating-point arithmetic. In our check, Qwen3.5-9B repeated
-  20 of 20 reasoning answers token for token, but Qwen3.5-4B only 10 of 20
-  (`scripts/check_budget_determinism.py`).
+  GPT-OSS) as served by Ollama 0.40.8. Another quantisation, runtime (vLLM, llama.cpp, transformers) or re-published
+  tag changes the answers.
+- **Run-to-run variation**: temperature 0 and a fixed seed do not guarantee identical outputs, because the server
+  batches concurrent requests and batching changes the floating-point arithmetic. In our check, Qwen3.5-9B repeated
+  20 of 20 reasoning answers token for token, Qwen3.5-4B only 10 of 20 (`scripts/check_budget_determinism.py`).
 - **Hardware and server version**: GPU type, Ollama version and context handling affect long generations.
-- **Grading**: the jury is itself an LLM; another build of the judges changes some verdicts.
+- **Grading**: the jury is itself a set of LLMs; another build of the judges changes some verdicts.
 
-The conclusions of the paper rest on differences much larger than these effects, but individual numbers will not
-match exactly. Levels 1 and 2 reproduce the published numbers exactly.
+The conclusions of the paper rest on differences much larger than these effects; individual numbers will not match
+exactly. Paths A and B reproduce the published numbers exactly.
 
 ### Long runs on a shared server
 
