@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this code or its data, please cite it as below."
+title: "Reading the Whole Paper or Retrieving What Matters? Open-Weight LLMs for Data Extraction in Systematic Literature Reviews, Evaluated by a Validated LLM Jury (code)"
+type: software
+license: MIT
+repository-code: "https://github.com/CodeWracker/llm_qa_large_text_input_info_based"
+authors:
+  - family-names: "Souza"
+    given-names: "Rodrigo Ferraz"
+    affiliation: "Universidade Federal de Santa Catarina (UFSC)"
+  - family-names: "de Souza"
+    given-names: "Rodrigo Guedes"
+    affiliation: "Universidade Federal de Santa Catarina (UFSC)"
+  - family-names: "Panisson"
+    given-names: "Alison R."
+    affiliation: "Universidade Federal de Santa Catarina (UFSC)"
+  - family-names: "de Macedo"
+    given-names: "Douglas Dyllon J."
+    affiliation: "Universidade Federal de Santa Catarina (UFSC)"
+  - family-names: "Sobieranski"
+    given-names: "Antonio Carlos"
+    affiliation: "Universidade Federal de Santa Catarina (UFSC)"
+keywords:
+  - systematic literature review
+  - data extraction
+  - long-document question answering
+  - retrieval-augmented generation
+  - LLM-as-a-judge
+  - open-weight language models
