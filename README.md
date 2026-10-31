@@ -1,110 +1,162 @@
-# Avaliação de LLMs em QA sobre documentos longos: documento completo vs. RAG
+# Open-weight LLMs for data extraction from long documents: full document vs. retrieval, with a validated LLM jury
 
-Código do estudo do artigo em `../latex-llmeval`. A pergunta central: quando um
-modelo responde a uma pergunta sobre um documento específico (um artigo, um
-conto), a resposta está certa? E é melhor colocar o documento inteiro no prompt
-ou recuperar só os trechos relevantes (RAG), ou deixar o próprio modelo buscar
-no documento?
+Code of the study *"Reading the Whole Paper or Retrieving What Matters? Open-Weight LLMs for Data Extraction in
+Systematic Literature Reviews, Evaluated by a Validated LLM Jury"*. Data (model outputs, verdicts, caches):
+Zenodo record (DOI to be added on publication).
 
-## Perguntas de pesquisa
+The guiding question: can open-weight language models running on a local server fill the data-extraction table of a
+systematic literature review reliably, where each cell is a question about one paper? Six models answer 400
+questions about long documents under eleven ways of providing the document, and the free-text answers are graded by
+a jury of three other LLMs that is first validated against an answer key and a human annotator.
 
-| RQ | Pergunta | Onde é respondida |
-|----|----------|-------------------|
-| RQ1 | Métricas automáticas e um júri de LLMs concordam com a correção objetiva? O júri é confiável e sem viés de família? | `rq1_instruments`, `rq1_reliability`, `fig_roc` |
-| RQ2 | Parecer certo × estar certo: modelos com respostas mais similares às referências acertam mais, ou alguns (maiores) erram de forma "plausível"? Formalizado por s̄_m = μ⁰_m + Acc_m·Δ_m | `rq2_plausible` |
-| RQ3 | Quão bem modelos abertos de 3B a 125B respondem com o documento inteiro? Como a acurácia varia com o tamanho do documento e a posição da evidência? | `table_accuracy`, `fig_accuracy`, `fig_length_position` |
-| RQ4 | RAG (BM25, denso, híbrido; k = 2, 5, 10) e a busca guiada pelo modelo alcançam o documento completo? Com que economia de contexto? Quanto do erro é falha de recuperação? | `rq3_paired` (gera `paired.tex`), `table_gee`, `fig_cost`, `fig_recall` |
-| RQ5 | Quando a resposta não está no documento, os modelos dizem isso? | `table_abstention` |
-| RQ6 | Raciocinar antes de responder (thinking) ajuda? A que custo em tokens e latência? | (a implementar quando houver dados) |
+## Research questions
 
-## Desenho experimental
+| RQ | Question | Produced by (`llmeval/analysis.py`) |
+|----|----------|-------------------------------------|
+| RQ1 | Do automatic metrics and an LLM jury agree with objective correctness and with a human annotator? Is the jury reliable and free of family bias? | `rq1_instruments`, `rq1_reliability`, `fig_roc` |
+| RQ2 | Do models whose answers look closer to the references answer correctly more often, or do some look right without being right? | `rq2_plausible` |
+| RQ3 | How accurately do models of 3B to 125B parameters answer with the whole document, by document length and evidence position, and against the agreement among the QASPER annotators? | `table_accuracy`, `fig_accuracy`, `fig_length_position`, `human_ceiling`, `consensus` |
+| RQ4 | Can retrieval (BM25, dense, hybrid; k = 2, 5, 10) or a keyword search chosen by the model match the whole document, with how much less input? | `rq3_paired`, `table_gee`, `fig_cost`, `fig_recall` |
+| RQ5 | When the document does not contain the answer, do models say so? | `table_abstention` |
+| RQ6 | Does reasoning before answering help, under which generation budget, and at what cost in tokens? | `rq6_reasoning`, `rq6_budget` |
 
-- **Dados**: amostra estratificada (seed 42) de 400 perguntas em 272 documentos:
-  50 por tipo de resposta do QASPER (extractive, abstractive, yes/no,
-  unanswerable) e 100 fáceis + 100 difíceis do QuALITY. No máximo 2 perguntas
-  por documento.
-- **Geradores** (servidor Ollama da UFSC): Llama-3.2-3B, Qwen3.5-4B,
-  Mistral-7B, Qwen3.5-9B, Gemma4-31B, Qwen3.5-122B. Temperatura 0, semente
-  fixa, `num_ctx` = 32768 para todos (todo documento da amostra cabe), raciocínio
-  desligado, saída restrita por JSON Schema.
-- **Condições de contexto** (11): sem documento, documento completo, BM25 k=5,
-  denso (bge-m3) k=5, híbrido (RRF) k=2/5/10 e quatro de busca guiada pelo
-  modelo. Trechos de ~200 palavras que respeitam parágrafos e seções; a busca é
-  feita dentro do próprio documento.
-- **Busca guiada pelo modelo (Ctrl+F)**: uma chamada de ferramenta única e
-  forçada (saída estruturada) em que o gerador lista até 5 termos; uma função
-  devolve os trechos que os contêm (sem distinção de maiúsculas, ordenados por
-  nº de termos distintos e de ocorrências). As variantes mudam o que o modelo
-  leu antes de escolher os termos e como os achados entram na resposta:
-  `search_k5` (só a pergunta; só os achados), `search_hybrid_k5` (só a pergunta;
-  achados fundidos ao híbrido por RRF), `rag_search_k5` (lê os trechos do
-  híbrido; fusão RRF) e `full_search_k5` (lê o documento inteiro; responde com
-  o documento seguido dos achados).
-- **Raciocínio (RQ6)**: segunda passada, com thinking ligado, nos modelos que o
-  suportam (Qwen3.5 e Gemma4), em todas as condições; teto de 4096 tokens
-  (raciocínio + resposta). Estourar o teto é registrado como falha.
-- **Correção**:
-  - QuALITY (múltipla escolha): gabarito, ou seja, rótulo objetivo.
-  - QASPER (resposta livre): júri de 3 LLMs de famílias distintas (GPT-OSS-120B,
-    Llama-3.3-70B, Qwen3-32B), nenhum deles gerador, com veredito
-    correct/partial/incorrect e maioria estrita. Abstenções são decididas por regra.
-  - Métricas automáticas: EM, F1 de tokens (SQuAD), ROUGE-L, fuzzy, cosseno
-    bge-m3 e BERTScore, todas com máximo sobre as referências.
-- **Validação do instrumento (RQ1)**: no QuALITY o gerador escreve a resposta
-  com as próprias palavras antes de escolher a letra. Júri e métricas avaliam esse
-  texto contra a alternativa correta, e o resultado é comparado ao gabarito.
-- **Estatística**: IC de Wilson, McNemar exato + Holm, bootstrap por documento,
-  GEE logístico agrupado por documento, Fleiss κ, Krippendorff α, AUROC/Youden.
+## Experimental design
 
-A formalização completa está na Seção *Methodology* do artigo.
+- **Data**: stratified sample (seed 42) of 400 questions over 272 documents: 50 QASPER questions per answer type
+  (extractive, abstractive, yes/no, unanswerable; test split) and 100 easy + 100 hard QuALITY questions (validation
+  split); at most two questions per document. Both datasets are downloaded from a pinned Hugging Face commit and
+  checked against their SHA-256.
+- **Generators**: Llama-3.2-3B, Qwen3.5-4B, Mistral-7B, Qwen3.5-9B, Gemma4-31B, Qwen3.5-122B, served by Ollama.
+  Temperature 0, fixed seed, `num_ctx` = 32,768 for every model (every sampled document fits), output constrained by
+  a JSON Schema, reasoning off in the main design.
+- **Context conditions** (11): closed book, full document, BM25 k=5, dense (BGE-M3) k=5, hybrid (RRF) k=2/5/10, and
+  four model-guided keyword searches (Ctrl+F): the model lists up to five terms in a single forced tool call, and the
+  passages containing them are returned. The variants differ in what the model reads before choosing the terms and
+  in how the passages enter the answer prompt (`search_k5`, `search_hybrid_k5`, `rag_search_k5`, `full_search_k5`).
+- **Reasoning (RQ6)**: Qwen3.5-4B and Qwen3.5-9B answer five conditions again with reasoning enabled, under
+  generation budgets of 512, 1024, 2048, 4096 and 8192 tokens (reasoning and answer together).
+- **Grading**: QuALITY answers by the answer key; QASPER answers by a jury of GPT-OSS-120B, Llama-3.3-70B and
+  Qwen3-32B (none of them a generator), with verdicts correct / partially correct / incorrect and a strict majority;
+  abstentions by rule. Automatic metrics: exact match, token F1, ROUGE-L, fuzzy, BGE-M3 cosine and BERTScore.
+- **Validation of the grader (RQ1)**: on QuALITY each generator first states its answer in its own words; the jury
+  and the metrics grade that text against the correct option, and the result is compared with the answer key. On
+  QASPER, a human annotator graded 120 answers blind to the model and to the jury.
+- **Human reference point (RQ3, RQ5)**: each QASPER annotator is left out in turn and compared with the others; the
+  models are compared with the same annotators, and a pairwise analysis shows where models depart from a consensus.
+- **Statistics**: Wilson intervals, exact McNemar with Holm correction, document-clustered bootstrap, logistic GEE
+  clustered by document, Fleiss' kappa, Krippendorff's alpha, AUROC and Youden thresholds.
 
-## Estrutura
+## Layout
 
 ```
-configs/experiment.yaml   # tudo o que define o experimento
+configs/experiment.yaml   everything that defines the experiment (pinned datasets, model tags and digests, conditions, budgets)
 llmeval/
-  data.py        # download (parquet HF), normalização, amostragem estratificada
-  retrieval.py   # chunking, BM25, denso, RRF, revocação de evidência
-  embeddings.py  # bge-m3 local (GPU) ou via Ollama, com cache
-  ollama.py      # cliente com cache SQLite, JSON Schema, retentativas
-  prompts.py     # prompts de geração/júri, detecção de abstenção
-  generate.py    # estágio 1: pergunta × modelo × condição -> resposta
-  judge.py       # estágio 2: júri + regras de abstenção
-  metrics.py     # estágio 3: métricas automáticas
-  stats.py       # testes e medidas estatísticas
-  analysis.py    # estágio 4: tabelas .tex e figuras .pdf -> ../latex-llmeval
-data/sample/questions.jsonl   # amostra (versionada)
-results/                      # saídas versionadas (jsonl) e results/analysis/*.csv
+  data.py        pinned download, normalisation, stratified sampling
+  retrieval.py   chunking, BM25, dense, RRF, keyword search, evidence recall
+  embeddings.py  BGE-M3 (local GPU or Ollama), cached
+  ollama.py      client with SQLite cache, JSON Schema, retries, budget projection, offline mode
+  prompts.py     generation, search and jury prompts; abstention detection
+  generate.py    stage 1: question x model x condition -> answer (also --budget B)
+  judge.py       stage 2: jury and abstention rules
+  metrics.py     stage 3: automatic metrics
+  agreement.py   human reference point (leave-one-annotator-out and pairwise)
+  stats.py       statistical tests and measures
+  analysis.py    stage 4: .tex tables and .pdf figures, results/analysis/*.csv
+scripts/         human validation page and agreement, determinism check, Zenodo package
+human_eval/      annotation page, hidden key, annotations, agreement report
+data/sample/     the sample (questions.jsonl is versioned; documents.jsonl is rebuilt)
+results/         model outputs and verdicts (jsonl) and results/analysis/*.csv
 ```
 
-## Como reproduzir
+## Installation
 
 ```bash
 # Python >= 3.12
 uv venv --python 3.12 .venv
 uv pip install --python .venv/bin/python -r requirements.txt
-uv pip install --python .venv/bin/python torch --index-url https://download.pytorch.org/whl/cu128
-
-# endpoint Ollama (na UFSC); a autenticação Basic vem de ~/.netrc
-source /etc/profile.d/99-persist-env.sh
-
-.venv/bin/python -m llmeval sample     # data/sample/{questions,documents}.jsonl
-.venv/bin/python -m llmeval generate   # results/generations.jsonl, results/retrieval.jsonl
-.venv/bin/python -m llmeval judge      # results/judgments.jsonl
-.venv/bin/python -m llmeval metrics    # results/metrics.jsonl
-.venv/bin/python -m llmeval analyze    # ../latex-llmeval/{tables,figures}/, results/analysis/
-# ou tudo de uma vez:
-.venv/bin/python -m llmeval all
+uv pip install --python .venv/bin/python torch --index-url https://download.pytorch.org/whl/cu128   # GPU build
 ```
 
-Toda chamada a modelo fica em cache (`data/cache/*.sqlite`), então reexecutar
-um estágio não consulta o servidor de novo. Para trocar modelos, condições ou
-tamanho da amostra, edite apenas `configs/experiment.yaml`.
+A GPU is needed only to compute embeddings (BGE-M3) and BERTScore; set `CUDA_VISIBLE_DEVICES` as needed.
 
-### Notas sobre o servidor compartilhado
+## Reproducibility
 
-O servidor mantém um modelo carregado por vez. Por isso:
+Every model call is cached by a hash of the request (`data/cache/chat.sqlite`), and every stage reads the cache
+before calling the server, so re-running a stage is cheap and deterministic. There are three levels of reproduction.
 
-- os modelos são processados um de cada vez, com chamadas paralelas (`concurrency`);
-- os embeddings rodam localmente (`embedding_backend: local`), sem disputar o servidor;
-- `keep_alive` curto, para liberar a memória logo após o uso.
+### Level 1: tables and figures from the published outputs (no LLM, no GPU)
+
+```bash
+# put the Zenodo files results/, data/sample/ and human_eval/ in place, then:
+.venv/bin/python -m llmeval sample     # pinned download of QASPER/QuALITY, rebuilds data/sample/documents.jsonl
+LLMEVAL_OFFLINE=1 .venv/bin/python -m llmeval analyze
+```
+
+`sample` reproduces the published `questions.jsonl` and `documents.jsonl` byte for byte. `analyze` writes the tables
+and figures to the folder given by `paths.paper` in the config (by default `../latex-llmeval`) and the numbers to
+`results/analysis/`.
+
+### Level 2: the whole pipeline from the caches (no model server)
+
+Decompress `chat.sqlite` and `embeddings_local.sqlite` from the Zenodo record into `data/cache/`, then:
+
+```bash
+export LLMEVAL_OFFLINE=1
+.venv/bin/python -m llmeval sample
+.venv/bin/python -m llmeval generate
+.venv/bin/python -m llmeval judge
+.venv/bin/python -m llmeval metrics
+for b in 512 1024 2048 4096 8192; do .venv/bin/python -m llmeval generate --budget $b; .venv/bin/python -m llmeval judge --budget $b; done
+.venv/bin/python -m llmeval agreement
+.venv/bin/python -m llmeval agreement_pairs
+.venv/bin/python -m llmeval analyze
+```
+
+With `LLMEVAL_OFFLINE=1` nothing is sent to a server: a call that is not in the cache fails and is counted instead.
+Run this way, the pipeline reproduces the published outputs exactly. Without the embedding cache, the embeddings are
+recomputed on a GPU; tiny floating-point differences can then change a few retrieval rankings, which changes those
+prompts and sends them outside the cache.
+
+### Level 3: new inference with your own server
+
+Run the same commands without `LLMEVAL_OFFLINE`, pointing `OLLAMA_URL` to an Ollama server (Basic authentication is
+read from `~/.netrc`, or from `OLLAMA_USER`/`OLLAMA_PASSWORD`). Pull the tags listed in `configs/experiment.yaml`;
+the `digest` of each model identifies the exact weights we used (compare with `ollama list`). Local settings, such as
+`OLLAMA_URL` or `OLLAMA_INCIDENT_LOG` (an optional log of server failures), can go in an untracked `.env.local`,
+which the `run_*.sh` scripts source.
+
+Expect the results to differ somewhat from ours, and by more than sampling noise in individual answers:
+
+- **Model build and quantisation**: we used the default quantisation of each Ollama tag (Q4_K_M; MXFP4 for
+  GPT-OSS) as served by Ollama 0.40.8. Another quantisation, another runtime (vLLM, llama.cpp, transformers) or a
+  re-published tag with a different digest changes the answers.
+- **Run-to-run variation**: temperature 0 and a fixed seed do not guarantee identical outputs. Concurrent requests
+  are batched on the server, and batching changes the floating-point arithmetic. In our check, Qwen3.5-9B repeated
+  20 of 20 reasoning answers token for token, but Qwen3.5-4B only 10 of 20
+  (`scripts/check_budget_determinism.py`).
+- **Hardware and server version**: GPU type, Ollama version and context handling affect long generations.
+- **Grading**: the jury is itself an LLM; another build of the judges changes some verdicts.
+
+The conclusions of the paper rest on differences much larger than these effects, but individual numbers will not
+match exactly. Levels 1 and 2 reproduce the published numbers exactly.
+
+### Long runs on a shared server
+
+`run_chain.sh` (main design and reasoning), `run_budget.sh` (budget sweep) and `run_agreement.sh` (human reference
+point) chain the stages and log milestones to `results/logs/pipeline.log`. A stage exits with code 75 when the server
+keeps failing; `aguarda_servidor.sh` waits until no other model is in use on the server and resumes the chain
+(`CHAIN=./run_extra.sh` for the budget sweep and the agreement). Generations longer than 4096 tokens are streamed,
+because gateways may close connections that stay silent for minutes. `max_inflight` limits the concurrent requests
+across all processes.
+
+## Data and licenses
+
+- Code: MIT (`LICENSE`).
+- Data released on Zenodo: CC BY 4.0. They contain text from QASPER and QuALITY (both CC BY 4.0) and outputs of
+  Qwen, Gemma, Mistral and GPT-OSS models (Apache 2.0) and of Llama models (Llama 3.2 / 3.3 Community License;
+  Built with Llama). The data package is built by `scripts/build_zenodo_package.py`.
+- The original datasets are not redistributed here; `llmeval sample` downloads them from the pinned commits.
+
+## Citation
+
+See `CITATION.cff`.

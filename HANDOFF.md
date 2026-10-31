@@ -1,69 +1,75 @@
-# Handoff (ler primeiro, ~2 min)
+# Handoff (read first, ~2 min)
 
-Estado do trabalho e progresso: `TODO.md`. Desenho e reprodução: `README.md`.
+Internal working notes for whoever continues the work (they mention the study's own machine). Work state and
+progress: `TODO.md`. Design and reproduction: `README.md`.
 
-## O que é
-Revisão de um estudo engavetado: LLMs abertos (Ollama UFSC) respondendo perguntas
-sobre documentos longos (QASPER, QuALITY), comparando documento completo × RAG,
-com júri de 3 LLMs validado contra gabarito. Artigo IEEE em `../latex-llmeval`.
+## What this is
+Revision of a shelved study: open LLMs (UFSC Ollama server) answering questions about long documents (QASPER,
+QuALITY), comparing the full document with RAG and model-guided search, with a 3-LLM jury validated against an answer
+key and a human annotator. IEEE paper in `../latex-llmeval`.
 
-## Repositórios (já existem, nunca rodar `git init`)
-- `llm_qa_large_text_input_info_based/`: código, remoto GitHub, autor `CodeWracker`.
-- `latex-llmeval/`: artigo, remoto Overleaf. Token em `/home/jovyan/privado/.persist/git/credentials`
-  (credential helper `store`, via `~/.gitconfig` -> ZFS; `return_by_death.sh` recria o link).
-- Commits em português ("adiciona…", "corrige…"), um por unidade lógica, push logo após.
-  **Nunca** adicionar Co-Authored-By nem qualquer atribuição ao Claude.
+## Repositories (they already exist; never run `git init`)
+- `llm_qa_large_text_input_info_based/`: code, GitHub remote, author `CodeWracker`.
+- `latex-llmeval/`: paper, Overleaf remote. Token in `/home/jovyan/privado/.persist/git/credentials`
+  (credential helper `store`, via `~/.gitconfig` -> ZFS; `return_by_death.sh` recreates the link).
+- Commit messages in Portuguese ("adiciona…", "corrige…"), one per logical unit, pushed right away.
+  **Never** add Co-Authored-By or any attribution to Claude.
 
-## Regras do usuário para o artigo
-- Fio narrativo contínuo: intro → problema/RQs → método/formalização → setup →
-  resultados respondendo às RQs. Antecipar "tá, mas como fez isso?".
-- O artigo descreve UM estudo contínuo: nunca mencionar piloto, versões anteriores ou cronologia dos testes.
-- Introdução sem números de resultado.
-- `\todo{...}` = só fonte vermelha (`\textcolor{red}`), texto sempre em português, NUNCA caixas/todonotes.
-- Trabalhos Correlatos fica como `\todo{}` (traz eixos e strings de busca). O resumo já é a versão final.
-- Números da validação humana entram por macros `\hum{chave}` (`tables/human_agreement.tex`, gerado por
-  `scripts/evaluate_human_results.py`; ver `human_eval/README.md`).
-- Citar só datasets, técnicas, métodos computacionais/estatísticos. Não buscar
-  nem inventar referências de apoio a afirmações; no máximo `\todo{buscar referência para isso}`.
-- Decisões em vigor: ver o fim do `TODO.md`.
-- Arquivos de handoff curtos; se precisar de mais, use `handoffs/` com arquivos pequenos.
+## The user's rules for the paper
+- One continuous narrative: intro → problem/RQs → method/formalisation → setup → results answering the RQs.
+  Anticipate "ok, but how was this done?".
+- The paper describes ONE continuous study: never mention pilots, earlier versions or the chronology of the runs.
+- No result numbers in the introduction.
+- `\todo{...}` = red text only (`\textcolor{red}`), always in Portuguese, NEVER boxes/todonotes.
+- Related Work stays as `\todo{}` (axes and search strings); the user writes it.
+- Human-validation numbers enter through `\hum{key}` macros (`tables/human_agreement.tex`, written by
+  `scripts/evaluate_human_results.py`; see `human_eval/README.md`).
+- Cite only datasets, techniques and computational/statistical methods, plus the references the user asked for.
+- Decisions in force: see the end of `TODO.md`.
+- Keep handoff files short; if more is needed, use small files in `handoffs/`.
 
-## Ambiente (recriar se o container foi resetado)
+## Environment (recreate if the container was reset)
 ```bash
 source /etc/profile.d/99-persist-env.sh      # OLLAMA_URL
-# o container pode rodar como root ou como jovyan; o HOME é efêmero: rode
-# /home/jovyan/privado/.persist/return_by_death.sh para recriar os links (~/.ssh, ~/.netrc, ~/.gitconfig)
-# se o git acusar "dubious ownership": sudo chown -R jovyan:users /home/jovyan/compartilhado/ralph/llm-eval
-# (~/.netrc = auth do Ollama; ~/.gitconfig = credencial do Overleaf; ~/.ssh = chave do GitHub, conta CodeWracker)
+# the container may run as root or as jovyan; HOME is ephemeral: run
+# /home/jovyan/privado/.persist/return_by_death.sh to recreate the links (~/.ssh, ~/.netrc, ~/.gitconfig)
+# if git reports "dubious ownership": sudo chown -R jovyan:users /home/jovyan/compartilhado/ralph/llm-eval
+# (~/.netrc = Ollama auth; ~/.gitconfig = Overleaf credential; ~/.ssh = GitHub key, account CodeWracker)
 cd llm_qa_large_text_input_info_based
-# o .venv usa um Python instalado em pasta persistente (o HOME some no reinício); se quebrar, recriar:
+# the .venv uses a Python installed in a persistent folder (HOME is wiped on restart); if it breaks, recreate:
 export UV_PYTHON_INSTALL_DIR=/home/jovyan/privado/.persist/uv-python && uv python install 3.12
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt
 uv pip install --python .venv/bin/python torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
-# LaTeX local: /home/jovyan/privado/.persist/bin/tectonic -X compile main.tex
+# local LaTeX: /home/jovyan/privado/.persist/bin/tectonic -X compile main.tex
 ```
-O servidor Ollama é compartilhado com outros projetos: `max_inflight` (configs) limita as requisições simultâneas
-somando todos os processos (travas em `data/cache/slots`); 16 com o servidor cedido, 8 se compartilhado. Um modelo por vez. Os embeddings rodam localmente na GPU (`CUDA_VISIBLE_DEVICES=1`).
+`.env.local` (untracked) sets `OLLAMA_INCIDENT_LOG`; the `run_*.sh` scripts source it.
+The Ollama server is shared with other projects: `max_inflight` (config) caps concurrent requests across all
+processes (locks in `data/cache/slots`); 16 with the server to ourselves, 4 when shared (longer generations otherwise
+wait in the server queue past the gateway's 600 s and come back as 504). One model at a time. Embeddings run locally
+on the GPU (`CUDA_VISIBLE_DEVICES=1`).
 
 ## Pipeline
-`python -m llmeval {sample,generate,judge,metrics,analyze}`. Tudo fica em cache em
-`data/cache/*.sqlite`, então reexecutar é barato. A análise escreve `tables/*.tex` e
-`figures/*.pdf` direto em `../latex-llmeval`. Marcos em `results/logs/pipeline.log`; se cair, basta relançar.
-- `run_chain.sh`: desenho principal e RQ6 (concluídos).
-- `run_extra.sh`: `run_budget.sh` (varredura de orçamento, `generate/judge --budget B`, `--dry-run` só conta chamadas)
-  e depois `run_agreement.sh` (concordância com humanos). O cliente deduz do cache de outro teto as respostas cujo
-  desfecho já se sabe (`OllamaClient._project`); modelos em `nondeterministic_models` só são projetados para tetos menores.
+`python -m llmeval {sample,generate,judge,metrics,analyze}` plus `agreement` and `agreement_pairs`. Everything is
+cached in `data/cache/*.sqlite`, so re-running is cheap; `LLMEVAL_OFFLINE=1` forbids server calls (reproduction
+from the cache, checked on 31/10: generation identical). The analysis writes `tables/*.tex` and `figures/*.pdf`
+straight into `../latex-llmeval`. Milestones in `results/logs/pipeline.log`; if a run dies, relaunch it.
+- `run_chain.sh`: main design and RQ6 (done).
+- `run_extra.sh`: `run_budget.sh` (budget sweep, `generate/judge --budget B`, `--dry-run` only counts calls) and then
+  `run_agreement.sh` (human reference point). The client derives from the cache of another budget the answers whose
+  outcome is already known (`OllamaClient._project`); models in `nondeterministic_models` are only projected to
+  smaller budgets. Generations above 4096 tokens are streamed.
+- `scripts/build_zenodo_package.py` builds the data package in `dist/zenodo/`.
 
-## Incidentes do servidor e loop
-- Toda falha do Ollama (HTTP, timeout, conexão) e a recuperação vão automaticamente para
-  `/home/jovyan/privado/setic_infra_audit/incidentes_ollama/eventos.jsonl` (o usuário relata à SeTIC).
-  `relatorio.py` na mesma pasta gera `RELATORIO_INCIDENTES_OLLAMA.md`.
-- Disjuntor: `circuit_breaker` falhas seguidas do servidor encerram o estágio com código 75 e a cadeia pausa.
-- `aguarda_servidor.sh` (vigia, PID em `results/logs/aguarda.pid`) espera 3 min sem modelo alheio em uso
-  (`expires_at` parado; keep_alive infinito conta como ocupado), roda `$CHAIN` e volta a vigiar se ela pausar (75);
-  qualquer outro código encerra. Variáveis: `CHAIN` (padrão `./run_chain.sh`), `IGNORAR_MODELOS="m1 m2"`
-  (modelos alheios liberados pelo usuário, ex. o qwen2.5:32b do ClinicalSimilarity), `IGNORAR_ALHEIOS=1`
-  (servidor todo cedido). Comando atual: ver "Se o container cair" no `TODO.md`.
-- Um loop (CronCreate, de hora em hora, expira em 7 dias, morre com a sessão) confere cadeia e vigia e
-  relança o vigia se ele morreu. Se a sessão morreu, recrie o loop. Encerrar processos só por PID (nunca `pkill -f`).
-- Após reboot da máquina: `OLLAMA_URL` e `~/.netrc` somem até o usuário rodar `/home/jovyan/privado/.persist/return_by_death.sh`.
+## Server incidents and the loop
+- Every Ollama failure (HTTP, timeout, connection) and the recovery go to the file in `OLLAMA_INCIDENT_LOG`
+  (the user reports them to SeTIC). `relatorio.py` in the same folder writes `RELATORIO_INCIDENTES_OLLAMA.md`.
+- Circuit breaker: `circuit_breaker` consecutive server failures end the stage with code 75 and the chain pauses.
+- `aguarda_servidor.sh` (watcher, PID in `results/logs/aguarda.pid`) waits 3 min with no other model in use
+  (`expires_at` unchanged; infinite keep_alive counts as busy), runs `$CHAIN` and watches again if it pauses (75);
+  any other code ends it. Variables: `CHAIN` (default `./run_chain.sh`), `IGNORAR_MODELOS="m1 m2"` (other users'
+  models released by the user), `IGNORAR_ALHEIOS=1` (whole server ceded). Current command: see "If the container
+  goes down" in `TODO.md`.
+- A loop (CronCreate; expires in 7 days; dies with the session) checks the chain and the watcher and relaunches the
+  watcher if it died. If the session died, recreate the loop. Kill processes only by PID (never `pkill -f`).
+- After a machine reboot: `OLLAMA_URL` and `~/.netrc` disappear until the user runs
+  `/home/jovyan/privado/.persist/return_by_death.sh`.
