@@ -22,6 +22,24 @@ ollama:
   # falhas do servidor (para relatar à SeTIC); sobrescrito por $OLLAMA_INCIDENT_LOG; ignorado se a pasta não existir
   incident_log: /home/jovyan/privado/setic_infra_audit/incidentes_ollama/eventos.jsonl
 
+# Datasets fixados: commit do ramo refs/convert/parquet no Hugging Face e sha256 de cada arquivo (verificado no download)
+sources:
+  qasper:
+    repo: allenai/qasper
+    revision: 06806e4608976fc2fac0a090ac425d5b2b29caf4
+    config: qasper
+    files:
+      train:      {path: qasper/train/0000.parquet,      sha256: 9af08092ee26c4f700202c1f90d1592b662926f23f3a308a10ff0a53345e37fe}
+      validation: {path: qasper/validation/0000.parquet, sha256: 089781b91c337d348dd9e8b57cc8adc100ed2d9cab84a6127402bcccf1559222}
+      test:       {path: qasper/test/0000.parquet,       sha256: 206d05a86672dc330a47de4ff95eb0042d5ce0c74a84885bc3d15c36ae67b86e}
+  quality:
+    repo: tasksource/QuALITY
+    revision: 851fc59e8dffdfacda0607a483200ffcd50908fa
+    config: default
+    files:
+      train:      {path: default/train/0000.parquet,      sha256: 18609d4ef874d3ae041cf7ef6a69b64819e45c01ccc8993d5896500c46c81a5f}
+      validation: {path: default/validation/0000.parquet, sha256: 110ec89895d7fb0ea273d2689fc5f69b2031a837ec5c4eabf2ab098d0561655f}
+
 sample:
   qasper_split: test
   qasper_per_type: 50           # extractive, abstractive, yes_no, unanswerable
@@ -60,14 +78,16 @@ search:
   num_predict: 128          # passo dos termos, sem raciocínio
   view_k: 5                 # trechos do RAG híbrido lidos antes de escolher os termos (view: rag)
 
+# Modelos como servidos pelo Ollama 0.40.8 (UFSC), com a quantização padrão da tag (Q4_K_M; MXFP4 no GPT-OSS).
+# digest = sha256 do manifesto no servidor (`ollama list` / /api/tags): identifica os pesos exatos usados.
 # Geradores: escada de tamanho, famílias diferentes. Passada principal com think=false.
 generators:
-  - {model: "llama3.2:3b",         label: "Llama-3.2-3B",   family: llama,   params_b: 3.2}
-  - {model: "qwen3.5:4b",          label: "Qwen3.5-4B",     family: qwen,    params_b: 4.7}
-  - {model: "mistral:7b-instruct", label: "Mistral-7B",     family: mistral, params_b: 7.2}
-  - {model: "qwen3.5:9b",          label: "Qwen3.5-9B",     family: qwen,    params_b: 9.7}
-  - {model: "gemma4:31b",          label: "Gemma4-31B",     family: gemma,   params_b: 31.3}
-  - {model: "qwen3.5:122b",        label: "Qwen3.5-122B",   family: qwen,    params_b: 125.1}
+  - {model: "llama3.2:3b",         label: "Llama-3.2-3B",   family: llama,   params_b: 3.2, digest: "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72"}
+  - {model: "qwen3.5:4b",          label: "Qwen3.5-4B",     family: qwen,    params_b: 4.7, digest: "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd"}
+  - {model: "mistral:7b-instruct", label: "Mistral-7B",     family: mistral, params_b: 7.2, digest: "6577803aa9a036369e481d648a2baebb381ebc6e897f2bb9a766a2aa7bfbc1cf"}
+  - {model: "qwen3.5:9b",          label: "Qwen3.5-9B",     family: qwen,    params_b: 9.7, digest: "6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7"}
+  - {model: "gemma4:31b",          label: "Gemma4-31B",     family: gemma,   params_b: 31.3, digest: "6316f0629137b426c9d9b853ffc4c8209589f30ee39aebede6285096c0ff47e7"}
+  - {model: "qwen3.5:122b",        label: "Qwen3.5-122B",   family: qwen,    params_b: 125.1, digest: "8b9d11d807c57feb1e2ecb0d6cbf40334c37dcc3523bed5540af4f927f112a37"}
 
 # Condições de contexto. k = número de trechos recuperados.
 conditions:
@@ -87,8 +107,8 @@ conditions:
 # Júri: três famílias distintas, nenhum modelo é também gerador.
 jury:
   judges:
-    - {model: "gpt-oss:120b", label: "GPT-OSS-120B", family: gptoss, think: low}
-    - {model: "llama3.3:70b", label: "Llama-3.3-70B", family: llama}
-    - {model: "qwen3:32b",    label: "Qwen3-32B",     family: qwen,   think: false}
+    - {model: "gpt-oss:120b", label: "GPT-OSS-120B", family: gptoss, think: low, digest: "a951a23b46a1f6093dafee2ea481d634b4e31ac720a8a16f3f91e04f5a40ecd9"}
+    - {model: "llama3.3:70b", label: "Llama-3.3-70B", family: llama, digest: "a6eb4748fd2990ad2952b2335a95a7f952d1a06119a0aa6a2df6cd052a93a3fa"}
+    - {model: "qwen3:32b",    label: "Qwen3-32B",     family: qwen,   think: false, digest: "030ee887880fc378860c2dd35101da424377520441ae4bfe7be6deff8ade7840"}
   # No QuALITY o júri é usado apenas para meta-avaliação (rótulo objetivo disponível)
   quality_conditions: [full, hybrid_k5]

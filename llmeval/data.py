@@ -10,6 +10,7 @@ Convenções:
 """
 from __future__ import annotations
 
+import hashlib
 import logging
 import re
 from collections import Counter
@@ -24,23 +25,36 @@ from .io import write_jsonl
 log = logging.getLogger(__name__)
 
 UNANSWERABLE = "UNANSWERABLE"
-HF_PARQUET = "https://huggingface.co/api/datasets/{repo}/parquet/{config}/{split}/0.parquet"
-SOURCES = {
-    "qasper": ("allenai/qasper", "qasper"),
-    "quality": ("tasksource/QuALITY", "default"),
-}
+# arquivo de um commit fixo do Hugging Face (configs/experiment.yaml, `sources`): o conteúdo não muda com o tempo
+HF_FILE = "https://huggingface.co/datasets/{repo}/resolve/{revision}/{path}"
 
 
-def download(raw_dir: Path, splits: dict[str, str]) -> None:
+def _sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def download(sources: dict, raw_dir: Path, splits: dict[str, str]) -> None:
+    """Baixa cada (dataset, split) do commit fixado e confere o sha256; um arquivo já presente também é conferido."""
+    raw_dir.mkdir(parents=True, exist_ok=True)
     for name, split in splits.items():
-        repo, config = SOURCES[name]
+        src = sources[name]
+        spec = src["files"][split]
         dest = raw_dir / f"{name}_{split}.parquet"
-        if dest.exists():
-            continue
-        log.info("baixando %s/%s", repo, split)
-        r = requests.get(HF_PARQUET.format(repo=repo, config=config, split=split), timeout=300)
-        r.raise_for_status()
-        dest.write_bytes(r.content)
+        if not dest.exists():
+            url = HF_FILE.format(repo=src["repo"], revision=src["revision"], path=spec["path"])
+            log.info("baixando %s", url)
+            r = requests.get(url, timeout=300)
+            r.raise_for_status()
+            tmp = dest.with_suffix(".part")
+            tmp.write_bytes(r.content)
+            tmp.rename(dest)
+        got = _sha256(dest)
+        if got != spec["sha256"]:
+            raise RuntimeError(f"{dest}: sha256 {got} difere do fixado {spec['sha256']}; apague o arquivo e baixe de novo")
 
 
 def _norm_ws(text: str) -> str:
@@ -171,7 +185,7 @@ def stratified_sample(
 def build_sample(cfg) -> tuple[list[dict], list[dict]]:
     raw = cfg.path("raw")
     s = cfg["sample"]
-    download(raw, {"qasper": s["qasper_split"], "quality": s["quality_split"]})
+    download(cfg["sources"], raw, {"qasper": s["qasper_split"], "quality": s["quality_split"]})
     rng = np.random.default_rng(cfg["seed"])
 
     q_docs, q_qs = parse_qasper(pd.read_parquet(raw / f"qasper_{s['qasper_split']}.parquet"))
