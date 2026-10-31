@@ -24,3 +24,8 @@ results/metrics_interim.jsonl
 
 # pacote do Zenodo (gerado por scripts/build_zenodo_package.py)
 dist/
+
+# notas internas de trabalho (ficam só no disco)
+HANDOFF.md
+TODO.md
+handoffs/

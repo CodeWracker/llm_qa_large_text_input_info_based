@@ -3,7 +3,7 @@
 # 1) teste de determinismo: 40 respostas refeitas com teto 8192 devem sair iguais às de 4096;
 # 2) tetos 512, 1024 e 2048 (quase tudo deduzido do cache de 4096) e depois 8192 (só os itens cortados);
 # 3) júri de cada teto e análise. Tudo em cache: relançar retoma de onde parou.
-# Marcos em results/logs/pipeline.log. Uso: CHAIN=./run_budget.sh ./aguarda_servidor.sh (ver HANDOFF)
+# Marcos em results/logs/pipeline.log. Uso: CHAIN=./run_budget.sh ./aguarda_servidor.sh
 set -uo pipefail
 cd "$(dirname "$0")"
 [ -f /etc/profile.d/99-persist-env.sh ] && source /etc/profile.d/99-persist-env.sh  # ambiente da máquina do estudo
