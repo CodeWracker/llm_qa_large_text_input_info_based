@@ -32,7 +32,7 @@ from llmeval.config import load_config  # noqa: E402
 from llmeval.stats import krippendorff_alpha  # noqa: E402
 
 HE = ROOT / "human_eval"
-ANNOTATORS = ["Rodrigo Ferraz", "Rodrigo Guedes"]  # ordem usada no relatório
+ANNOTATORS = ["Annotator 1", "Annotator 2"]  # ordem usada no relatório
 VERDICT = {"correct": "correct", "partial": "partial", "partially_correct": "partial", "incorrect": "incorrect"}
 ORDINAL = {"correct": 1.0, "partial": 0.5, "incorrect": 0.0}
 

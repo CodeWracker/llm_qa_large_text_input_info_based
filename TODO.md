@@ -12,7 +12,7 @@ Só o que vale hoje. `[~]` em andamento, `[ ]` pendente. Histórico: `git log`. 
 - [ ] Trabalhos Correlatos é do usuário
 
 ## Pendências do usuário
-- [ ] Segundo anotador (Rodrigo Guedes), se ele fizer: CSV em `human_eval/results/`, rodar
+- [ ] Segundo anotador ("Annotator 2"), se ele fizer: CSV em `human_eval/results/`, rodar
   `scripts/evaluate_human_results.py`; recolocar no artigo a linha "annotator 1 vs. 2" e a concordância entre humanos
 - [ ] Avisar o dono/administrador da chave exposta em `/home/jovyan/compartilhado/.ssh/` (não usar: não é do usuário)
 
@@ -29,6 +29,6 @@ Só o que vale hoje. `[~]` em andamento, `[ ]` pendente. Histórico: `git log`. 
 - Amostra de 400 perguntas; júri de 3 LLMs; raciocínio só em Qwen3.5-4B e 9B, 5 condições.
 - Ordem no servidor (27/10): varredura de orçamento antes da concordância com o júri. 28/10: dividir o servidor
   com outros usuários em vez de esperar (IGNORAR_ALHEIOS=1).
-- Validação humana: 120 respostas, um anotador (Rodrigo Ferraz, 27/10: júri 85,0%, kappa 0,65); a régua do modelo é a
+- Validação humana: 120 respostas, um anotador ("Annotator 1", 27/10: júri 85,0%, kappa 0,65); a régua do modelo é a
   concordância entre humanos, não 100%.
 - Citar só datasets/métodos, mais Liu 2024, Schick 2023 e Souza & Panisson 2026 (pedidos pelo usuário).

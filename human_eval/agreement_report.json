@@ -1,7 +1,7 @@
 {
  "n_sample": 120,
  "annotators": {
-  "Rodrigo Ferraz": {
+  "Annotator 1": {
    "n": 120,
    "verdicts": {
     "correct": 86,
@@ -11,52 +11,52 @@
   }
  },
  "inter_annotator": [],
- "consensus_reference": "Rodrigo Ferraz",
+ "consensus_reference": "Annotator 1",
  "machine_vs_human": [
   {
-   "reference": "Rodrigo Ferraz",
+   "reference": "Annotator 1",
    "instrument": "LLM jury (majority)",
    "n": 120,
    "acc": 0.85,
    "kappa": 0.6493506493506493
   },
   {
-   "reference": "Rodrigo Ferraz",
+   "reference": "Annotator 1",
    "instrument": "Judge: GPT-OSS-120B",
    "n": 120,
    "acc": 0.8,
    "kappa": 0.5477386934673367
   },
   {
-   "reference": "Rodrigo Ferraz",
+   "reference": "Annotator 1",
    "instrument": "Judge: Llama-3.3-70B",
    "n": 120,
    "acc": 0.875,
    "kappa": 0.6837666900913563
   },
   {
-   "reference": "Rodrigo Ferraz",
+   "reference": "Annotator 1",
    "instrument": "Judge: Qwen3-32B",
    "n": 120,
    "acc": 0.7833333333333333,
    "kappa": 0.5255474452554745
   },
   {
-   "reference": "Rodrigo Ferraz",
+   "reference": "Annotator 1",
    "instrument": "LLM jury (majority) [extractive]",
    "n": 40,
    "acc": 0.825,
    "kappa": 0.5569620253164558
   },
   {
-   "reference": "Rodrigo Ferraz",
+   "reference": "Annotator 1",
    "instrument": "LLM jury (majority) [abstractive]",
    "n": 40,
    "acc": 0.825,
    "kappa": 0.65
   },
   {
-   "reference": "Rodrigo Ferraz",
+   "reference": "Annotator 1",
    "instrument": "LLM jury (majority) [yes_no]",
    "n": 40,
    "acc": 0.9,
@@ -64,7 +64,7 @@
   }
  ],
  "human_accept_rate": {
-  "Rodrigo Ferraz": 0.7166666666666667
+  "Annotator 1": 0.7166666666666667
  },
  "jury_accept_rate": 0.6666666666666666
 }

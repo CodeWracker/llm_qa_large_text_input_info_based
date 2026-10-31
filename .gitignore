@@ -17,3 +17,6 @@ data/sample/documents.jsonl
 results/logs/
 results/*.partial.jsonl
 results/metrics_interim.jsonl
+
+# notebooks
+**/.ipynb_checkpoints/
