@@ -1,6 +1,6 @@
 # Open-weight LLMs for data extraction from long documents: full document vs. retrieval, with a validated LLM jury
 
-Code of the study *"Reading the Whole Paper or Retrieving What Matters? Open-Weight LLMs for Data Extraction in Systematic Literature Reviews, Evaluated by a Validated LLM Jury"*. Data (model outputs, verdicts, caches): Zenodo record (DOI to be added on publication).
+Code of the study *"Reading the Whole Paper or Retrieving What Matters? Open-Weight LLMs for Data Extraction in Systematic Literature Reviews, Evaluated by a Validated LLM Jury"*. Data (model outputs, verdicts, caches): [doi:10.5281/zenodo.23844724](https://doi.org/10.5281/zenodo.23844724).
 
 The guiding question: can open-weight language models running on a local server fill the data-extraction table of a systematic literature review reliably, where each cell is a question about one paper? Six models answer 400 questions about long documents under eleven ways of providing the document, and the free-text answers are graded by a jury of three other LLMs that is first validated against an answer key and a human annotator.
 
@@ -74,7 +74,7 @@ How it works: every model call is cached by a hash of the request (`data/cache/c
 ### Path A: check our numbers (no LLM, no GPU)
 
 ```bash
-# download llm-eval-data-v1.0.zip from the Zenodo record (DOI in the paper), then:
+# download llm-eval-data-v1.0.zip from https://doi.org/10.5281/zenodo.23844724, then:
 .venv/bin/python scripts/install_zenodo_data.py ~/llm-eval-data-v1.0.zip   # extracts, checks SHA-256, copies results/, data/sample/, human_eval/
 .venv/bin/python -m llmeval sample                                       # pinned QASPER/QuALITY download; rebuilds documents.jsonl
 LLMEVAL_OFFLINE=1 .venv/bin/python -m llmeval analyze

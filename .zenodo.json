@@ -3,12 +3,41 @@
   "upload_type": "software",
   "license": "MIT",
   "creators": [
-    {"name": "Souza, Rodrigo Ferraz", "affiliation": "Universidade Federal de Santa Catarina (UFSC)"},
-    {"name": "de Souza, Rodrigo Guedes", "affiliation": "Universidade Federal de Santa Catarina (UFSC)"},
-    {"name": "Panisson, Alison R.", "affiliation": "Universidade Federal de Santa Catarina (UFSC)"},
-    {"name": "de Macedo, Douglas Dyllon J.", "affiliation": "Universidade Federal de Santa Catarina (UFSC)"},
-    {"name": "Sobieranski, Antonio Carlos", "affiliation": "Universidade Federal de Santa Catarina (UFSC)"}
+    {
+      "name": "Ferraz Souza, Rodrigo",
+      "affiliation": "Universidade Federal de Santa Catarina (UFSC)"
+    },
+    {
+      "name": "Guedes de Souza, Rodrigo",
+      "affiliation": "Universidade Federal de Santa Catarina (UFSC)"
+    },
+    {
+      "name": "Panisson, Alison R.",
+      "affiliation": "Universidade Federal de Santa Catarina (UFSC)"
+    },
+    {
+      "name": "de Macedo, Douglas Dyllon J.",
+      "affiliation": "Universidade Federal de Santa Catarina (UFSC)"
+    },
+    {
+      "name": "Sobieranski, Antonio Carlos",
+      "affiliation": "Universidade Federal de Santa Catarina (UFSC)"
+    }
   ],
-  "keywords": ["systematic literature review", "data extraction", "long-document question answering",
-               "retrieval-augmented generation", "LLM-as-a-judge", "open-weight language models"]
+  "keywords": [
+    "systematic literature review",
+    "data extraction",
+    "long-document question answering",
+    "retrieval-augmented generation",
+    "LLM-as-a-judge",
+    "open-weight language models"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://doi.org/10.5281/zenodo.23844724",
+      "relation": "isSupplementedBy",
+      "resource_type": "dataset",
+      "scheme": "doi"
+    }
+  ]
 }

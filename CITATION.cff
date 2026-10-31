@@ -4,12 +4,16 @@ title: "Reading the Whole Paper or Retrieving What Matters? Open-Weight LLMs for
 type: software
 license: MIT
 repository-code: "https://github.com/CodeWracker/llm_qa_large_text_input_info_based"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23844724"
+    description: "Data of the study (model outputs, verdicts, caches) on Zenodo"
 authors:
-  - family-names: "Souza"
-    given-names: "Rodrigo Ferraz"
+  - family-names: "Ferraz Souza"
+    given-names: "Rodrigo"
     affiliation: "Universidade Federal de Santa Catarina (UFSC)"
-  - family-names: "de Souza"
-    given-names: "Rodrigo Guedes"
+  - family-names: "Guedes de Souza"
+    given-names: "Rodrigo"
     affiliation: "Universidade Federal de Santa Catarina (UFSC)"
   - family-names: "Panisson"
     given-names: "Alison R."
