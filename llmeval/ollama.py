@@ -158,6 +158,8 @@ class OllamaClient:
         # modelos cuja saída muda entre execuções mesmo com temperatura 0 (ver scripts/check_budget_determinism.py)
         self.nondeterministic = set(cfg.get("generation", {}).get("nondeterministic_models") or [])
         self.dry_run, self.dry_run_calls = False, 0
+        # LLMEVAL_OFFLINE=1: nada vai ao servidor; só o cache responde (reprodução a partir do cache publicado)
+        self.offline = os.environ.get("LLMEVAL_OFFLINE") == "1"
 
     def _project(self, payload: dict, num_predict: int) -> dict | None:
         """Resultado de uma chamada com raciocínio no orçamento `num_predict`, deduzido do cache de outro orçamento.
@@ -201,6 +203,8 @@ class OllamaClient:
     )
     def _post(self, endpoint: str, payload: dict) -> dict:
         model, t0 = payload.get("model"), time.time()
+        if self.offline:
+            raise ServerUnavailable("LLMEVAL_OFFLINE=1: chamada fora do cache")
         if self._tripped:
             raise ServerUnavailable(f"{self._fail_streak} falhas seguidas do servidor")
         try:
@@ -252,6 +256,8 @@ class OllamaClient:
         # persistido no cache: respostas já em cache não dependem do servidor estar no ar
         key = _hash(["capabilities", model])
         caps = self.chat_cache.get(key)
+        if caps is None and self.offline:
+            return ()
         if caps is None:
             caps = self._post("/api/show", {"model": model}).get("capabilities", [])
             self.chat_cache.set(key, caps)
@@ -292,6 +298,10 @@ class OllamaClient:
             cached = self._project(payload, num_predict)
         if cached is not None:
             return cached
+        if self.offline:  # fora do cache e sem servidor: a chamada falha sozinha, sem derrubar o estágio
+            with self._breaker_lock:
+                self.dry_run_calls += 1
+            return {"output": None, "error": "offline: fora do cache", "done_reason": None}
         if self.dry_run:  # só conta as chamadas que iriam ao servidor
             with self._breaker_lock:
                 self.dry_run_calls += 1

@@ -19,8 +19,8 @@ ollama:
   timeout_s: 1800       # gerações de até 8192 tokens na varredura de orçamento
   max_parse_retries: 3
   experiment: llm-eval   # nome no registro de incidentes
-  # falhas do servidor (para relatar à SeTIC); sobrescrito por $OLLAMA_INCIDENT_LOG; ignorado se a pasta não existir
-  incident_log: /home/jovyan/privado/setic_infra_audit/incidentes_ollama/eventos.jsonl
+  # registro opcional das falhas do servidor (JSON Lines): defina OLLAMA_INCIDENT_LOG (ex.: em .env.local)
+  incident_log: null
 
 # Datasets fixados: commit do ramo refs/convert/parquet no Hugging Face e sha256 de cada arquivo (verificado no download)
 sources:
@@ -79,15 +79,16 @@ search:
   view_k: 5                 # trechos do RAG híbrido lidos antes de escolher os termos (view: rag)
 
 # Modelos como servidos pelo Ollama 0.40.8 (UFSC), com a quantização padrão da tag (Q4_K_M; MXFP4 no GPT-OSS).
-# digest = sha256 do manifesto no servidor (`ollama list` / /api/tags): identifica os pesos exatos usados.
+# digest = sha256 do manifesto no servidor (`ollama list` / /api/tags): identifica os pesos exatos usados;
+# quant e max_ctx como reportados pelo servidor (/api/show), para a tabela de modelos não depender dele.
 # Geradores: escada de tamanho, famílias diferentes. Passada principal com think=false.
 generators:
-  - {model: "llama3.2:3b",         label: "Llama-3.2-3B",   family: llama,   params_b: 3.2, digest: "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72"}
-  - {model: "qwen3.5:4b",          label: "Qwen3.5-4B",     family: qwen,    params_b: 4.7, digest: "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd"}
-  - {model: "mistral:7b-instruct", label: "Mistral-7B",     family: mistral, params_b: 7.2, digest: "6577803aa9a036369e481d648a2baebb381ebc6e897f2bb9a766a2aa7bfbc1cf"}
-  - {model: "qwen3.5:9b",          label: "Qwen3.5-9B",     family: qwen,    params_b: 9.7, digest: "6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7"}
-  - {model: "gemma4:31b",          label: "Gemma4-31B",     family: gemma,   params_b: 31.3, digest: "6316f0629137b426c9d9b853ffc4c8209589f30ee39aebede6285096c0ff47e7"}
-  - {model: "qwen3.5:122b",        label: "Qwen3.5-122B",   family: qwen,    params_b: 125.1, digest: "8b9d11d807c57feb1e2ecb0d6cbf40334c37dcc3523bed5540af4f927f112a37"}
+  - {model: "llama3.2:3b",         label: "Llama-3.2-3B",   family: llama,   params_b: 3.2, quant: Q4_K_M, max_ctx: 128k, digest: "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72"}
+  - {model: "qwen3.5:4b",          label: "Qwen3.5-4B",     family: qwen,    params_b: 4.7, quant: Q4_K_M, max_ctx: 256k, digest: "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd"}
+  - {model: "mistral:7b-instruct", label: "Mistral-7B",     family: mistral, params_b: 7.2, quant: Q4_K_M, max_ctx: 32k, digest: "6577803aa9a036369e481d648a2baebb381ebc6e897f2bb9a766a2aa7bfbc1cf"}
+  - {model: "qwen3.5:9b",          label: "Qwen3.5-9B",     family: qwen,    params_b: 9.7, quant: Q4_K_M, max_ctx: 256k, digest: "6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7"}
+  - {model: "gemma4:31b",          label: "Gemma4-31B",     family: gemma,   params_b: 31.3, quant: Q4_K_M, max_ctx: 256k, digest: "6316f0629137b426c9d9b853ffc4c8209589f30ee39aebede6285096c0ff47e7"}
+  - {model: "qwen3.5:122b",        label: "Qwen3.5-122B",   family: qwen,    params_b: 125.1, quant: Q4_K_M, max_ctx: 256k, digest: "8b9d11d807c57feb1e2ecb0d6cbf40334c37dcc3523bed5540af4f927f112a37"}
 
 # Condições de contexto. k = número de trechos recuperados.
 conditions:
@@ -107,8 +108,8 @@ conditions:
 # Júri: três famílias distintas, nenhum modelo é também gerador.
 jury:
   judges:
-    - {model: "gpt-oss:120b", label: "GPT-OSS-120B", family: gptoss, think: low, digest: "a951a23b46a1f6093dafee2ea481d634b4e31ac720a8a16f3f91e04f5a40ecd9"}
-    - {model: "llama3.3:70b", label: "Llama-3.3-70B", family: llama, digest: "a6eb4748fd2990ad2952b2335a95a7f952d1a06119a0aa6a2df6cd052a93a3fa"}
-    - {model: "qwen3:32b",    label: "Qwen3-32B",     family: qwen,   think: false, digest: "030ee887880fc378860c2dd35101da424377520441ae4bfe7be6deff8ade7840"}
+    - {model: "gpt-oss:120b", label: "GPT-OSS-120B", family: gptoss, think: low, quant: MXFP4, max_ctx: 128k, params_b: 116.8, digest: "a951a23b46a1f6093dafee2ea481d634b4e31ac720a8a16f3f91e04f5a40ecd9"}
+    - {model: "llama3.3:70b", label: "Llama-3.3-70B", family: llama, quant: Q4_K_M, max_ctx: 128k, params_b: 70.6, digest: "a6eb4748fd2990ad2952b2335a95a7f952d1a06119a0aa6a2df6cd052a93a3fa"}
+    - {model: "qwen3:32b",    label: "Qwen3-32B",     family: qwen,   think: false, quant: Q4_K_M, max_ctx: 40k, params_b: 32.8, digest: "030ee887880fc378860c2dd35101da424377520441ae4bfe7be6deff8ade7840"}
   # No QuALITY o júri é usado apenas para meta-avaliação (rótulo objetivo disponível)
   quality_conditions: [full, hybrid_k5]

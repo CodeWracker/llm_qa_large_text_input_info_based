@@ -165,33 +165,16 @@ Dataset & Stratum & Questions & Docs & Words & Refs/q \\
 
 
 def table_models(cfg, out: Path, client=None) -> None:
-    info = {}
-    if client is not None:
-        for m in [g["model"] for g in cfg["generators"]] + [j["model"] for j in cfg["jury"]["judges"]]:
-            try:
-                d = client._post("/api/show", {"model": m})
-                mi = d.get("model_info", {})
-                ctx = next((v for k, v in mi.items() if k.endswith("context_length")), None)
-                info[m] = (d.get("details", {}).get("quantization_level", "--"), ctx)
-            except Exception as exc:  # servidor indisponível: tabela sai sem essas colunas
-                log.warning("api/show %s: %s", m, exc)
-
-    missing = [m for m in [g["model"] for g in cfg["generators"]] + [j["model"] for j in cfg["jury"]["judges"]]
-               if m not in info]
-    if missing and (out / "tables" / "models.tex").exists():
-        log.warning("api/show falhou para %s: mantendo a tabela de modelos existente", ", ".join(missing))
-        return
+    """Modelos com quantização e contexto máximo registrados no config (configs/experiment.yaml)."""
 
     def row(entry):
-        q, ctx = info.get(entry["model"], ("--", None))
-        ctxs = f"{ctx // 1024}k" if ctx else "--"
+        q, ctxs = entry.get("quant", "--"), entry.get("max_ctx", "--")
         params = entry.get("params_b")
         ps = f"{params:g}" if params else "--"
         return f"{entry['label']} & \\texttt{{{entry['model']}}} & {ps} & {q.replace('_', chr(92) + '_')} & {ctxs} \\\\"
 
-    params = {"gpt-oss:120b": 116.8, "llama3.3:70b": 70.6, "qwen3:32b": 32.8}
     gens = "\n".join(row(g) for g in cfg["generators"])
-    judges = "\n".join(row({**j, "params_b": params.get(j["model"])}) for j in cfg["jury"]["judges"])
+    judges = "\n".join(row(j) for j in cfg["jury"]["judges"])
     write(out / "tables" / "models.tex", rf"""% Gerado por `python -m llmeval analyze` (table_models). Não editar à mão.
 \begin{{table}}[t]
 \centering
@@ -1171,7 +1154,7 @@ def rq6_budget(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame | None:
         frames.append(g.join(off, on=keys, how="inner").dropna(subset=["y", "y_off"]))
     if not frames:
         return None
-    d = pd.concat(frames, ignore_index=True)
+    d = pd.concat(frames, ignore_index=True).sort_values(["budget", "dataset", "model", "condition", "qid"])
     d.to_csv(results / "analysis" / "budget_items.csv", index=False,
              columns=["budget", "dataset", "model", "condition", "qid", "y", "y_off", "lost", "tokens"])
 
@@ -1411,7 +1394,7 @@ def consensus(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame | None:
             rows.append({"task": task, "qid": r.qid, "model": r.model,
                          "humans": "agree" if len(set(T)) == 1 else "disagree",
                          "cat": "all" if all(v == t for t in T) else ("none" if v not in T else "some")})
-    d = pd.DataFrame(rows)
+    d = pd.DataFrame(rows).sort_values(["task", "qid", "model"])
     d.to_csv(cfg.path("results") / "analysis" / "consensus_items.csv", index=False)
     res = (d.groupby(["task", "humans", "model"]).cat.value_counts(normalize=True).unstack(fill_value=0)
            .reindex(columns=[c for c, _ in CONSENSUS_CATS], fill_value=0).reset_index())
