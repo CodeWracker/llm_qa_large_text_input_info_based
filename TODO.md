@@ -7,8 +7,9 @@ Only what holds today. `[~]` in progress, `[ ]` pending. History: `git log`. Res
 
 ## Publication (31/10)
 - [x] Datasets pinned (Hugging Face commit + SHA-256, checked on download; rebuilt sample identical) and model digests in the config; annotator anonymised as "Annotator 1"; MIT license (code) and CC BY 4.0 (data); `scripts/build_zenodo_package.py`; README and markdown in English; offline mode `LLMEVAL_OFFLINE=1`.
-- [ ] Upload `dist/zenodo/llm-eval-data-<version>/` to Zenodo and put the DOI in the README and in the paper (user).
-- [ ] Before making the GitHub repository public: decide whether `HANDOFF.md`/`TODO.md` (internal paths) stay tracked; the git history also contains them and the annotator's former name (user).
+- [x] Data published on Zenodo: https://doi.org/10.5281/zenodo.23844724 (v1.0; published files match the local MD5). DOI in the README, `CITATION.cff`, `.zenodo.json` and the paper.
+- [ ] Fix the fourth author on the Zenodo record ("D. J. de Macedo, Douglas" -> "de Macedo, Douglas Dyllon J."): Edit, then Publish; metadata changes need no new version (user).
+- [ ] The GitHub repository is public. Full history scanned on 31/10: no credentials (only placeholders). Decide whether `HANDOFF.md`/`TODO.md`, which list internal paths, stay tracked (user). The annotator's former name in the history is accepted by the user.
 
 ## Paper (`../latex-llmeval`)
 - [ ] Review float placement (the budget table/figure float into the threats section); check `.bib` metadata
