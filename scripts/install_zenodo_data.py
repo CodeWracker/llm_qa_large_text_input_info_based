@@ -4,7 +4,7 @@ Checks the record against its MANIFEST.sha256, copies the outputs to results/, d
 with --with-caches, decompresses the caches into data/cache/ (needed only to re-run the pipeline offline).
 
 Usage: python scripts/install_zenodo_data.py PATH_TO_RECORD [--with-caches]
-PATH_TO_RECORD is the folder with the downloaded files (README.md, MANIFEST.sha256, results/, ...).
+PATH_TO_RECORD is the downloaded llm-eval-data-<version>.zip, or the folder extracted from it.
 """
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ import argparse
 import gzip
 import hashlib
 import shutil
+import zipfile
 import sys
 from pathlib import Path
 
@@ -34,6 +35,10 @@ def main() -> None:
     ap.add_argument("--with-caches", action="store_true", help="also install data/cache/*.sqlite (offline re-run)")
     args = ap.parse_args()
     rec = args.record.resolve()
+    if rec.suffix == ".zip":  # the archive downloaded from Zenodo: extract it next to itself
+        with zipfile.ZipFile(rec) as z:
+            z.extractall(rec.parent)
+            rec = rec.parent / z.namelist()[0].split("/")[0]
 
     bad = []
     for line in (rec / "MANIFEST.sha256").read_text().splitlines():

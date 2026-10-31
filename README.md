@@ -98,8 +98,8 @@ and a call that is not in the cache fails instead of being sent.
 ### Path A: check our numbers (no LLM, no GPU)
 
 ```bash
-# download all files of the Zenodo record (DOI in the paper) into a folder, e.g. ~/llm-eval-data-v1.0, then:
-.venv/bin/python scripts/install_zenodo_data.py ~/llm-eval-data-v1.0    # checks SHA-256, copies results/, data/sample/, human_eval/
+# download llm-eval-data-v1.0.zip from the Zenodo record (DOI in the paper), then:
+.venv/bin/python scripts/install_zenodo_data.py ~/llm-eval-data-v1.0.zip   # extracts, checks SHA-256, copies results/, data/sample/, human_eval/
 .venv/bin/python -m llmeval sample                                       # pinned QASPER/QuALITY download; rebuilds documents.jsonl
 LLMEVAL_OFFLINE=1 .venv/bin/python -m llmeval analyze
 ```
@@ -110,7 +110,7 @@ LLMEVAL_OFFLINE=1 .venv/bin/python -m llmeval analyze
 ### Path B: re-run our pipeline exactly (no model server)
 
 ```bash
-.venv/bin/python scripts/install_zenodo_data.py ~/llm-eval-data-v1.0 --with-caches   # also installs data/cache/*.sqlite
+.venv/bin/python scripts/install_zenodo_data.py ~/llm-eval-data-v1.0.zip --with-caches   # also installs data/cache/*.sqlite
 export LLMEVAL_OFFLINE=1
 .venv/bin/python -m llmeval sample
 .venv/bin/python -m llmeval generate          # 26,400 answers + 4,000 with reasoning, all read from the cache

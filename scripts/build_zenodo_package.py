@@ -2,8 +2,9 @@
 validation and the caches needed to re-run the pipeline offline.
 
 The package goes to dist/zenodo/llm-eval-data-<version>/ with a README (data card), LICENSE, NOTICE (third-party
-terms), the exact configuration and a MANIFEST.sha256. The SQLite caches are gzip-compressed. Upload every file of
-that folder to one Zenodo record.
+terms), the exact configuration and a MANIFEST.sha256. The SQLite caches are gzip-compressed. Zenodo does not keep
+folders, so the script also writes llm-eval-data-<version>.zip (the whole folder) and a copy of the README: upload
+these two files to one Zenodo record.
 
 Usage: python scripts/build_zenodo_package.py [--version v1.0] [--no-embeddings]
 """
@@ -144,7 +145,11 @@ def main() -> None:
             manifest.append(f"{sha256(p)}  {p.relative_to(out)}")
     (out / "MANIFEST.sha256").write_text("\n".join(manifest) + "\n", encoding="utf-8")
     total = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())
-    print(json.dumps({"package": str(out), "files": len(manifest) + 1, "size": human(total)}, indent=1))
+    # Zenodo does not keep folders: upload this zip (it keeps the layout) plus README.md, shown on the record page
+    archive = shutil.make_archive(str(out), "zip", root_dir=out.parent, base_dir=out.name)
+    shutil.copy2(out / "README.md", out.parent / f"README-{args.version}.md")
+    print(json.dumps({"package": str(out), "files": len(manifest) + 1, "size": human(total),
+                      "upload": [archive, str(out.parent / f"README-{args.version}.md")]}, indent=1))
 
 
 if __name__ == "__main__":

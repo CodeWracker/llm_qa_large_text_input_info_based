@@ -53,8 +53,9 @@ of at least t and is cut under any smaller budget. Qwen3.5-4B did not reproduce 
 
 ## How to use
 
-Clone the code repository and place the files of this record in it (`results/`, `data/sample/`, `human_eval/`,
-and the caches, decompressed, in `data/cache/`). The repository README describes three levels of reproduction:
+Download `llm-eval-data-{{VERSION}}.zip`, clone the code repository and run
+`python scripts/install_zenodo_data.py llm-eval-data-{{VERSION}}.zip [--with-caches]`, which checks the files and puts
+them in place. The repository README describes three levels of reproduction:
 
 1. **Tables and figures** from these outputs: `python -m llmeval analyze` (no LLM, no GPU).
 2. **The whole pipeline from the caches**: with `chat.sqlite` and `embeddings_local.sqlite` in `data/cache/` and
@@ -62,7 +63,7 @@ and the caches, decompressed, in `data/cache/`). The repository README describes
 3. **New inference** with your own Ollama server: the same model tags and settings; results will differ somewhat
    with the model build, quantisation, server version and hardware.
 
-Check the files with `sha256sum -c MANIFEST.sha256`.
+Inside the zip, `sha256sum -c MANIFEST.sha256` checks every file.
 
 ## Licenses
 
