@@ -31,7 +31,9 @@ log = logging.getLogger(__name__)
 SERIES = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
 INK, INK2, GRID = "#0b0b0b", "#52514e", "#e4e3df"
 SEQ_BLUE = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"]
-COL_W, PAGE_W = 3.5, 7.16  # larguras de coluna e de página do IEEEtran (pol.)
+# Largura da coluna de texto do Pattern Recognition em coluna única (11,4 cm = 4,49 pol.; margens de
+# 4,3/4,8 cm em A4). Figuras de dois painéis lado a lado ficam estreitas, por isso várias são empilhadas.
+COL_W = PAGE_W = 4.49
 
 plt.rcParams.update({
     "font.size": 7.5, "axes.titlesize": 8, "axes.labelsize": 7.5, "legend.fontsize": 7,
@@ -128,6 +130,14 @@ def write(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
     log.info("escrito %s", path)
+
+
+def two_line_header(label: str) -> str:
+    """Cabeçalho de coluna em duas linhas, família em cima e tamanho embaixo: ``Qwen3.5-122B`` vira
+    ``Qwen3.5`` / ``122B``. Mantém as colunas de números estreitas na coluna de texto de 11,4 cm."""
+    fam, _, size = label.partition("-")
+    size = size.replace("-", "\\mbox{-}")
+    return rf"\multicolumn{{1}}{{c}}{{\begin{{tabular}}[b]{{@{{}}c@{{}}}}{fam}\\{size}\end{{tabular}}}}"
 
 
 def pval_marker(p):
@@ -460,7 +470,7 @@ def rq2_plausible(cfg, df: pd.DataFrame, out: Path, instruments: pd.DataFrame | 
 \caption{{Looking right versus being right, with BERTScore as the similarity $S$ (abstentions excluded). Per generator: accuracy (\%), mean similarity $\bar s$, mean similarity of incorrect answers $\hat\mu^{{(0)}}$, separation $\hat\Delta=\hat\mu^{{(1)}}-\hat\mu^{{(0)}}$ (\cref{{eq:decomp}}) and false-acceptance rate at the RQ1 threshold (\%). Bottom: rank agreement between $\bar s$ and accuracy, number of model pairs that satisfy the reversal condition, and the size coefficients of \cref{{eq:plausible}} (95\% CI). Correctness is the jury verdict on QASPER and the answer key on QuALITY.}}
 \label{{tab:plausible}}
 \footnotesize
-\setlength{{\tabcolsep}}{{3.5pt}}
+\setlength{{\tabcolsep}}{{2.5pt}}
 \begin{{tabular}}{{l rrrrr rrrrr}}
 \toprule
  & \multicolumn{{5}}{{c}}{{QASPER (jury)}} & \multicolumn{{5}}{{c}}{{QuALITY (answer key)}} \\
@@ -478,7 +488,7 @@ Model & {hdr} & {hdr} \\
     # figura: (esq.) s̄ × acurácia por modelo; (dir.) S de respostas certas × erradas no QuALITY
     if res.empty:
         return res
-    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 2.5), gridspec_kw={"width_ratios": [1, 1.5]})
+    fig, axes = plt.subplots(2, 1, figsize=(PAGE_W, 5.6), gridspec_kw={"height_ratios": [1, 1.15]})
     ax = axes[0]
     for color, marker, (ds, name) in zip(SERIES, ("o", "s"), (("qasper", "QASPER (jury)"), ("quality", "QuALITY (key)"))):
         r = res[res.dataset == ds]
@@ -513,7 +523,7 @@ Model & {hdr} & {hdr} \\
     ax.set_yticks(np.arange(-0.2, 1.01, 0.2))
     ax.legend(frameon=False, ncol=2, fontsize=6.5, loc="upper center")
     ax.set_title("(b) QuALITY: similarity of correct vs. incorrect answers", loc="left")
-    fig.subplots_adjust(wspace=0.3)  # afasta o rótulo do eixo de (b) do painel (a)
+    fig.subplots_adjust(hspace=0.5)  # espaço para o título de (b) abaixo dos rótulos do eixo de (a)
     fig.savefig(out / "figures" / "plausible.pdf")
     plt.close(fig)
     return res
@@ -562,7 +572,7 @@ def table_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
         lines.append(r"\midrule Mean & " + " & ".join(r"\pending" if pd.isna(v) else pct(v) for v in means) + r" \\")
         blocks.append("\n".join(lines))
     write(out / "tables" / "accuracy.tex", rf"""% Gerado por `python -m llmeval analyze` (table_accuracy). Não editar à mão.
-\begin{{table*}}[t]
+\begin{{sidewaystable}}
 \centering
 \caption{{Accuracy (\%) of each generator under each context condition. QASPER answers are graded by the LLM jury (strict majority of \textsc{{correct}} votes, abstentions by rule); QuALITY answers by the answer key (chance level: 25\%). Best condition per model in bold. 95\% Wilson intervals are in the supplementary CSV; on $n=200$ questions per dataset their half-width is at most 6.9 points.}}
 \label{{tab:accuracy}}
@@ -576,7 +586,7 @@ Model & {header} \\
 {(chr(10) + r"\midrule" + chr(10)).join(blocks)}
 \bottomrule
 \end{{tabular}}
-\end{{table*}}
+\end{{sidewaystable}}
 """)
 
 
@@ -611,7 +621,7 @@ def fig_accuracy(cfg, acc: pd.DataFrame, out: Path) -> None:
     axes[0].set_yticks(range(len(gens)), [g["label"] for g in gens])
     axes[0].invert_yaxis()
     h, l = axes[0].get_legend_handles_labels()
-    fig.legend(h, l, ncol=min(len(conds), 6), frameon=False, loc="upper center", bbox_to_anchor=(0.5, 0.0))
+    fig.legend(h, l, ncol=4, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.01))
     fig.subplots_adjust(wspace=0.06)
     fig.savefig(out / "figures" / "accuracy.pdf")
     plt.close(fig)
@@ -626,7 +636,7 @@ def fig_cost(cfg, acc: pd.DataFrame, out: Path) -> None:
 
     gens = [g for g in cfg["generators"] if g["model"] in set(acc.model)]
     order = ["hybrid_k2", "hybrid_k5", "hybrid_k10", "full"]
-    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 2.3))
+    fig, axes = plt.subplots(2, 1, figsize=(PAGE_W, 4.6))
     for ax, (ds, title) in zip(axes, (("qasper", "QASPER (jury)"), ("quality", "QuALITY (answer key)"))):
         sub = acc[(acc.dataset == ds) & acc.condition.isin(order)]
         for color, g in zip(SERIES, gens):
@@ -642,9 +652,11 @@ def fig_cost(cfg, acc: pd.DataFrame, out: Path) -> None:
         ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
         ax.xaxis.set_minor_formatter(NullFormatter())
         ax.set_xlabel("Mean context size (words, log scale)")
+        ax.set_ylabel("Accuracy (%)")
         ax.set_title(title, loc="left")
-    axes[0].set_ylabel("Accuracy (%)")
-    axes[1].legend(frameon=False, loc="center left", bbox_to_anchor=(1.0, 0.5))
+    h, l = axes[1].get_legend_handles_labels()
+    fig.legend(h, l, ncol=3, frameon=False, loc="upper center", bbox_to_anchor=(0.5, 0.0))
+    fig.subplots_adjust(hspace=0.45)
     fig.savefig(out / "figures" / "cost_accuracy.pdf")
     plt.close(fig)
 
@@ -678,7 +690,7 @@ def rq3_paired(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame:
     res.to_csv(cfg.path("results") / "analysis" / "paired.csv", index=False)
 
     gens = [g for g in cfg["generators"] if g["model"] in models]
-    header = " & ".join(g["label"].replace("-", "\\mbox{-}") for g in gens)
+    header = " & ".join(two_line_header(g["label"]) for g in gens)
     blocks = []
     for ds, name in (("qasper", "QASPER"), ("quality", "QuALITY")):
         lines = [rf"\multicolumn{{{len(gens) + 1}}}{{l}}{{\emph{{{name}}}}} \\"]
@@ -697,7 +709,7 @@ def rq3_paired(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame:
 \caption{{Paired difference in accuracy (percentage points) of each condition relative to the full document, per model. Positive values mean the condition is better than reading the whole document. Significance by exact McNemar test with Holm correction over all {len(res)} comparisons: $^{{*}}p<0.05$, $^{{**}}p<0.01$, $^{{***}}p<0.001$. Cluster-bootstrap 95\% intervals are in the supplementary CSV.}}
 \label{{tab:paired}}
 \footnotesize
-\setlength{{\tabcolsep}}{{5pt}}
+\setlength{{\tabcolsep}}{{3pt}}
 \begin{{tabular}}{{l{"r" * len(gens)}}}
 \toprule
 Condition & {header} \\
@@ -725,7 +737,7 @@ def _placeholder_paired(cfg, out):
 \caption{{Paired difference in accuracy (percentage points) of each condition relative to the full document, per model. Positive values mean the condition is better than reading the whole document. Exact McNemar test with Holm correction: $^{{*}}p<0.05$, $^{{**}}p<0.01$, $^{{***}}p<0.001$.}}
 \label{{tab:paired}}
 \footnotesize
-\setlength{{\tabcolsep}}{{5pt}}
+\setlength{{\tabcolsep}}{{3pt}}
 \begin{{tabular}}{{l{"r" * len(gens)}}}
 \toprule
 Condition & {header} \\
@@ -794,7 +806,7 @@ def fig_recall(cfg, out: Path, df: pd.DataFrame) -> None:
     rt = rt[rt.recall.notna()]
     rt.groupby(["method", "k"]).recall.agg(["mean", "count"]).to_csv(
         cfg.path("results") / "analysis" / "retrieval_recall.csv")
-    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 2.2))
+    fig, axes = plt.subplots(2, 1, figsize=(PAGE_W, 4.8))
     ax = axes[0]
     names = {"bm25": "BM25", "dense": "Dense (BGE-M3)", "hybrid": "Hybrid (RRF)"}
     for color, m in zip(SERIES, ("bm25", "dense", "hybrid")):
@@ -821,6 +833,7 @@ def fig_recall(cfg, out: Path, df: pd.DataFrame) -> None:
         ax.grid(axis="x", visible=False)
         ax.legend(frameon=False, ncol=2, fontsize=6, loc="upper left")
         ax.set_title("Accuracy by retrieval outcome (Hybrid $k$=5)", loc="left")
+    fig.subplots_adjust(hspace=0.4)
     fig.savefig(out / "figures" / "retrieval.pdf")
     plt.close(fig)
 
@@ -830,7 +843,7 @@ def fig_length_position(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame | None
     full = df[(df.condition == "full") & df.y.notna()]
     if full.empty:
         return None
-    fig, axes = plt.subplots(1, 2, figsize=(PAGE_W, 2.1))
+    fig, axes = plt.subplots(2, 1, figsize=(PAGE_W, 4.6))
     qa = full[(full.dataset == "qasper") & full.evidence_pos.notna()].copy()
     fit = None
     if len(qa) > 30:
@@ -864,6 +877,7 @@ def fig_length_position(cfg, df: pd.DataFrame, out: Path) -> pd.DataFrame | None
     ax.set(xlabel="Median document length in tercile (words)", ylabel="Accuracy (%)", ylim=(0, 100))
     ax.legend(frameon=False)
     ax.set_title("Full document, by length tercile", loc="left")
+    fig.subplots_adjust(hspace=0.45)
     fig.savefig(out / "figures" / "length_position.pdf")
     plt.close(fig)
     return fit
@@ -974,7 +988,7 @@ def car_example(cfg, client, out: Path) -> None:
             lines.append(r"\midrule")
     jh = " & ".join(j["label"].split("-")[0] for j in judges)
     write(out / "tables" / "car_example.tex", rf"""% Gerado por `python -m llmeval analyze` (car_example). Não editar à mão.
-\begin{{table*}}[t]
+\begin{{sidewaystable}}
 \centering
 \caption{{The motivating example: answers to ``{CAR_QUESTION}'' compared with the reference ``{CAR_REFERENCE}''. The first five answers are correct, the last six are not. Metrics are computed as defined in \cref{{sec:measuring}}; the last four columns are the votes of the three judges (\checkmark{{}} correct, $\sim$ partial, $\times$ incorrect) and the jury verdict.{missing}}}
 \label{{tab:car}}
@@ -989,7 +1003,7 @@ Answer & Gold & EM & F1 & ROUGE-L & Fuzzy & Emb.\ cos. & BERTScore & {jh} & Jury
 {chr(10).join(lines)}
 \bottomrule
 \end{{tabular}}
-\end{{table*}}
+\end{{sidewaystable}}
 """)
 
 
@@ -998,18 +1012,18 @@ Answer & Gold & EM & F1 & ROUGE-L & Fuzzy & Emb.\ cos. & BERTScore & {jh} & Jury
 PLACEHOLDERS = {
     "accuracy": dict(shape=(1, 2), size=(PAGE_W, 3.2), titles=["QASPER (jury)", "QuALITY (answer key)"],
                      xlabel="Accuracy (%)", ylabel="", xlim=(0, 100), yticks="models"),
-    "cost_accuracy": dict(shape=(1, 2), size=(PAGE_W, 2.3), titles=["QASPER (jury)", "QuALITY (answer key)"],
+    "cost_accuracy": dict(shape=(2, 1), size=(PAGE_W, 4.6), titles=["QASPER (jury)", "QuALITY (answer key)"],
                           xlabel="Mean context size (words, log scale)", ylabel="Accuracy (%)", ylim=(0, 100)),
-    "retrieval": dict(shape=(1, 2), size=(PAGE_W, 2.2),
+    "retrieval": dict(shape=(2, 1), size=(PAGE_W, 4.8),
                       titles=["QASPER evidence recall", "Accuracy by retrieval outcome (Hybrid $k$=5)"],
                       xlabel=["Retrieved chunks $k$", "Retrieval outcome"],
                       ylabel=["Evidence recall@$k$ (%)", "Accuracy (%)"], ylim=(0, 100)),
-    "length_position": dict(shape=(1, 2), size=(PAGE_W, 2.1),
+    "length_position": dict(shape=(2, 1), size=(PAGE_W, 4.6),
                             titles=["QASPER, full document, all models", "Full document, by length tercile"],
                             xlabel=["Position of first evidence paragraph (% of document)",
                                     "Median document length in tercile (words)"],
                             ylabel="Accuracy (%)", ylim=(0, 100)),
-    "plausible": dict(shape=(1, 2), size=(PAGE_W, 2.5), titles=["Similarity vs. accuracy per model",
+    "plausible": dict(shape=(2, 1), size=(PAGE_W, 5.6), titles=["Similarity vs. accuracy per model",
                       "QuALITY: similarity of correct vs. incorrect answers"],
                       xlabel=[r"Mean similarity $\bar s$ (BERTScore)", ""], ylabel=["Accuracy (%)", "Similarity $S$ (BERTScore)"]),
     "reasoning": dict(shape=(1, 2), size=(PAGE_W, 2.4), titles=["QASPER (jury)", "QuALITY (answer key)"],
@@ -1081,7 +1095,7 @@ def rq6_reasoning(cfg, full_df: pd.DataFrame, out: Path) -> pd.DataFrame:
 \caption{{Effect of reasoning: paired accuracy difference with minus without reasoning (percentage points) on the same questions, in the five conditions run with reasoning. Exact McNemar test with Holm correction over all model--condition--dataset pairs: $^{{*}}p<0.05$, $^{{**}}p<0.01$, $^{{***}}p<0.001$. Tokens: median ratio of generated tokens with and without reasoning, over conditions. Budget: share of answers lost because reasoning exhausted the budget of 4096 tokens (\%).}}
 \label{{tab:reasoning}}
 \footnotesize
-\setlength{{\tabcolsep}}{{4pt}}
+\setlength{{\tabcolsep}}{{2pt}}
 \begin{{tabular}}{{l{"r" * len(show)}rr}}
 \toprule
 Model & {header} & Tokens & Budget \\
@@ -1118,15 +1132,16 @@ def fig_reasoning(cfg, res: pd.DataFrame, out: Path) -> None:
                 ax.plot(100 * r.delta_ok, yi + off, marker=marker, mfc="none", mec=color, ls="none", ms=ms, mew=0.9)
         ax.axvline(0, color=INK2, lw=0.8)
         ax.set_title(title, loc="left")
-        ax.set_xlabel("Accuracy with minus without reasoning (pp)")
         ax.grid(axis="y", visible=False)
+    # um rótulo só para os dois painéis: lado a lado na coluna de 11,4 cm, dois rótulos se sobrepunham
+    fig.supxlabel("Accuracy with minus without reasoning (pp)", fontsize=7.5, y=-0.1)
     axes[0].set_yticks(range(len(gens)), [g["label"] for g in gens])
     axes[0].invert_yaxis()
     h, l = axes[0].get_legend_handles_labels()
     h += [plt.Line2D([], [], marker="o", color=INK2, ls="none", ms=4.5, mec="white"),
           plt.Line2D([], [], marker="o", mfc="none", mec=INK2, ls="none", ms=4.5, mew=0.9)]
     l += ["All answers", "Completed within budget"]
-    fig.legend(h, l, ncol=4, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.03))
+    fig.legend(h, l, ncol=3, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.2))
     fig.subplots_adjust(wspace=0.06)
     fig.savefig(out / "figures" / "reasoning.pdf")
     plt.close(fig)
@@ -1205,7 +1220,7 @@ Model & No reas. & {" & ".join(str(b) for b in budgets)} \\
 def fig_budget(cfg, pooled: pd.DataFrame, out: Path) -> None:
     gens = [g for g in cfg["generators"] if g["model"] in set(pooled.model)]
     colors = {g["model"]: c for g, c in zip(gens, (SERIES[0], SERIES[1], SERIES[2]))}
-    fig, axes = plt.subplots(2, 2, figsize=(PAGE_W, 3.6), sharex=True, gridspec_kw={"height_ratios": [2, 1]})
+    fig, axes = plt.subplots(2, 2, figsize=(PAGE_W, 4.0), sharex=True, gridspec_kw={"height_ratios": [2, 1]})
     for col, (ds, title) in enumerate((("qasper", "(a) QASPER (jury)"), ("quality", "(b) QuALITY (answer key)"))):
         top, bottom = axes[0, col], axes[1, col]
         for g in gens:
@@ -1225,8 +1240,8 @@ def fig_budget(cfg, pooled: pd.DataFrame, out: Path) -> None:
         bottom.set_xticks(sorted(pooled.budget.unique()), [str(b) for b in sorted(pooled.budget.unique())])
         bottom.set_ylim(0, 100)
     h, l = axes[0, 0].get_legend_handles_labels()
-    fig.legend(h, l, ncol=4, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.01))
-    fig.subplots_adjust(wspace=0.18, hspace=0.12)
+    fig.legend(h, l, ncol=2, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.01))
+    fig.subplots_adjust(wspace=0.22, hspace=0.12)
     fig.savefig(out / "figures" / "budget.pdf")
     plt.close(fig)
 
@@ -1444,7 +1459,7 @@ def fig_consensus(cfg, res: pd.DataFrame, out: Path) -> None:
     colors = {"all": SERIES[0], "some": "#b9b8b3", "none": SERIES[7]}
     states = [("agree", "(a) All annotators match"), ("partly agree", "(b) Some annotators match"),
               ("all differ", "(c) No two annotators match")]
-    fig, axes = plt.subplots(1, 3, figsize=(PAGE_W, 0.28 * len(models) + 1.0), sharey=True)
+    fig, axes = plt.subplots(3, 1, figsize=(PAGE_W, 3 * (0.24 * len(models) + 0.55) + 0.6), sharex=True)
     for ax, (st, title) in zip(axes, states):
         s = sub[sub.humans == st].set_index("model")
         n = int(s.n_questions.iloc[0]) if not s.empty else 0
@@ -1457,17 +1472,17 @@ def fig_consensus(cfg, res: pd.DataFrame, out: Path) -> None:
                     ax.text(left + v / 2, yi, f"{v:.0f}", ha="center", va="center", fontsize=6.5,
                             color="white" if c != "some" else INK)
                 left += v
-        ax.set_title(f"{title}\n{n} questions", loc="left")
+        ax.set_title(f"{title}, {n} questions", loc="left")
         ax.set_xlim(0, 100)
         ax.set_xticks([0, 25, 50, 75, 100])
-        ax.set_xlabel("Share of the model's answers (%)")
         ax.grid(axis="y", visible=False)
-    axes[0].set_yticks(range(len(models)), [labels[m] for m in models])
-    axes[0].invert_yaxis()
+        ax.set_yticks(range(len(models)), [labels[m] for m in models])
+        ax.invert_yaxis()
+    axes[-1].set_xlabel("Share of the model's answers (%)")
     handles = [plt.Rectangle((0, 0), 1, 1, color=colors[c]) for c, _ in CONSENSUS_CATS]
     fig.legend(handles, [n for _, n in CONSENSUS_CATS], ncol=3, frameon=False, loc="upper center",
                bbox_to_anchor=(0.5, -0.02))
-    fig.subplots_adjust(wspace=0.14)
+    fig.subplots_adjust(hspace=0.45)
     fig.savefig(out / "figures" / "consensus.pdf")
     plt.close(fig)
 
