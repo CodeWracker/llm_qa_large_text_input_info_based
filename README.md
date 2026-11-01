@@ -1,6 +1,6 @@
 # Open-weight LLMs for data extraction from long documents: full document vs. retrieval, with a validated LLM jury
 
-Code of the study *"Reading the Whole Paper or Retrieving What Matters? Open-Weight LLMs for Data Extraction in Systematic Literature Reviews, Evaluated by a Validated LLM Jury"*. Data (model outputs, verdicts, caches): [doi:10.5281/zenodo.23844724](https://doi.org/10.5281/zenodo.23844724).
+Code of the study *"Whole-Paper Reading versus Retrieval with Open-Weight Language Models for Data Extraction in Systematic Reviews"*. Data (model outputs, verdicts, caches): [doi:10.5281/zenodo.23844724](https://doi.org/10.5281/zenodo.23844724).
 
 The guiding question: can open-weight language models running on a local server fill the data-extraction table of a systematic literature review reliably, where each cell is a question about one paper? Six models answer 400 questions about long documents under eleven ways of providing the document, and the free-text answers are graded by a jury of three other LLMs that is first validated against an answer key and a human annotator.
 

@@ -1,4 +1,4 @@
-# Data for "Reading the Whole Paper or Retrieving What Matters? Open-Weight LLMs for Data Extraction in Systematic Literature Reviews, Evaluated by a Validated LLM Jury"
+# Data for "Whole-Paper Reading versus Retrieval with Open-Weight Language Models for Data Extraction in Systematic Reviews"
 
 Version {{VERSION}}. Code: <https://github.com/CodeWracker/llm_qa_large_text_input_info_based>.
 
